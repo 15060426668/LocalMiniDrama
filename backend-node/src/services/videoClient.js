@@ -984,13 +984,29 @@ function isAgnesBuiltinQueryEndpoint(ep) {
 }
 
 /**
- * Agnes 结果查询（对齐 new-api TaskAdaptor.FetchTask）：
- * GET {origin}/v1/videos/{task_id}
+ * Agnes 结果查询：
+ * - Video 2.5 / 2.5 Flash：GET {origin}/agnesapi?video_id=&model_name=
+ * - Video V2.0：GET {origin}/v1/videos/{task_id}
  */
-function buildAgnesPollUrl(config, pollId) {
+function isAgnesVideo25Model(model) {
+  return /agnes-video-2\.5/i.test(String(model || ''));
+}
+
+function isAgnesVideo25FlashModel(model) {
+  return /agnes-video-2\.5-flash/i.test(String(model || ''));
+}
+
+function resolveAgnesVideoModel(config, explicitModel) {
+  const named = String(explicitModel || '').trim();
+  if (named) return named;
+  return getModelFromConfig(config) || '';
+}
+
+function buildAgnesPollUrl(config, pollId, explicitModel) {
   const root = getAgnesApiRoot(config.base_url);
   const id = String(pollId || '').trim();
   const cfgEp = String(config.query_endpoint || '').trim();
+  const model = resolveAgnesVideoModel(config, explicitModel);
 
   if (cfgEp && !isAgnesBuiltinQueryEndpoint(cfgEp)) {
     const base = (config.base_url || '').replace(/\/$/, '');
@@ -1000,9 +1016,16 @@ function buildAgnesPollUrl(config, pollId) {
       .replace(/\{video_id\}/gi, encodeURIComponent(id))
       .replace(/\{taskId\}/gi, encodeURIComponent(id))
       .replace(/\{task_id\}/gi, encodeURIComponent(id))
-      .replace(/\{id\}/gi, encodeURIComponent(id));
+      .replace(/\{id\}/gi, encodeURIComponent(id))
+      .replace(/\{model\}/gi, encodeURIComponent(model))
+      .replace(/\{model_name\}/gi, encodeURIComponent(model));
     if (!ep.startsWith('/')) ep = '/' + ep;
     return base + ep;
+  }
+
+  if (isAgnesVideo25Model(model)) {
+    const params = new URLSearchParams({ video_id: id, model_name: model });
+    return `${root}/agnesapi?${params.toString()}`;
   }
 
   return `${root}/v1/videos/${encodeURIComponent(id)}`;
@@ -1036,14 +1059,14 @@ function extractAgnesVideoUrl(data) {
   return pickProxyVideoUrl(data);
 }
 
-function buildQueryUrl(config, taskId) {
+function buildQueryUrl(config, taskId, extras = {}) {
   const p = (config.provider || '').toLowerCase();
   const proto = resolveVideoProtocol(config);
   const isDashScope = proto === 'dashscope' || p === 'dashscope';
   const isVolc = p === 'volces' || p === 'volcengine' || p === 'volc';
   const isSora = proto === 'sora';
   if (isVolc) return getVolcVideoBase(config) + VOLC_VIDEO_QUERY_PATH + '/' + encodeURIComponent(taskId);
-  if (proto === 'agnes') return buildAgnesPollUrl(config, taskId);
+  if (proto === 'agnes') return buildAgnesPollUrl(config, taskId, extras.model);
   if (proto === 'minimax_h3') return buildMinimaxH3PollUrl(config, taskId);
   const base = (config.base_url || '').replace(/\/$/, '');
   let defaultEp;
@@ -2367,6 +2390,93 @@ async function callVeo3VideoApi(config, log, opts) {
 
 /** Agnes Video V2.0：POST /videos JSON，轮询 GET /videos/{task_id} */
 const AGNES_ALLOWED_NUM_FRAMES = [81, 121, 161, 241, 441];
+const AGNES_VIDEO_25_RATIO_VALUES = [
+  ['21:9', 21 / 9],
+  ['16:9', 16 / 9],
+  ['4:3', 4 / 3],
+  ['1:1', 1],
+  ['3:4', 3 / 4],
+  ['9:16', 9 / 16],
+];
+
+function normalizeAgnesVideo25Duration(duration) {
+  const n = Math.round(Number(duration) || 5);
+  if (!Number.isFinite(n)) return '5';
+  return String(Math.min(12, Math.max(4, n)));
+}
+
+function normalizeAgnesVideo25AspectRatio(ratio) {
+  const normalized = normalizeAspectRatioForApi(ratio);
+  const allowed = new Set(AGNES_VIDEO_25_RATIO_VALUES.map(([label]) => label));
+  if (normalized && allowed.has(normalized)) return normalized;
+  const raw = String(ratio || '').trim().replace(/\uFF1A/g, ':').replace(/[×xX＊*]/g, ':');
+  if (allowed.has(raw)) return raw;
+  // 2:3 / 3:2 等映射到最接近的 2.5 支持画幅
+  const match = raw.match(/^(\d+(?:\.\d+)?)\s*:\s*(\d+(?:\.\d+)?)$/);
+  if (match) {
+    const r = Number(match[1]) / Number(match[2]);
+    let best = '16:9';
+    let bestD = Infinity;
+    for (const [label, tr] of AGNES_VIDEO_25_RATIO_VALUES) {
+      const d = Math.abs(Math.log(r) - Math.log(tr));
+      if (d < bestD) {
+        bestD = d;
+        best = label;
+      }
+    }
+    return best;
+  }
+  return '16:9';
+}
+
+function normalizeAgnesVideo25Size(model, resolution) {
+  if (isAgnesVideo25FlashModel(model)) return '720P';
+  const r = String(resolution || '').toUpperCase();
+  if (/2K|1080|1440|2160|4K/.test(r)) return '2K';
+  return '720P';
+}
+
+/**
+ * Agnes Video 2.5 / 2.5 Flash：OpenAI Videos 兼容参数（mode / seconds / size / aspect_ratio）
+ */
+function buildAgnesVideo25Body({
+  model,
+  prompt,
+  duration,
+  aspect_ratio,
+  resolution,
+  useOmniReference,
+  resolvedRefs,
+  firstResolved,
+  lastResolved,
+}) {
+  const flash = isAgnesVideo25FlashModel(model);
+  const body = {
+    model: model || 'agnes-video-2.5-flash',
+    prompt: prompt || '',
+    seconds: normalizeAgnesVideo25Duration(duration),
+    size: normalizeAgnesVideo25Size(model, resolution),
+    aspect_ratio: normalizeAgnesVideo25AspectRatio(aspect_ratio),
+  };
+  const refs = Array.isArray(resolvedRefs) ? resolvedRefs.filter(Boolean) : [];
+  if (useOmniReference && refs.length) {
+    const maxImages = flash ? 5 : 9;
+    body.mode = 'reference';
+    body.images = refs.slice(0, maxImages);
+    return {
+      body,
+      strategy: refs.length > 1 ? 'v25_reference' : 'v25_reference_single',
+    };
+  }
+  if (firstResolved || lastResolved) {
+    body.mode = 'keyframe';
+    if (firstResolved) body.first_frame = firstResolved;
+    if (lastResolved && lastResolved !== firstResolved) body.last_frame = lastResolved;
+    return { body, strategy: 'v25_keyframe' };
+  }
+  body.mode = 'text';
+  return { body, strategy: 'v25_text' };
+}
 
 /** 调试日志：base64 只记长度，http(s) URL 保留完整以便核对参考图 */
 function summarizeMediaValueForLog(value) {
@@ -2389,6 +2499,12 @@ function formatVideoPostBodyForLog(body) {
   }
   if (clone.image && typeof clone.image === 'object' && clone.image.url) {
     clone.image = { ...clone.image, url: summarizeMediaValueForLog(clone.image.url) };
+  }
+  if (typeof clone.first_frame === 'string') {
+    clone.first_frame = summarizeMediaValueForLog(clone.first_frame);
+  }
+  if (typeof clone.last_frame === 'string') {
+    clone.last_frame = summarizeMediaValueForLog(clone.last_frame);
   }
   if (Array.isArray(clone.images)) {
     clone.images = clone.images.map((u, i) => `[${i}] ${summarizeMediaValueForLog(u)}`);
@@ -2490,6 +2606,7 @@ async function callAgnesVideoApi(db, config, log, opts) {
     model,
     duration,
     aspect_ratio,
+    resolution,
     image_url,
     first_frame_url,
     last_frame_url,
@@ -2503,19 +2620,7 @@ async function callAgnesVideoApi(db, config, log, opts) {
   let ep = config.endpoint || '/videos';
   if (!ep.startsWith('/')) ep = '/' + ep;
   const url = base + ep;
-
-  const frameRate = 24;
-  const dims = agnesDimensionsFromAspectRatio(aspect_ratio || '16:9');
-  const numFrames = agnesSnapNumFrames(duration, frameRate);
-
-  const body = {
-    model: model || 'agnes-video-v2.0',
-    prompt: prompt || '',
-    width: dims.width,
-    height: dims.height,
-    num_frames: numFrames,
-    frame_rate: frameRate,
-  };
+  const use25 = isAgnesVideo25Model(model);
 
   const rawRefList = Array.isArray(reference_urls) ? reference_urls.filter(Boolean) : [];
   const resolvedRefs = [];
@@ -2557,22 +2662,49 @@ async function callAgnesVideoApi(db, config, log, opts) {
     };
   }
 
-  const imagePayload = buildAgnesVideoImagePayload({
-    useOmniReference,
-    resolvedRefs,
-    firstResolved,
-    lastResolved,
-  });
-  if (imagePayload.image != null) {
-    body.image = imagePayload.image;
-  }
-  if (imagePayload.extra_body) {
-    body.extra_body = imagePayload.extra_body;
+  let body;
+  let imageStrategy;
+  if (use25) {
+    const built = buildAgnesVideo25Body({
+      model,
+      prompt,
+      duration,
+      aspect_ratio,
+      resolution,
+      useOmniReference,
+      resolvedRefs,
+      firstResolved,
+      lastResolved,
+    });
+    body = built.body;
+    imageStrategy = built.strategy;
+  } else {
+    const frameRate = 24;
+    const dims = agnesDimensionsFromAspectRatio(aspect_ratio || '16:9');
+    const numFrames = agnesSnapNumFrames(duration, frameRate);
+    body = {
+      model: model || 'agnes-video-v2.0',
+      prompt: prompt || '',
+      width: dims.width,
+      height: dims.height,
+      num_frames: numFrames,
+      frame_rate: frameRate,
+    };
+    const imagePayload = buildAgnesVideoImagePayload({
+      useOmniReference,
+      resolvedRefs,
+      firstResolved,
+      lastResolved,
+    });
+    imageStrategy = imagePayload.strategy;
+    if (imagePayload.image != null) body.image = imagePayload.image;
+    if (imagePayload.extra_body) body.extra_body = imagePayload.extra_body;
   }
 
   log.info('[Agnes] 参考图输入（解析前）', {
     video_gen_id,
     use_omni_reference: useOmniReference,
+    use_video_25: use25,
     raw_ref_count: rawRefList.length,
     raw_refs: rawRefList.map((u, i) => ({ index: i, url: String(u) })),
     raw_first_frame: rawFirst || null,
@@ -2584,18 +2716,22 @@ async function callAgnesVideoApi(db, config, log, opts) {
     resolved_refs: resolvedRefs.map((u, i) => ({ index: i, url: u })),
     first_resolved: firstResolved,
     last_resolved: lastResolved,
-    image_strategy: imagePayload.strategy,
+    image_strategy: imageStrategy,
   });
 
   logVideoPostRequest(log, 'Agnes', url, body, video_gen_id, {
     model: body.model,
+    use_video_25: use25,
+    mode: body.mode || null,
+    seconds: body.seconds || null,
+    size: body.size || null,
     width: body.width,
     height: body.height,
     num_frames: body.num_frames,
     frame_rate: body.frame_rate,
     duration_sec: duration,
-    aspect_ratio: aspect_ratio || '16:9',
-    image_strategy: imagePayload.strategy,
+    aspect_ratio: body.aspect_ratio || aspect_ratio || '16:9',
+    image_strategy: imageStrategy,
     extra_body_mode: body.extra_body?.mode || null,
     omni_reference: useOmniReference,
     prompt_len: (body.prompt || '').length,
@@ -2616,7 +2752,7 @@ async function callAgnesVideoApi(db, config, log, opts) {
     let errMsg = 'Agnes 视频请求失败: ' + res.status;
     try {
       const errJson = JSON.parse(raw);
-      const msg = errJson.error?.message || errJson.message || errJson.error;
+      const msg = errJson.error?.message || errJson.detail || errJson.message || errJson.error;
       if (msg) errMsg += ' - ' + (typeof msg === 'string' ? msg : JSON.stringify(msg).slice(0, 200));
     } catch (_) {
       if (raw) errMsg += ' - ' + raw.slice(0, 200);
@@ -2637,9 +2773,18 @@ async function callAgnesVideoApi(db, config, log, opts) {
     return { video_url: directUrl };
   }
 
-  const taskId = data.id || data.task_id || data.data?.id || data.data?.task_id;
+  // Video 2.5 轮询必须用 video_id；V2.0 用 id/task_id
+  const taskId = use25
+    ? (data.video_id || data.id || data.task_id || data.data?.video_id || data.data?.id || data.data?.task_id)
+    : (data.id || data.task_id || data.video_id || data.data?.id || data.data?.task_id);
   if (taskId) {
-    log.info('[Agnes] 返回 task_id', { task_id: taskId, status: data.status, video_gen_id });
+    log.info('[Agnes] 返回 task_id', {
+      task_id: taskId,
+      video_id: data.video_id || null,
+      status: data.status,
+      video_gen_id,
+      use_video_25: use25,
+    });
     return { task_id: String(taskId), status: data.status || 'processing' };
   }
 
@@ -3890,13 +4035,14 @@ async function callVideoApi(db, log, opts) {
     });
   }
 
-  // Agnes Video V2.0 (api_protocol = 'agnes')
+  // Agnes Video（api_protocol = 'agnes'）：V2.0 或 2.5 / 2.5 Flash
   if (protocol === 'agnes') {
     return callAgnesVideoApi(db, config, log, {
       prompt,
       model,
       duration: opts.duration,
       aspect_ratio,
+      resolution: opts.resolution,
       image_url: opts.image_url,
       first_frame_url: opts.first_frame_url,
       last_frame_url: opts.last_frame_url,
@@ -4106,8 +4252,32 @@ async function pollVideoTask(db, log, videoGenId, taskId, config, maxAttempts = 
   /** Agnes：completed 后 remixed_from_video_id / metadata.url 偶发迟到，对齐 new-api 继续多查几轮 */
   let agnesCompletedWithoutUrl = 0;
   const AGNES_COMPLETED_URL_GRACE = 12;
-  const queryUrl = () => buildQueryUrl(config, pollTaskId);
-  log.info('[poll] 开始', { video_gen_id: videoGenId, task_id: pollTaskId, protocol, poll_url: queryUrl() });
+  let agnesPollModel = getModelFromConfig(config);
+  if (isAgnes && db && videoGenId) {
+    try {
+      const row = db.prepare('SELECT model FROM video_generations WHERE id = ?').get(Number(videoGenId));
+      if (row && row.model != null) {
+        let m = row.model;
+        if (typeof m === 'string' && m.trim().startsWith('[')) {
+          try {
+            const parsed = JSON.parse(m);
+            if (Array.isArray(parsed) && parsed[0]) m = parsed[0];
+          } catch (_) {}
+        } else if (Array.isArray(m) && m[0]) {
+          m = m[0];
+        }
+        if (String(m).trim()) agnesPollModel = String(m).trim();
+      }
+    } catch (_) {}
+  }
+  const queryUrl = () => buildQueryUrl(config, pollTaskId, { model: agnesPollModel });
+  log.info('[poll] 开始', {
+    video_gen_id: videoGenId,
+    task_id: pollTaskId,
+    protocol,
+    poll_url: queryUrl(),
+    agnes_model: isAgnes ? agnesPollModel : undefined,
+  });
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     await new Promise((r) => setTimeout(r, intervalMs));
     try {
@@ -4465,6 +4635,12 @@ module.exports = {
   buildAgnesPollUrl,
   getAgnesApiRoot,
   buildAgnesVideoImagePayload,
+  buildAgnesVideo25Body,
+  isAgnesVideo25Model,
+  isAgnesVideo25FlashModel,
+  normalizeAgnesVideo25Duration,
+  normalizeAgnesVideo25Size,
+  normalizeAgnesVideo25AspectRatio,
   formatVideoPostBodyForLog,
   isSeedance2FamilyModel,
   normalizeVolcengineDuration,

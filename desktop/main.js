@@ -2,6 +2,11 @@ const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+// 打包 exe 出站常见 IPv6 黑洞（Cloudflare ETIMEDOUT）；尽早优先 IPv4
+try {
+  require('dns').setDefaultResultOrder('ipv4first');
+} catch (_) {}
+
 // 显式固定 userData 目录，使开发模式与打包 exe 路径完全一致，防止 productName 变更导致路径漂移
 const USERDATA_DIR = path.join(app.getPath('appData'), 'localminidrama-desktop');
 app.setPath('userData', USERDATA_DIR);

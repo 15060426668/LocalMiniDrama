@@ -24,6 +24,8 @@ function postJSONNonStream(url, headers, body, timeoutMs = 120000) {
       path: parsed.pathname + parsed.search,
       method: 'POST',
       headers: reqHeaders,
+      // 避免 Windows/Electron 优先连不可达的 IPv6（Cloudflare）导致 ETIMEDOUT
+      family: 4,
     };
 
     const req = mod.request(options, (res) => {
@@ -77,6 +79,8 @@ function postJSONWithTimeout(url, headers, body, timeoutMs = 600000) {
       path: parsed.pathname + parsed.search,
       method: 'POST',
       headers: reqHeaders,
+      // 避免 Windows/Electron 优先连不可达的 IPv6（Cloudflare）导致 ETIMEDOUT
+      family: 4,
     };
 
     const req = mod.request(options, (res) => {
@@ -130,6 +134,8 @@ function postJSONStream(url, headers, body, silenceTimeoutMs = 60000, onProgress
       path: parsed.pathname + parsed.search,
       method: 'POST',
       headers: reqHeaders,
+      // 避免 Windows/Electron 优先连不可达的 IPv6（Cloudflare）导致 ETIMEDOUT
+      family: 4,
     };
 
     let silenceTimer = null;

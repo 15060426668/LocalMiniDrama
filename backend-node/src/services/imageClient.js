@@ -186,15 +186,17 @@ function fixSeedreamSize(size) {
   return `${w}x${h}`;
 }
 
-/** Agnes Image 2.x 官方常用尺寸（过大如 1440x2560 会导致上游 do_request_failed） */
-const AGNES_IMAGE_SIZE_BY_RATIO = {
-  '16:9': '1792x1024',
-  '9:16': '1024x1792',
-  '1:1': '1024x1024',
-  '4:3': '1024x768',
-  '3:4': '768x1024',
-  '21:9': '1792x1024',
-};
+/** Agnes Image 2.1/2.5：官方推荐 size 档位 + ratio，不要直接传 1920x1080 等显示分辨率 */
+const AGNES_IMAGE_RATIO_VALUES = [
+  ['1:1', 1],
+  ['3:4', 3 / 4],
+  ['4:3', 4 / 3],
+  ['16:9', 16 / 9],
+  ['9:16', 9 / 16],
+  ['2:3', 2 / 3],
+  ['3:2', 3 / 2],
+  ['21:9', 21 / 9],
+];
 
 function isAgnesImageConfig(config, model) {
   const p = String(config?.provider || '').toLowerCase();
@@ -203,31 +205,48 @@ function isAgnesImageConfig(config, model) {
   return p === 'agnes' || /agnes-image/.test(m) || /apihub\.agnes-ai\.com/.test(base);
 }
 
-/** 将项目内高分辨率 size 映射为 Agnes 支持的尺寸，保持宽高比类别 */
-function fixAgnesImageSize(size) {
-  if (!size || typeof size !== 'string') return AGNES_IMAGE_SIZE_BY_RATIO['4:3'];
-  const s = size.trim().toLowerCase().replace(/\*/g, 'x');
-  const match = s.match(/^(\d+)\s*x\s*(\d+)$/);
-  if (!match) return AGNES_IMAGE_SIZE_BY_RATIO['4:3'];
-  const w = parseInt(match[1], 10);
-  const h = parseInt(match[2], 10);
-  if (!w || !h) return AGNES_IMAGE_SIZE_BY_RATIO['4:3'];
-  const mapped = AGNES_IMAGE_SIZE_BY_RATIO['16:9'];
-  const ratio = w / h;
-  const candidates = Object.entries(AGNES_IMAGE_SIZE_BY_RATIO).map(([label, sz]) => {
-    const [rw, rh] = sz.split('x').map(Number);
-    return { label, sz, r: rw / rh };
-  });
-  let best = mapped;
-  let bestDiff = Infinity;
-  for (const c of candidates) {
-    const diff = Math.abs(Math.log(ratio) - Math.log(c.r));
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      best = c.sz;
+function closestAgnesImageRatio(w, h) {
+  if (!w || !h) return '1:1';
+  const r = w / h;
+  let best = '1:1';
+  let bestD = Infinity;
+  for (const [label, tr] of AGNES_IMAGE_RATIO_VALUES) {
+    const d = Math.abs(Math.log(r) - Math.log(tr));
+    if (d < bestD) {
+      bestD = d;
+      best = label;
     }
   }
   return best;
+}
+
+function agnesImageTierFromMaxDim(maxDim) {
+  if (maxDim >= 3500) return '3K';
+  if (maxDim >= 1600) return '2K';
+  return '1K';
+}
+
+/** 将项目像素尺寸映射为 Agnes size 档位 + ratio（官方 2.1/2.5 规范） */
+function mapAgnesImageSizeSpec(size) {
+  if (!size || typeof size !== 'string') return { size: '2K', ratio: '1:1' };
+  const raw = size.trim();
+  const tierMatch = raw.match(/^([1-4])[Kk]$/);
+  if (tierMatch) return { size: `${tierMatch[1]}K`, ratio: '1:1' };
+  const s = raw.toLowerCase().replace(/\*/g, 'x');
+  const match = s.match(/^(\d+)\s*x\s*(\d+)$/);
+  if (!match) return { size: '2K', ratio: '1:1' };
+  const w = parseInt(match[1], 10);
+  const h = parseInt(match[2], 10);
+  if (!w || !h) return { size: '2K', ratio: '1:1' };
+  return {
+    size: agnesImageTierFromMaxDim(Math.max(w, h)),
+    ratio: closestAgnesImageRatio(w, h),
+  };
+}
+
+/** @deprecated 兼容旧测试/调用；新请求请用 mapAgnesImageSizeSpec */
+function fixAgnesImageSize(size) {
+  return mapAgnesImageSizeSpec(size).size;
 }
 
 function dashScopeSize(size) {
@@ -1516,18 +1535,23 @@ async function callImageApi(db, log, opts) {
     });
   }
 
-  // doubao-seedream-4-5+ 要求最低 3686400 像素，不足时等比放大；Agnes 需映射到官方支持尺寸
+  // doubao-seedream-4-5+ 要求最低 3686400 像素，不足时等比放大；Agnes 使用官方 size 档位 + ratio
   let effectiveSize = size;
+  let agnesSizeSpec = null;
   if (isSeedream && size) effectiveSize = fixSeedreamSize(size);
-  else if (isAgnes && size) effectiveSize = fixAgnesImageSize(size);
+  else if (isAgnes) {
+    agnesSizeSpec = mapAgnesImageSizeSpec(size);
+    effectiveSize = agnesSizeSpec.size;
+  }
 
   const body = {
     model,
     prompt: effectivePrompt,
-    // doubao-seedream API 不使用 n，其他 OpenAI 兼容接口保留
-    ...(!isSeedream ? { n: 1 } : {}),
+    // doubao-seedream / Agnes 均不使用 n
+    ...(!isSeedream && !isAgnes ? { n: 1 } : {}),
     ...(effectiveSize ? { size: effectiveSize } : {}),
-    ...(quality ? { quality } : {}),
+    ...(isAgnes && agnesSizeSpec ? { ratio: agnesSizeSpec.ratio } : {}),
+    ...(!isAgnes && quality ? { quality } : {}),
     // volcengine 原生或 doubao-seedream 模型均需关闭水印（默认为 true）
     ...((isVolc || isSeedream) ? { watermark: false } : {}),
     // 多张参考图时加 negative_prompt，防止模型把参考图拼成左右分割的合图
@@ -1535,8 +1559,13 @@ async function callImageApi(db, log, opts) {
     ...(mergedNegativePrompt ? { negative_prompt: mergedNegativePrompt } : {}),
     // 参考图字段：volcengine doubao-seedream API 规范使用 image（数组），见官方文档
     ...(resolvedRefs.length > 0 && !isAgnes ? { image: resolvedRefs } : {}),
-    // Agnes Image 2.x：参考图放在 extra_body.image
-    ...(isAgnes && resolvedRefs.length > 0 ? { extra_body: { image: resolvedRefs, response_format: 'url' } } : {}),
+    // Agnes Image 2.x：response_format 必须放 extra_body；参考图走 extra_body.image
+    ...(isAgnes ? {
+      extra_body: {
+        response_format: 'url',
+        ...(resolvedRefs.length > 0 ? { image: resolvedRefs } : {}),
+      },
+    } : {}),
   };
   log.info('Image API request', {
     url: url.slice(0, 60),
@@ -1544,6 +1573,7 @@ async function callImageApi(db, log, opts) {
     image_gen_id,
     has_ref_images: resolvedRefs.length > 0,
     size: effectiveSize,
+    ratio: isAgnes && agnesSizeSpec ? agnesSizeSpec.ratio : undefined,
     original_size: size !== effectiveSize ? size : undefined,
     is_agnes: isAgnes,
   });
@@ -1917,6 +1947,7 @@ module.exports = {
   canAddStoryboardObjectRef,
   refListHasCanonical,
   fixAgnesImageSize,
+  mapAgnesImageSizeSpec,
   isAgnesImageConfig,
   /** 图床 URL 缓存（image_proxy_cache），供 SD2 认证等复用 */
   getProxyCache,

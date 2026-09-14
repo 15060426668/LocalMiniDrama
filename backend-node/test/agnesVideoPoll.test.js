@@ -113,6 +113,40 @@ describe('buildAgnesPollUrl (align new-api FetchTask)', () => {
     assert.equal(url, 'https://apihub.agnes-ai.com/v1/videos/task_abc');
   });
 
+  it('builds GET /agnesapi for Video 2.5 with video_id + model_name', () => {
+    const url = buildAgnesPollUrl(
+      {
+        base_url: 'https://apihub.agnes-ai.com/v1',
+        provider: 'agnes',
+        api_protocol: 'agnes',
+        model: ['agnes-video-2.5-flash'],
+        default_model: 'agnes-video-2.5-flash',
+        query_endpoint: '/agnesapi',
+      },
+      'video_abc123'
+    );
+    assert.equal(
+      url,
+      'https://apihub.agnes-ai.com/agnesapi?video_id=video_abc123&model_name=agnes-video-2.5-flash'
+    );
+  });
+
+  it('uses explicit model over config default for 2.5 poll URL', () => {
+    const url = buildAgnesPollUrl(
+      {
+        base_url: 'https://apihub.agnes-ai.com/v1',
+        model: ['agnes-video-v2.0'],
+        default_model: 'agnes-video-v2.0',
+      },
+      'video_xyz',
+      'agnes-video-2.5'
+    );
+    assert.equal(
+      url,
+      'https://apihub.agnes-ai.com/agnesapi?video_id=video_xyz&model_name=agnes-video-2.5'
+    );
+  });
+
   it('getAgnesApiRoot matches new-api apiOrigin', () => {
     assert.equal(getAgnesApiRoot('https://apihub.agnes-ai.com'), 'https://apihub.agnes-ai.com');
     assert.equal(getAgnesApiRoot('https://apihub.agnes-ai.com/v1'), 'https://apihub.agnes-ai.com');
