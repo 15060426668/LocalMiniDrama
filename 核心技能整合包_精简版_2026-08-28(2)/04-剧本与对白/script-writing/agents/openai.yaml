@@ -1,0 +1,7 @@
+interface:
+  display_name: "Script Writing"
+  short_description: "Draft scripts from archive and outline constraints."
+  default_prompt: "Use $script-writing to draft the next script section from this project archive and outline."
+
+policy:
+  allow_implicit_invocation: true

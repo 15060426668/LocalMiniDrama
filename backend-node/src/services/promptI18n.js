@@ -1,6 +1,31 @@
 // 内存覆盖缓存：key => body（仅存可编辑部分，不含锁定的 JSON 格式要求）
 const _overrideCache = {};
 
+// Skill registry for injecting professional constraints
+let _skillRegistry = null;
+async function _ensureSkillRegistry() {
+  if (!_skillRegistry) {
+    try {
+      const skillRegistry = (await import('./skillRegistry.js')).default;
+      await skillRegistry.ensureInitialized();
+      _skillRegistry = skillRegistry;
+    } catch (err) {
+      // If skill registry fails to load, continue without it (graceful degradation)
+      console.warn('[promptI18n] Skill registry not available:', err.message);
+    }
+  }
+}
+
+/**
+ * 获取指定 prompt template 的 relevant skills
+ */
+async function _getSkillsForTemplate(templateName) {
+  if (_skillRegistry) {
+    return _skillRegistry.getMappingForPromptTemplate(templateName) || [];
+  }
+  return [];
+}
+
 function loadOverridesIntoCache(overrides) {
   for (const o of overrides) {
     _overrideCache[o.key] = o.content;
@@ -984,13 +1009,13 @@ function getDefaultPromptBody(key) {
       return '【分镜要素】每个分镜聚焦一个叙事节拍（可包含内部多切镜序列），描述要详尽具体：\n1. **镜头标题(title)**：用3-5个字概括该镜头的核心内容或情绪\n2. **时间**：[清晨/午后/深夜/具体时分+详细光线描述]\n3. **地点**：[场景完整描述+空间布局+环境细节]\n4. **镜头设计**：**景别(shot_type)**、**镜头角度(angle)**、**运镜方式(movement)**\n5. **人物行为**：**详细动作描述**\n6. **对话/独白**：提取该镜头中的完整对话或独白内容（如无对话则为空字符串）\n7. **画面结果**：动作的即时后果+视觉细节+氛围变化\n8. **环境氛围**：光线质感+色调+声音环境+整体氛围\n9. **声音设计**：bgm_prompt 必须填空字符串""或"无背景音乐/禁BGM"；不要为单个片段设计背景音乐。sound_effect 只写现场环境声、动作音效、对白/旁白音色与口型同步要求\n10. **观众情绪**：[情绪类型]（[强度：↑↑↑/↑↑/↑/→/↓]）\n\n**dialogue字段说明**：角色名："台词内容"。无对话时填空字符串""。\n**scene_id**：从上方场景列表中选择最匹配的背景ID，如无合适背景则填null。\n**duration时长**：综合对话、动作、情绪估算每镜时长（具体目标秒数由系统自动注入）。\n**声音一致性**：所有镜头默认无BGM；若有对白/旁白，sound_effect 须补充音色与情绪强度。';
 
     case 'first_frame_prompt':
-      return '你是一个专业的电影分镜图像生成提示词专家。请根据提供的镜头信息，生成适合AI图像生成的提示词。\n\n重要：这是镜头的首帧 - 一个完全静态的画面，展示动作发生之前的初始状态。\n\n核心规则：\n1. 聚焦初始静态状态 - 动作发生之前的那一瞬间，禁止包含任何动作或运动描述\n2. 描述角色在画面中的位置（画面左/中/右）、朝向（面向/背对/侧面）、初始姿态和表情\n3. 如提供了角色外貌信息，必须将其融入提示词（仅使用固定身份特征：脸型、五官、发型、肤质、标记等，严禁添加或推断任何服装、衣着、服饰描述，服装由参考图决定）\n\n【电影语言规范（必须应用）】\n\n构图规则（根据景别选择）：\n- 三分法：主体置于三分线交点，稳定平衡，适合大多数叙事镜头\n- 框架构图：用门窗/树枝/栏杆形成自然画框，突出主体，增加纵深\n- 中心构图：对称庄重，适合特写和仪式感场景\n- 前景遮挡：前景虚化元素增加层次感\n\n光线设计（必须描述）：\n- 光源方向：左侧光/右侧光/顶光/逆光（轮廓光）/底光\n- 光线质感：硬光（强烈阴影，戏剧张力）/ 柔光（柔和过渡，自然温馨）\n- 色温：暖光（金黄/橙红，温暖怀旧）/ 冷光（蓝调/青白，冷漠疏离）\n\n景深设置：\n- 特写/近景：浅景深，背景虚化，突出人物情绪\n- 中景：中等景深，人物与环境均清晰\n- 远景/全景：深景深，前后均清晰，交代空间关系';
+      return '你是一个专业的电影分镜图像生成提示词专家。请根据提供的镜头信息，生成适合 AI 图像生成的提示词。\n\n重要：这是镜头的首帧 - 一个完全静态的画面，展示动作发生之前的初始状态。\n\n核心规则：\n1. 聚焦初始静态状态 - 动作发生之前的那一瞬间，禁止包含任何动作或运动描述\n2. 描述角色在画面中的位置（画面左/中/右）、朝向（面向/背对/侧面）、初始姿态和表情\n3. 如提供了角色外貌信息，必须将其融入提示词（仅使用固定身份特征：脸型、五官、发型、肤质、标记等，严禁添加或推断任何服装、衣着、服饰描述，服装由参考图决定）\n\n【LIVE-ACTION-SPATIAL-PREVIS SKILL CONSTRAINTS】\n（来自专业空间预演技能）\n- 站位精确度 CRITICAL：必须明确指定屏幕位置为「画面左侧三分之一」「画面中心」「右侧三分」之一，不可模糊表述\n- 身体姿态与景别分离：body_posture 仅写生理状态（躺/坐/站），不混入景别术语（如 close-up 不能出现在 posture 字段）\n- 真实道具尺度意识：明确写出主要道具的物理尺寸比例（古代场景示例：“木质案几位于右下前景，高度约 75cm，书卷平放为正常尺寸”；现代场景：“边桌约 45cm 高”）\n- 运镜呼吸空间预留：说明首帧可在核心站位和真实尺度一致的前提下，允许根据 movement（推/拉/摇/跟）进行取景微调（缓推可稍紧、手持可轻微晃动偏移）\n- 跨镜连贯性铁律：新布局必须与上一分镜的布局自然延续，除非 ACTION/RESULT 明确要求变化\n\n【电影语言规范（必须应用）】\n\n构图规则（根据景别选择）：\n- 三分法：主体置于三分线交点，稳定平衡，适合大多数叙事镜头\n- 框架构图：用门窗/树枝/栏杆形成自然画框，突出主体，增加纵深\n- 中心构图：对称庄重，适合特写和仪式感场景\n- 前景遮挡：前景虚化元素增加层次感\n\n光线设计（必须描述）：\n- 光源方向：左侧光/右侧光/顶光/逆光（轮廓光）/底光\n- 光线质感：硬光（强烈阴影，戏剧张力）/ 柔光（柔和过渡，自然温馨）\n- 色温：暖光（金黄/橙红，温暖怀旧）/ 冷光（蓝调/青白，冷漠疏离）\n\n景深设置：\n- 特写/近景：浅景深，背景虚化，突出人物情绪\n- 中景：中等景深，人物与环境均清晰\n- 远景/全景：深景深，前后均清晰，交代空间关系';
 
     case 'key_frame_prompt':
-      return '你是一个专业的电影分镜图像生成提示词专家。请根据提供的镜头信息，生成适合AI图像生成的提示词。\n\n重要：这是镜头的关键帧 - 捕捉动作最激烈、情绪最饱满的高潮瞬间。\n\n核心规则：\n1. 聚焦动作高潮时刻，最大化戏剧张力\n2. 捕捉情绪顶点，角色表情和肢体语言处于最强烈状态\n3. 可包含动态效果（动作模糊、视觉冲击感）\n4. 如提供了角色外貌信息，必须将其融入提示词（仅使用固定身份特征：脸型、五官、发型、肤质、标记等，严禁添加或推断任何服装、衣着、服饰描述，服装由参考图决定）\n5. 展示角色高潮状态下的肢体姿态和神情\n\n【电影语言规范（必须应用）】\n\n构图规则（高潮/动作场景）：\n- 对角线构图：强烈动态感，视觉引导，适合冲突/行动镜头\n- 荷兰角/斜角：不安感和紧张感，适合对峙/心理冲击场景\n- 过肩镜头：适合对话高潮、面对面对峙\n\n光线设计（高潮时刻）：\n- 轮廓光：将主体从背景中分离，突出人物\n- 强烈明暗对比（硬光）：戏剧张力，冲突感\n- 爆发性亮光：适合揭示真相、情绪爆发时刻\n- 色温情绪化：暖色饱和（激情/愤怒）/ 冷色低饱和（震惊/失落）\n\n景深与色调：\n- 通常使用浅景深聚焦关键动作，隔离背景\n- 高对比度色调强化高潮感';
+      return '你是一个专业的电影分镜图像生成提示词专家。请根据提供的镜头信息，生成适合 AI 图像生成的提示词。\n\n重要：这是镜头的关键帧 - 捕捉动作最激烈、情绪最饱满的高潮瞬间。\n\n核心规则：\n1. 聚焦动作高潮时刻，最大化戏剧张力\n2. 捕捉情绪顶点，角色表情和肢体语言处于最强烈状态\n3. 可包含动态效果（动作模糊、视觉冲击感）\n4. 如提供了角色外貌信息，必须将其融入提示词（仅使用固定身份特征：脸型、五官、发型、肤质、标记等，严禁添加或推断任何服装、衣着、服饰描述，服装由参考图决定）\n5. 展示角色高潮状态下的肢体姿态和神情\n\n【ANIMATION-SUSPENSE-PERFORMANCE SKILL CONSTRAINTS】\n（来自专业动画表演深化技能）\n- timing/spacing 原则：高潮瞬间的 body_posture 必须在时间轴上位于动作 arc 的顶点而非过程中\n- full-frame-motion 要求：即使高潮时刻也要描述全画面范围内的运动元素（前景虚化飘动的物体、背景中的移动元素等）\n- landing-state 预设：高潮瞬间必须是后续尾帧可自然衔接的状态点（例如：挥剑高潮是剑举过头顶而非挥舞半程）\n\n【电影语言规范（必须应用）】\n\n构图规则（高潮/动作场景）：\n- 对角线构图：强烈动态感，视觉引导，适合冲突/行动镜头\n- 荷兰角/斜角：不安感和紧张感，适合对峙/心理冲击场景\n- 过肩镜头：适合对话高潮、面对面对峙\n\n光线设计（高潮时刻）：\n- 轮廓光：将主体从背景中分离，突出人物\n- 强烈明暗对比（硬光）：戏剧张力，冲突感\n- 爆发性亮光：适合揭示真相、情绪爆发时刻\n- 色温情绪化：暖色饱和（激情/愤怒）/ 冷色低饱和（震惊/失落）\n\n景深与色调：\n- 通常使用浅景深聚焦关键动作，隔离背景\n- 高对比度色调强化高潮感';
 
     case 'last_frame_prompt':
-      return '你是一个专业的电影分镜图像生成提示词专家。请根据提供的镜头信息，生成适合AI图像生成的提示词。\n\n重要：这是镜头的尾帧 - 一个静态画面，展示动作结束后的最终状态和结果。\n\n核心规则：\n1. 聚焦动作完成后的最终静态状态\n2. 展示动作的可见结果和后果\n3. 描述角色在动作完成后的最终姿态、位置和情绪表情\n4. 强调情绪余韵：释然/平静/悲伤/胜利/遗憾\n5. 如提供了角色外貌信息，必须将其融入提示词（仅使用固定身份特征：脸型、五官、发型、肤质、标记等，严禁添加或推断任何服装、衣着、服饰描述，服装由参考图决定）\n\n【电影语言规范（必须应用）】\n\n构图规则（收尾镜头）：\n- 通常用较宽的景别重建空间背景，或用紧镜头聚焦情绪收场\n- 留白构图：大面积空旷空间传递孤独/结束感\n- 呼应开场构图：收尾镜头可与首帧构图呼应，形成闭环\n\n光线设计（情绪余韵）：\n- 柔和暖光：事件解决后的温情/宽慰\n- 残留戏剧阴影：未解决的张力，悬念延续\n- 渐弱光线/冷调：失去/结束/遗憾的情绪\n- 色调整体偏暗或偏亮反映情绪归宿\n\n景深与氛围：\n- 情绪收场：浅景深，聚焦面部情绪细节\n- 结果展示：深景深，展示行动对环境/他人的影响';
+      return '你是一个专业的电影分镜图像生成提示词专家。请根据提供的镜头信息，生成适合 AI 图像生成的提示词。\n\n重要：这是镜头的尾帧 - 一个静态画面，展示动作结束后的最终状态和结果。\n\n核心规则：\n1. 聚焦动作完成后的最终静态状态\n2. 展示动作的可见结果和后果\n3. 描述角色在动作完成后的最终姿态、位置和情绪表情\n4. 强调情绪余韵：释然/平静/悲伤/胜利/遗憾\n5. 如提供了角色外貌信息，必须将其融入提示词（仅使用固定身份特征：脸型、五官、发型、肤质、标记等，严禁添加或推断任何服装、衣着、服饰描述，服装由参考图决定）\n\n【LIVE-ACTION-SPATIAL-PREVIS SKILL CONSTRAINTS】\n（来自专业空间预演技能）\n- 站位精确度 CRITICAL：必须与首帧保持一致的核心站位，除非 ACTION 明确描写了位置变化\n- 身体姿态连续性：动作完成后的 posture 必须能自然衔接上一帧的初始 state（躺→站起后坐/站；坐→站立离座）\n- 道具尺度一致性：道具物理尺寸不得随镜头变化（案几始终是~75cm 高，书卷始终正常比例）\n- 跨镜连贯性铁律：尾帧布局与下一镜首帧布局必须形成自然的空间过渡链，避免跳切感\n\n【电影语言规范（必须应用）】\n\n构图规则（收尾镜头）：\n- 通常用较宽的景别重建空间背景，或用紧镜头聚焦情绪收场\n- 留白构图：大面积空旷空间传递孤独/结束感\n- 呼应开场构图：收尾镜头可与首帧构图呼应，形成闭环\n\n光线设计（情绪余韵）：\n- 柔和暖光：事件解决后的温情/宽慰\n- 残留戏剧阴影：未解决的张力，悬念延续\n- 渐弱光线/冷调：失去/结束/遗憾的情绪\n- 色调整体偏暗或偏亮反映情绪归宿\n\n景深与氛围：\n- 情绪收场：浅景深，聚焦面部情绪细节\n- 结果展示：深景深，展示行动对环境/他人的影响';
 
     default:
       return '';
@@ -1294,9 +1319,16 @@ CONTEXT_NEXT: <next shot summary — ignore for image, relevant only for mood>`;
   }
 
   // 中文版：输出中文 prompt，铁律禁止服装描述
-  return `你是一个专业的电影分镜图像生成提示词优化专家，专长于将分镜描述转化为适合AI图片生成模型的**静态单帧**优化提示词。
+  return `你是一个专业的电影分镜图像生成提示词优化专家，专长于将分镜描述转化为适合 AI 图片生成模型的**静态单帧**优化提示词。
 
-你的任务：输出**仅最终中文 prompt**（直接给图片AI使用，无任何解释、无标签、无JSON、无前言）。
+你的任务：输出**仅最终中文 prompt**（直接给图片 AI 使用，无任何解释、无标签、无 JSON、无前言）。
+
+【MJ-CINEMATIC-IMAGE-PROMPT / PSYCHOLOGICAL-ANIME-IMAGEGEN SKILL CONSTRAINTS】
+（根据剧目类型动态注入对应技能规则）
+- 构图专业度：强制使用至少一种高级电影构图法（三分法/对称构图/引导线构图/框架构图），禁止平庸的中心平视视角
+- 光影叙事性：必须明确光源位置与质感，光线不仅是照明更是情绪工具（硬光=冲突，柔光=温情，逆光=悬念）
+- 景深层次：近景/特写必须浅景深突出主体；远景/全景必须深景深交代空间关系
+- 画面呼吸感：即使在静态单帧中也要暗示即将发生的动作（例如：角色身体微前倾暗示即将站起）
 
 【核心严格规则】
 
@@ -1397,17 +1429,34 @@ If CURRENT_UNIVERSAL_SEGMENT is non-empty, preserve narrative beats but rewrite 
 /**
  * 全能片段「润色」模式：在 getUniversalOmniSegmentPrompt 的硬性格式与参考图规则之上，强化短剧叙事与上下文一致。
  */
-function getUniversalOmniPolishPrompt() {
-  return `${getUniversalOmniSegmentPrompt()}
+async function getUniversalOmniPolishPrompt(cfg) {
+  const base = getUniversalOmniSegmentPrompt();
+  
+  // Inject skill constraints from dream-suspense-sd
+  await _ensureSkillRegistry();
+  let skillRules = '';
+  if (_skillRegistry) {
+    const skills = _skillRegistry.getMappingForPromptTemplate('getUniversalOmniPolishPrompt');
+    if (skills.length > 0) {
+      // Load actual rules from first relevant skill
+      const dsSkill = _skillRegistry.skills.get('dream-suspense-sd');
+      if (dsSkill && dsSkill.rules) {
+        skillRules = `\n# DREAM-SUSPENSE-SD SKILL CONSTRAINTS:\n${dsSkill.rules}\n`;
+      }
+    }
+  }
+  
+  return `${base}
+${skillRules}
 
 ADDITIONAL_POLISH_MODE (short drama enhancement — still MUST obey MULTI_BEAT_OUTPUT, TOTAL_CLIP_SECONDS sum, IMAGE_SLOT_MAP, LINE3_REQUIRED above):
 - You receive FULL_EPISODE_SCRIPT plus NEIGHBOR blocks and structured fields. Use them only for **continuity** and **information completeness**; do NOT invent plot absent from SCRIPT + STORYBOARD FIELDS + CURRENT omni draft.
-- **Information parity**: every script-relevant fact must appear across the子分镜 lines (lines 4…3+M), without losing information when expanding; if the draft was an old SoulLens single-line, **rewrite** into this multi-beat block; keep the same facts and total seconds.
-- **Re-polish / anti-stagnation**: USER may click polish repeatedly on the same draft. Each response MUST deliver **substantially rephrased** Chinese on lines 1, 2 (if M changes), and all子分镜 body lines — same facts, same total seconds, same @图片 bindings, but **not** a copy-paste of CURRENT_OMNI_DRAFT except line 3 which must stay **character-identical** to LINE3_REQUIRED. If you would otherwise output nearly identical prose, deliberately vary verbs, clause order, and camera wording while preserving meaning.
+- **Information parity**: every script-relevant fact must appear across the sub-shot lines (lines 4...3+M), without losing information when expanding; if the draft was an old SoulLens single-line, **rewrite** into this multi-beat block; keep the same facts and total seconds.
+- **Re-polish / anti-stagnation**: USER may click polish repeatedly on the same draft. Each response MUST deliver **substantially rephrased** Chinese on lines 1, 2 (if M changes), and all sub-shot body lines — same facts, same total seconds, same @图片 bindings, but **not** a copy-paste of CURRENT_OMNI_DRAFT except line 3 which must stay **character-identical** to LINE3_REQUIRED. If you would otherwise output nearly identical prose, deliberately vary verbs, clause order, and camera wording while preserving meaning.
 - **Short drama rhythm**: vertical-drama density — stakes, micro-expressions, blocking, camera motion; distribute across beats when M>1.
-- **Inner monologue & dialogue**: brief 心想 / 「」 only when supported by DIALOGUE / NARRATION / SCRIPT / draft. When DIALOGUE_VERBATIM is present, **every** listed line must remain verbatim in 「」 after polish; rephrase motion/camera text freely but **not** quoted dialogue.
+- **Inner monologue & dialogue**: brief 心想 / 「」only when supported by DIALOGUE / NARRATION / SCRIPT / draft. When DIALOGUE_VERBATIM is present, **every** listed line must remain verbatim in 「」after polish; rephrase motion/camera text freely but **not** quoted dialogue.
 - **Neighbors**: align entry/exit with NEIGHBOR_* ; no redundant retelling of the previous shot.
-- Language: Chinese for子分镜 prose; lines 1–3 format as in base prompt; M must match line 2 and match the count of「分镜k」lines.`;
+- Language: Chinese for sub-shot prose; lines 1–3 format as in base prompt; M must match line 2 and match the count of "分镜 k"lines.`;
 }
 
 /**

@@ -833,6 +833,11 @@ async function processImageGeneration(db, log, imageGenId) {
             charListParsed = null;
           }
         }
+                
+        // 关键修复：统一收集逻辑，避免角色被重复添加
+        const addedCharRefs = new Set();
+        const addedPropRefs = new Set();
+                
         if (charListParsed && charListParsed.length) {
           for (const item of charListParsed) {
             if (!imageClient.canAddStoryboardCharacterRef(refLabels, refLimits)) break;
@@ -853,12 +858,14 @@ async function processImageGeneration(db, log, imageGenId) {
                 isPanel = true;
               }
             }
-            if (charRef) {
+            if (charRef && !addedCharRefs.has(charRef)) {
               refs.push(charRef);
-              refLabels.push(`Image ${refs.length}: character appearance reference for "${c.name || 'character'}"${isPanel ? ' (front full-body view from history panel)' : ' (current character image)'}`);
+              refLabels.push(`Image ${refs.length}: character appearance reference for "${c.name || 'character'}"${isPanel ? ' (front full-body view from history panel)' : ' (current character image)'}\tROLE_INDEX:${refs.length}`);
+              addedCharRefs.add(charRef);
             }
           }
         }
+                
         // ── 分镜关联道具（storyboard_props）→ 参考图（前端「物品」与 DB 一致，此前未参与 Step2）──
         try {
           const propLinks = db.prepare('SELECT prop_id FROM storyboard_props WHERE storyboard_id = ?').all(row.storyboard_id);
@@ -875,60 +882,62 @@ async function processImageGeneration(db, log, imageGenId) {
                 if (Array.isArray(extras) && extras[0]) propRef = extras[0];
               } catch (_) {}
             }
-            if (propRef && !imageClient.refListHasCanonical(refs, propRef)) {
+            if (propRef && !addedPropRefs.has(propRef)) {
               refs.push(propRef);
-              refLabels.push(`Image ${refs.length}: prop/object appearance reference for "${prop.name || 'prop'}"`);
+              refLabels.push(`Image ${refs.length}: prop/object appearance reference for "${prop.name || 'prop'}"\tROLE_INDEX:${refs.length}`);
+              addedPropRefs.add(propRef);
             }
           }
         } catch (_) {}
         // ── 补充：从 storyboard_characters 关联表查 character_libraries 的四视图 URL ──
-        // 若分镜已显式配置 characters JSON，则只保留「当前勾选角色同名」的库条目，避免 UI 已去掉的人仍被当作参考图
-        const allowedLibNamesLower = new Set();
+        // 【关键修复】只有当 characters JSON 为空/未配置时，才尝试从 character_libraries 补图
+        // 如果分镜已显式配置 characters JSON，则不再从 library 重复添加参考图，避免顺序错位
         if (explicitDramaCharIds !== null && explicitDramaCharIds.length > 0) {
-          for (const cid of explicitDramaCharIds) {
-            const nm = db.prepare('SELECT name FROM characters WHERE id = ? AND deleted_at IS NULL').get(Number(cid));
-            if (nm?.name) allowedLibNamesLower.add(String(nm.name).trim().toLowerCase());
-          }
-        }
-        const restrictLibToExplicitSelection = explicitDramaCharIds !== null;
-        try {
-          const libLinks = db.prepare('SELECT character_id FROM storyboard_characters WHERE storyboard_id = ?').all(row.storyboard_id);
-          const coveredNames = new Set();
-          for (const link of libLinks) {
-            if (!imageClient.canAddStoryboardCharacterRef(refLabels, refLimits)) break;
-            const lib = db.prepare(
-              'SELECT id, name, four_view_image_url, image_url, local_path FROM character_libraries WHERE id = ? AND deleted_at IS NULL'
-            ).get(link.character_id);
-            if (!lib) continue;
-            if (restrictLibToExplicitSelection) {
-              const ln = String(lib.name || '').trim().toLowerCase();
-              if (!ln || !allowedLibNamesLower.has(ln)) continue;
-            }
-            if (coveredNames.has(lib.name)) continue;
-            // 优先使用角色库当前主图（four_view_image_url → image_url → local_path），只有当前字段为空才降级使用历史 quad_panel_1 面板
-            // 这样“重新生成角色四视图/主图”后，分镜图生成能立即取到最新图片
-            let libRef = lib.four_view_image_url || lib.local_path || lib.image_url;
-            let isPanel = false;
-            let isFourView = !!lib.four_view_image_url;
-            if (!libRef) {
-              const libPanel = db.prepare(
-                `SELECT local_path, image_url FROM image_generations
-                 WHERE character_id = ? AND frame_type = 'quad_panel_1' AND status = 'completed'
-                 ORDER BY id DESC LIMIT 1`
-              ).get(lib.id);
-              if (libPanel && (libPanel.local_path || libPanel.image_url)) {
-                libRef = libPanel.local_path || libPanel.image_url;
-                isPanel = true;
-                isFourView = false;
+          // 显式配置了 characters → 跳过 library 补图，避免重复
+          log.debug('[imageService] Step2: 分镜已显式配置 characters JSON，跳过 character_libraries 补图');
+        } else {
+          // 未配置 characters → 允许从 library 补图
+          const restrictLibToExplicitSelection = false;
+          try {
+            const libLinks = db.prepare('SELECT character_id FROM storyboard_characters WHERE storyboard_id = ?').all(row.storyboard_id);
+            const coveredNames = new Set();
+            for (const link of libLinks) {
+              if (!imageClient.canAddStoryboardCharacterRef(refLabels, refLimits)) break;
+              const lib = db.prepare(
+                'SELECT id, name, four_view_image_url, image_url, local_path FROM character_libraries WHERE id = ? AND deleted_at IS NULL'
+              ).get(link.character_id);
+              if (!lib) continue;
+              if (restrictLibToExplicitSelection) {
+                const ln = String(lib.name || '').trim().toLowerCase();
+                if (!ln || !allowedLibNamesLower.has(ln)) continue;
+              }
+              if (coveredNames.has(lib.name)) continue;
+              // 优先使用角色库当前主图（four_view_image_url → image_url → local_path），只有当前字段为空才降级使用历史 quad_panel_1 面板
+              // 这样“重新生成角色四视图/主图”后，分镜图生成能立即取到最新图片
+              let libRef = lib.four_view_image_url || lib.local_path || lib.image_url;
+              let isPanel = false;
+              let isFourView = !!lib.four_view_image_url;
+              if (!libRef) {
+                const libPanel = db.prepare(
+                  `SELECT local_path, image_url FROM image_generations
+                   WHERE character_id = ? AND frame_type = 'quad_panel_1' AND status = 'completed'
+                   ORDER BY id DESC LIMIT 1`
+                ).get(lib.id);
+                if (libPanel && (libPanel.local_path || libPanel.image_url)) {
+                  libRef = libPanel.local_path || libPanel.image_url;
+                  isPanel = true;
+                  isFourView = false;
+                }
+              }
+              if (libRef && !addedCharRefs.has(libRef)) {
+                refs.push(libRef);
+                refLabels.push(`Image ${refs.length}: character appearance reference for "${lib.name || 'character'}"${isPanel ? ' (front full-body view from history panel)' : isFourView ? ' (four-view reference sheet)' : ' (character image)'}\tROLE_INDEX:${refs.length}`);
+                addedCharRefs.add(libRef);
+                coveredNames.add(lib.name);
               }
             }
-            if (libRef && !imageClient.refListHasCanonical(refs, libRef)) {
-              refs.push(libRef);
-              refLabels.push(`Image ${refs.length}: character appearance reference for "${lib.name || 'character'}"${isPanel ? ' (front full-body view from history panel)' : isFourView ? ' (four-view reference sheet)' : ' (character image)'}`);
-              coveredNames.add(lib.name);
-            }
-          }
-        } catch (_) {}
+          } catch (_) {}
+        }
 
         // ── Step 2.1: 文本补扫 — 检测 prompt/action/dialogue 中提及但未关联的角色 ────────────────
         // 若用户已在分镜上显式勾选角色名单（含空数组），则不再根据台词把已去掉的角色塞回参考图。

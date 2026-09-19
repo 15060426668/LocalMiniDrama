@@ -1,0 +1,7 @@
+interface:
+  display_name: "Live-Action Spatial Previs"
+  short_description: "Map actor blocking and camera geometry before shooting."
+  default_prompt: "Use $live-action-spatial-previs to build a validated top-down blocking plan and camera handoff."
+
+policy:
+  allow_implicit_invocation: true

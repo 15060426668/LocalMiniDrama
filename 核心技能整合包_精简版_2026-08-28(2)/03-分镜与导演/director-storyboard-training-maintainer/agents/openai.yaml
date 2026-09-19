@@ -1,0 +1,4 @@
+interface:
+  display_name: "分镜训练维护器"
+  short_description: "吸收与审计分镜训练素材，去污染去重并维护双技能回归"
+  default_prompt: "Use $director-storyboard-training-maintainer to absorb this storyboard training batch and deposit only verified reusable mechanisms."

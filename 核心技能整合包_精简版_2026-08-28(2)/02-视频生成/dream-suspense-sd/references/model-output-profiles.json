@@ -1,0 +1,115 @@
+{
+  "profile_version": "2.0",
+  "evidence_status": "theoretical_until_calibration_ledger_promotes",
+  "default_profile": "model_execution",
+  "user_facing_format": "plain_text",
+  "json_usage": "internal_validation_only",
+  "user_facing_json_forbidden": true,
+  "attachment_policy": {
+    "model_payload": [
+      "BASE LOCK",
+      "A区块·模型执行词"
+    ],
+    "excluded_by_default": [
+      "E区块",
+      "声音后期表",
+      "自审报告",
+      "来源账本"
+    ]
+  },
+  "profiles": {
+    "model_execution": {
+      "field_order": [
+        "camera",
+        "action",
+        "relation_environment",
+        "sound_light_transition",
+        "tail"
+      ],
+      "density": "medium",
+      "camera_first": true,
+      "include_attachments": false,
+      "output_format": "plain_text"
+    },
+    "master_lossless": {
+      "field_order": [
+        "camera",
+        "action",
+        "relation_environment",
+        "sound_light_transition",
+        "tail"
+      ],
+      "density": "full",
+      "camera_first": true,
+      "include_attachments": true,
+      "output_format": "plain_text"
+    },
+    "seedance_execution": {
+      "field_order": [
+        "camera",
+        "action",
+        "relation_environment",
+        "sound_light_transition",
+        "tail"
+      ],
+      "density": "medium",
+      "camera_first": true,
+      "include_attachments": false,
+      "output_format": "plain_text"
+    },
+    "kling_execution": {
+      "field_order": [
+        "action",
+        "camera",
+        "relation_environment",
+        "sound_light_transition",
+        "tail"
+      ],
+      "density": "medium",
+      "camera_first": false,
+      "include_attachments": false,
+      "output_format": "plain_text"
+    },
+    "runway_execution": {
+      "field_order": [
+        "camera",
+        "action",
+        "relation_environment",
+        "sound_light_transition",
+        "tail"
+      ],
+      "density": "compact",
+      "camera_first": true,
+      "include_attachments": false,
+      "output_format": "plain_text"
+    },
+    "image_to_video_delta": {
+      "field_order": [
+        "camera",
+        "action",
+        "relation_environment",
+        "sound_light_transition",
+        "tail"
+      ],
+      "density": "compact",
+      "camera_first": true,
+      "include_attachments": false,
+      "output_format": "plain_text"
+    }
+  },
+  "default_animation_schema": "animation_text_v6",
+  "animation_text_v6_fields": {
+    "required": [
+      "镜头与构图",
+      "主体动作与表演",
+      "关系/物件/环境反馈",
+      "声光与转场触发",
+      "尾帧与连续性"
+    ],
+    "priority": [
+      "主体动作与表演",
+      "镜头与构图",
+      "关系/物件/环境反馈"
+    ]
+  }
+}

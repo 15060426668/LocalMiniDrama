@@ -1,0 +1,4 @@
+interface:
+  display_name: "视频提示词工作台"
+  short_description: "迁移通用视频提示词生成器与视频反推提示词，支持文字/图片/视频到通用视频模型 Prompt。"
+  default_prompt: "请使用 $video-prompt-workbench 判断素材用途，并生成或反推通用 AI 视频提示词。"

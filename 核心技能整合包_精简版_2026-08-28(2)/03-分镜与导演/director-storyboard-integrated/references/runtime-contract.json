@@ -1,0 +1,555 @@
+{
+    "contract_version":  "6.0",
+    "aspect_ratio_default":  "21:9",
+    "phase_contract":  {
+                           "story_readiness":  "验证场景功能、角色目标、阻力、策略、因果、退出变化和下一段债务；问题返回对应上游",
+                           "dialogue_lock":  "验证声纹、潜台词、信息效率、说听变化和可用口型时间；不得在分镜或SD层擅改批准台词",
+                           "brief_scheme":  "围绕当前段主戏剧事务输出零到六个真正不同的导演方案；不输出正式镜头表或SD",
+                           "detailed_storyboard":  "把批准方案按当前故事、空间、整秒时长和AIGC条件设计为唯一正式分镜",
+                           "animation_performance":  "在不改剧情、台词和镜头任务的前提下深化动作、timing/spacing、画面法则、环境接力和尾态",
+                           "approval_lock":  "用户批准的正式分镜成为下游唯一内容来源",
+                           "sd_compile":  "把批准分镜编译为纯文本BASE LOCK+A；JSON仅供内部验证，永不作为用户交付",
+                           "result_repair":  "定位故事、台词、导演、动画、SD、模型或后期中的首个失败层并最小修复"
+                       },
+    "phase_advancement":  {
+                              "one_user_visible_phase_per_turn":  true,
+                              "advance_requires_explicit_user_command":  true,
+                              "pipeline_description_is_not_a_request_to_output_all_phases":  true,
+                              "selection_turn_stops_before_detailed_storyboard":  true,
+                              "detailed_storyboard_turn_stops_before_sd":  true
+                          },
+    "segment_entry_refresh":  {
+                                  "continuity_state_inherits":  true,
+                                  "visible_first_shot_refreshes":  true,
+                                  "default_entry":  "hard_cut_to_new_shot",
+                                  "refresh_axes":  [
+                                                       "camera_position_or_angle",
+                                                       "shot_size",
+                                                       "focus_route",
+                                                       "information_owner"
+                                                   ],
+                                  "repeat_previous_tail_as_opening_default":  false,
+                                  "model_prompt_wording":  "Describe the exact new opening composition and cut; do not use generic wording equivalent to continue the previous image.",
+                                  "exceptions":  [
+                                                     "user_explicitly_requests_one_take",
+                                                     "user_explicitly_requests_continuous_camera_motion",
+                                                     "the_visible_continuation_itself_is_the_approved_transition_mechanism"
+                                                 ]
+                              },
+    "counterpart_workflow":  {
+                                 "candidate_count_range":  [
+                                                               0,
+                                                               6
+                                                           ],
+                                 "candidate_count_is_quota":  false,
+                                 "return_only_storyboard_relevant_references":  true,
+                                 "counterpart_binding_required":  false,
+                                 "counterpart_match_target":  "reusable_storyboard_mechanisms_not_equal_duration_replication",
+                                 "counterpart_match_granularity":  "textual_scene_and_shot_mechanism_without_timestamp_requirement",
+                                 "broad_plot_summary_cannot_qualify":  true,
+                                 "exact_film_timestamp_required":  false,
+                                 "rough_film_location_required":  false,
+                                 "equal_duration_excerpt_required":  false,
+                                 "film_pacing_transfer_required":  false,
+                                 "shortform_retiming_required":  true,
+                                 "selection_turn_required_output":  [
+                                                                        "film_and_scene_identifier",
+                                                                        "composition_and_camera_mechanism",
+                                                                        "blocking_and_information_release",
+                                                                        "rhythm_sound_and_transition_mechanism",
+                                                                        "reusable_rules",
+                                                                        "replacement_variables",
+                                                                        "strengths_and_failure_boundaries"
+                                                                    ],
+                                 "direct_storyboard_transplant_default":  false,
+                                 "no_match_fallback":  "independent_original_director_schemes",
+                                 "user_may_decline_any_reference":  true,
+                                 "storyboard_reference_gate":  {
+                                                                   "minimum_useful_mechanism_axes":  2,
+                                                                   "mechanism_axes":  [
+                                                                                          "composition_and_camera",
+                                                                                          "blocking_and_spatial_design",
+                                                                                          "rhythm_and_information_release",
+                                                                                          "sound_transition_and_vfx_logic",
+                                                                                          "performance_or_object_language",
+                                                                                          "aigc_execution_transferability"
+                                                                                      ],
+                                                                   "replaceable_variables":  [
+                                                                                                 "character_identity",
+                                                                                                 "character_knowledge_or_awareness",
+                                                                                                 "relationship",
+                                                                                                 "dialogue",
+                                                                                                 "plot_cause",
+                                                                                                 "setting_and_environment",
+                                                                                                 "props",
+                                                                                                 "costume",
+                                                                                                 "threat_identity",
+                                                                                                 "dream_or_world_rule_explanation"
+                                                                                             ],
+                                                                   "rejection_conditions":  [
+                                                                                                "only_plot_or_theme_similarity_without_visual_mechanism",
+                                                                                                "mechanism_cannot_be_expressed_as_shootable_text",
+                                                                                                "core_staging_depends_on_an_untransferable_physical_requirement",
+                                                                                                "aigc_execution_risk_destroys_the_intended_mechanism"
+                                                                                            ]
+                                                               },
+                                 "multiple_film_references_per_scheme_allowed":  true,
+                                 "cross_film_director_synthesis_allowed":  true,
+                                 "synthesis_requires_user_approval":  true,
+                                 "film_reference_role":  "training_and_design_evidence_only",
+                                 "approved_storyboard_becomes_sole_sd_source":  true,
+                                 "film_metadata_retained_in_sd_checksum":  false,
+                                 "user_supplied_footage_exact_analysis_optional":  true,
+                                 "reference_to_storyboard_order":  [
+                                                                       "multiple_reference_breakdown",
+                                                                       "reusable_mechanism_extraction",
+                                                                       "user_filtering_or_combination_approval",
+                                                                       "shortform_retiming",
+                                                                       "formal_storyboard"
+                                                                   ],
+                                 "long_sequence_segment_duration_seconds":  [
+                                                                                4,
+                                                                                30
+                                                                            ],
+                                 "single_segment_when_requested_total_is_within_limit":  true,
+                                 "long_sequence_segmentation_mode":  "adaptive_from_requested_total_duration_and_natural_story_beats",
+                                 "fixed_partition_template_allowed":  false,
+                                 "segment_durations_must_sum_to_requested_total":  true,
+                                 "short_remainder_rebalancing_required":  true,
+                                 "segment_boundary_priority":  [
+                                                                   "completed_action_or_camera_phrase",
+                                                                   "threshold_or_transition_landing",
+                                                                   "information_turn_or_power_shift",
+                                                                   "sound_or_vfx_resolution",
+                                                                   "tail_frame_ready_for_continuity"
+                                                               ],
+                                 "preserve_from_references":  [
+                                                                  "useful_composition_principles",
+                                                                  "camera_and_blocking_mechanisms",
+                                                                  "information_release_logic",
+                                                                  "sound_and_transition_ideas",
+                                                                  "performance_object_and_background_language",
+                                                                  "known_failure_boundaries"
+                                                              ],
+                                 "redesign_for_current_short":  [
+                                                                    "shot_order",
+                                                                    "shot_duration",
+                                                                    "camera_path",
+                                                                    "blocking",
+                                                                    "focus_route",
+                                                                    "sound_beats",
+                                                                    "transition_logic",
+                                                                    "tail_frame_and_continuity"
+                                                                ]
+                             },
+    "timing":  {
+                   "integer_seconds_only":  true,
+                   "fixed_shot_refresh_max_seconds":  4,
+                   "sd_segment_max_seconds":  30,
+                   "user_visible_segment_policy":  "one_plain_text_prompt_per_4_30_second_segment",
+                   "internal_a_beats_allowed":  true,
+                   "animation_internal_beat_duration_seconds":  [
+                                                                    2,
+                                                                    4
+                                                                ],
+                   "animation_midpoint_refresh_window_seconds":  [
+                                                                     12,
+                                                                     18
+                                                                 ],
+                   "keep_16_30_animation_in_one_prompt_by_default":  true,
+                   "separate_prompt_conditions":  [
+                                                      "total_duration_exceeds_30_seconds",
+                                                      "user_explicitly_requests_multiple_prompts",
+                                                      "an_internal_beat_remains_overloaded_after_sequential_splitting",
+                                                      "character_limit_conflicts_with_complete_source_coverage"
+                                                  ]
+               },
+    "formal_storyboard_fields":  [
+                                     "镜头",
+                                     "时长",
+                                     "景别/焦段",
+                                     "构图画面",
+                                     "机位与运镜",
+                                     "光影/色彩",
+                                     "画面基调/质感",
+                                     "实拍摄影证据",
+                                     "画面内容",
+                                     "运动生态/层级交互",
+                                     "声音设计",
+                                     "转场",
+                                     "叙事目的",
+                                     "镜间变化/尾帧"
+                                 ],
+    "sd_output_architecture":  {
+                                   "default_user_output":  "model_execution",
+                                   "user_facing_format":  "plain_text",
+                                   "json_usage_scope":  "internal_validation_only",
+                                   "user_facing_json_forbidden":  true,
+                                   "execution_payload":  [
+                                                             "BASE LOCK",
+                                                             "A区块·模型执行词"
+                                                         ],
+                                   "optional_attachments":  [
+                                                                "E区块·审核索引",
+                                                                "声音后期表",
+                                                                "自审报告"
+                                                            ],
+                                   "attachments_are_outside_model_payload":  true,
+                                   "global_lock_policy":  "stable_model_bearing_invariants_only",
+                                   "temporal_delta_owner":  "A",
+                                   "tail_continuity_field":  "尾帧与连续性",
+                                   "perceptual_sound_owner":  "A",
+                                   "numeric_sound_owner":  "sound_post_attachment",
+                                   "e_required_for_model_execution":  false,
+                                   "e_required_for_master_lossless":  true,
+                                   "source_omission_requires_explicit_user_command":  true,
+                                   "compression_policy":  "deduplicate_stable_facts_never_compress_action_dialogue_or_tail",
+                                   "animation_default_schema":  "animation_text_v6",
+                                   "character_limit_policy":  "split_internal_beats_before_new_prompts_never_summarize",
+                                   "source_ip_names_allowed_in_model_payload":  false,
+                                   "strict_source_anchor_coverage_default":  true,
+                                   "source_fact_retention":  "lossless_internal_ledger",
+                                   "model_payload_policy":  "execution_complete_plain_text_v6"
+                               },
+    "animation_performance_handoff":  {
+                                          "skill":  "animation-suspense-performance",
+                                          "required_fields":  [
+                                                                  "表演任务",
+                                                                  "知情/误读权限",
+                                                                  "事件强度 / 内在情绪 / 公开表情 / 可见反应幅度",
+                                                                  "正常基准",
+                                                                  "触发",
+                                                                  "关键姿势链",
+                                                                  "时间与间距",
+                                                                  "脸部与口型",
+                                                                  "身体/重心/手脚",
+                                                                  "次级运动与材质",
+                                                                  "声音触发",
+                                                                  "恢复与尾帧",
+                                                                  "SD承接锚点"
+                                                              ],
+                                          "stable_baseline_owner":  "BASE_or_first_A",
+                                          "timed_performance_owner":  "A",
+                                          "recovery_tail_owner":  "尾帧与连续性",
+                                          "omission_default":  false,
+                                          "character_limit_resolution":  "sequential_split"
+                                      },
+    "sd_a_fields":  [
+                        "镜头与构图",
+                        "主体动作与表演",
+                        "关系/物件/环境反馈",
+                        "声光与转场触发",
+                        "尾帧与连续性"
+                    ],
+    "compatibility_sd_a_fields":  [
+                                      "镜头与构图",
+                                      "主体动作与表演",
+                                      "物件/环境/物理反馈",
+                                      "光影/色彩/质感",
+                                      "声音与声画触发",
+                                      "转场",
+                                      "尾帧与连续性"
+                                  ],
+    "legacy_sd_a_fields":  [
+                               "景别/焦段/景深",
+                               "构图画面",
+                               "机位与运镜",
+                               "光影/色彩",
+                               "画面基调/质感",
+                               "实拍摄影证据 / 生成可信证据",
+                               "画面内容",
+                               "运动生态/层级交互",
+                               "声音设计",
+                               "转场",
+                               "镜间变化/尾帧",
+                               "SD承接锚点"
+                           ],
+    "positive_only_forbidden_phrases":  [
+                                            "不要",
+                                            "禁止",
+                                            "避免",
+                                            "不能",
+                                            "不切",
+                                            "不另切",
+                                            "不改变",
+                                            "不穿",
+                                            "不越",
+                                            "不等待",
+                                            "负向提示词",
+                                            "negative prompt",
+                                            "without ",
+                                            " no "
+                                        ],
+    "complexity":  {
+                       "compact_max":  3,
+                       "separate_tracks_max":  5,
+                       "split_min":  6,
+                       "always_split_camera_paths":  3,
+                       "always_split_transitions":  2
+                   },
+    "dialogue_timing":  {
+                            "restrained_chars_per_second":  [
+                                                                2.5,
+                                                                3.5
+                                                            ],
+                            "normal_chars_per_second":  [
+                                                            3.5,
+                                                            4.5
+                                                        ],
+                            "heated_chars_per_second":  [
+                                                            4.5,
+                                                            6.0
+                                                        ],
+                            "system_voice_chars_per_second":  [
+                                                                  3.0,
+                                                                  4.0
+                                                              ],
+                            "comma_pause_seconds":  0.2,
+                            "sentence_pause_seconds":  0.4
+                        },
+    "sound_mix":  {
+                      "metering_units":  [
+                                             "RMS dBFS",
+                                             "peak dBFS",
+                                             "LUFS-S",
+                                             "LUFS-I",
+                                             "dBTP",
+                                             "relative dB"
+                                         ],
+                      "stem_buses":  [
+                                         "ENV",
+                                         "BODY",
+                                         "OBJ",
+                                         "VOX",
+                                         "FX",
+                                         "INT",
+                                         "MUS"
+                                     ],
+                      "required_per_shot":  [
+                                                "primary_source",
+                                                "active_stems",
+                                                "position_distance",
+                                                "stem_rms_peak",
+                                                "relative_level",
+                                                "spatial_processing",
+                                                "ducking_masking",
+                                                "shot_bus_lufs_s",
+                                                "master_profile",
+                                                "visible_reaction",
+                                                "tail_bridge"
+                                            ],
+                      "default_delivery_profile":  "social_balanced",
+                      "delivery_profiles":  {
+                                                "social_balanced":  {
+                                                                        "lufs_i":  -14.0,
+                                                                        "dbtp":  -1.0
+                                                                    },
+                                                "social_dense":  {
+                                                                     "lufs_i":  -12.0,
+                                                                     "dbtp":  -1.0
+                                                                 },
+                                                "dialogue_led":  {
+                                                                     "lufs_i":  -16.0,
+                                                                     "dbtp":  -1.0
+                                                                 },
+                                                "suspense_low_dynamic":  {
+                                                                             "lufs_i":  -15.0,
+                                                                             "dbtp":  -1.0
+                                                                         },
+                                                "cinema_preview":  {
+                                                                       "lufs_i":  -18.0,
+                                                                       "dbtp":  -2.0
+                                                                   }
+                                            },
+                      "audio_delivery_qa":  {
+                                                "accepted_format":  "PCM WAV",
+                                                "accepted_channels":  [
+                                                                          1,
+                                                                          2
+                                                                      ],
+                                                "recommended_sample_rate_hz":  48000,
+                                                "loudness_tolerance_lu":  1.5,
+                                                "clip_threshold_full_scale":  0.999,
+                                                "stereo_balance_warning_db":  3.0,
+                                                "true_peak_method":  "4x FFT oversampled estimate; final delivery requires a certified meter"
+                                            }
+                  },
+    "sd_output_modes":  [
+                            "model_execution",
+                            "master_lossless",
+                            "seedance_execution",
+                            "kling_execution",
+                            "runway_execution",
+                            "image_to_video_delta"
+                        ],
+    "continuity_manifest_required":  [
+                                         "characters",
+                                         "space",
+                                         "props",
+                                         "lights",
+                                         "sound_sources",
+                                         "incoming_tail",
+                                         "fragile_anchors"
+                                     ],
+    "continuity_buses":  [
+                             "character_identity",
+                             "wardrobe_body_residue",
+                             "space_screen_direction",
+                             "prop_ownership_state",
+                             "motivated_light_color",
+                             "texture_material_trace",
+                             "sound_source_tail",
+                             "vfx_boundary_residue",
+                             "camera_landing_frame",
+                             "knowledge_permission",
+                             "motion_ecology",
+                             "audience_question"
+                         ],
+    "subject_performance_detail_gate":  {
+                                            "enabled":  true,
+                                            "high_intensity_only":  false,
+                                            "minimum_characters":  80,
+                                            "scope":  "all_formal_animation_beats",
+                                            "motion_ledger_reference":  "../animation-suspense-performance/references/full-frame-motion-ledger.md",
+                                            "ordinary_beat_minimum_characters":  48,
+                                            "ordinary_beat_required_dimensions":  [
+                                                                                      "routine_or_baseline",
+                                                                                      "trigger",
+                                                                                      "gaze_face_breath",
+                                                                                      "support_or_hand_object",
+                                                                                      "listener_npc_or_environment_relay",
+                                                                                      "recovery_or_tail"
+                                                                                  ],
+                                            "minimum_dimensions":  4,
+                                            "mandatory_dimensions":  [
+                                                                         "sequence",
+                                                                         "body_mechanics",
+                                                                         "face_body_synchronization",
+                                                                         "secondary_motion_or_material",
+                                                                         "reaction_or_environment_relay",
+                                                                         "sound_or_light_cue",
+                                                                         "recovery_or_landing"
+                                                                     ],
+                                            "summary_action_severity":  "ERROR"
+                                        },
+    "sd_animation_a_fields":  {
+                                  "default_schema":  "animation_text_v6",
+                                  "required":  [
+                                                   "镜头与构图",
+                                                   "主体动作与表演",
+                                                   "关系/物件/环境反馈",
+                                                   "声光与转场触发",
+                                                   "尾帧与连续性"
+                                               ],
+                                  "optional":  [
+
+                                               ]
+                              },
+    "sd_a_field_schemas":  {
+                               "animation_text_v6":  {
+                                                         "status":  "active_user_output",
+                                                         "required":  [
+                                                                          "镜头与构图",
+                                                                          "主体动作与表演",
+                                                                          "关系/物件/环境反馈",
+                                                                          "声光与转场触发",
+                                                                          "尾帧与连续性"
+                                                                      ],
+                                                         "optional":  [
+
+                                                                      ]
+                                                     },
+                               "execution_expanded":  {
+                                                          "status":  "compatibility_input_only",
+                                                          "required":  [
+                                                                           "镜头与构图",
+                                                                           "主体动作与表演",
+                                                                           "物件/环境/物理反馈",
+                                                                           "光影/色彩/质感",
+                                                                           "声音与声画触发",
+                                                                           "转场",
+                                                                           "尾帧与连续性"
+                                                                       ],
+                                                          "optional":  [
+
+                                                                       ]
+                                                      },
+                               "legacy":  {
+                                              "status":  "compatibility_input_only",
+                                              "required":  [
+                                                               "景别/焦段/景深",
+                                                               "构图画面",
+                                                               "机位与运镜",
+                                                               "光影/色彩",
+                                                               "画面基调/质感",
+                                                               "实拍摄影证据 / 生成可信证据",
+                                                               "画面内容",
+                                                               "运动生态/层级交互",
+                                                               "声音设计",
+                                                               "转场",
+                                                               "镜间变化/尾帧",
+                                                               "SD承接锚点"
+                                                           ],
+                                              "optional":  [
+
+                                                           ]
+                                          }
+                           },
+    "pipeline_authority":  {
+                               "chain":  [
+                                             "story-framework",
+                                             "script-writing",
+                                             "script-roundtable",
+                                             "dialogue-doctor",
+                                             "director-storyboard-integrated",
+                                             "animation-suspense-performance",
+                                             "dream-suspense-sd"
+                                         ],
+                               "downstream_may_not_rewrite_upstream":  true,
+                               "approved_storyboard_becomes_sole_sd_source":  true,
+                               "issue_backpressure":  "return_to_fact_owner_with_exact_conflict"
+                           },
+    "story_readiness_gate":  {
+                                 "required":  [
+                                                  "scene_function",
+                                                  "entry_state",
+                                                  "character_objective",
+                                                  "obstacle",
+                                                  "strategy",
+                                                  "visible_trigger",
+                                                  "causal_beat_chain",
+                                                  "mid_segment_turn",
+                                                  "exit_delta",
+                                                  "next_segment_debt"
+                                              ],
+                                 "deletion_must_cause_loss":  true,
+                                 "information_source_required":  true,
+                                 "comedy_debuff_for_punchline_forbidden":  true
+                             },
+    "dialogue_logic_gate":  {
+                                "required":  [
+                                                 "speaker_objective",
+                                                 "surface_meaning",
+                                                 "subtext",
+                                                 "voiceprint",
+                                                 "new_information",
+                                                 "speech_act",
+                                                 "listener_delta",
+                                                 "pre_emphasis_tail_action",
+                                                 "lip_sync_window"
+                                             ],
+                                "approved_text_mutation_forbidden":  true,
+                                "cut_on_speaker_change_forbidden":  true,
+                                "reaction_window_required_after_punchline_or_reveal":  true
+                            },
+    "animation_formal_storyboard_fields":  [
+                                               "镜号与整秒时间",
+                                               "戏剧变化",
+                                               "镜头与构图",
+                                               "主体与关系表演",
+                                               "物件/环境/NPC",
+                                               "动画表达",
+                                               "声音与台词",
+                                               "转场与尾帧"
+                                           ]
+}

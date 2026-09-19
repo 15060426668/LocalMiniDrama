@@ -560,6 +560,18 @@ function routes(db, log) {
           return response.badRequest(res, built.message);
         }
         const { userPrompt, durationLabel, durationSec } = built;
+        
+        // Get segment context for intelligent 4s constraint
+        const prevShot = db.prepare(
+          `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number < ? AND deleted_at IS NULL ORDER BY storyboard_number DESC LIMIT 1`
+        ).get(built.episodeId, built.storyboardNumber);
+        
+        const nextShot = db.prepare(
+          `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number > ? AND deleted_at IS NULL ORDER BY storyboard_number ASC LIMIT 1`
+        ).get(built.episodeId, built.storyboardNumber);
+        
+        const currentSb = db.prepare('SELECT segment_title FROM storyboards WHERE id = ?').get(sbId);
+        
         const out = await aiClient.generateText(
           db,
           log,
@@ -572,7 +584,14 @@ function routes(db, log) {
           return response.badRequest(res, 'AI 返回内容过短，请检查文本模型配置');
         }
         let text = String(out).trim();
-        text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec);
+        
+        // Pass segment context for intelligent 4s constraint
+        text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec, {
+          segment_title: currentSb?.segment_title || '',
+          prev_segment_title: prevShot?.segment_title || null,
+          next_segment_title: nextShot?.segment_title || null
+        });
+        
         text = normalizeUniversalSegmentAtImageSpacing(text);
         const nowIso = new Date().toISOString();
         db.prepare('UPDATE storyboards SET universal_segment_text = ?, updated_at = ? WHERE id = ? AND deleted_at IS NULL').run(
@@ -609,6 +628,18 @@ function routes(db, log) {
       };
 
       let finalRaw = '';
+      
+      // Get segment context for intelligent 4s constraint
+      const prevShot = db.prepare(
+        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number < ? AND deleted_at IS NULL ORDER BY storyboard_number DESC LIMIT 1`
+      ).get(built.episodeId, built.storyboardNumber);
+      
+      const nextShot = db.prepare(
+        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number > ? AND deleted_at IS NULL ORDER BY storyboard_number ASC LIMIT 1`
+      ).get(built.episodeId, built.storyboardNumber);
+      
+      const currentSb = db.prepare('SELECT segment_title FROM storyboards WHERE id = ?').get(sbId);
+      
       try {
         finalRaw = await aiClient.streamGenerateText(
           db,
@@ -635,7 +666,14 @@ function routes(db, log) {
         return res.end();
       }
       let text = String(finalRaw).trim();
-      text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec);
+      
+      // Apply normalization with segment context for intelligent 4s constraint
+      text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec, {
+        segment_title: currentSb?.segment_title || '',
+        prev_segment_title: prevShot?.segment_title || null,
+        next_segment_title: nextShot?.segment_title || null
+      });
+      
       text = normalizeUniversalSegmentAtImageSpacing(text);
       const nowIso = new Date().toISOString();
       db.prepare('UPDATE storyboards SET universal_segment_text = ?, updated_at = ? WHERE id = ? AND deleted_at IS NULL').run(
@@ -659,9 +697,34 @@ function routes(db, log) {
           ? String(req.body.draft_universal_segment_text)
           : '';
       const draft = draftRaw.trim();
+      
+      // Get segment context for intelligent 4s constraint
+      const builtForContext = buildUniversalSegmentUserPromptBundle(db, sbId, {});
+      if (!builtForContext.ok) {
+        return response.badRequest(res, builtForContext.message);
+      }
+      
+      const prevShot = db.prepare(
+        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number < ? AND deleted_at IS NULL ORDER BY storyboard_number DESC LIMIT 1`
+      ).get(builtForContext.episodeId, builtForContext.storyboardNumber);
+      
+      const nextShot = db.prepare(
+        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number > ? AND deleted_at IS NULL ORDER BY storyboard_number ASC LIMIT 1`
+      ).get(builtForContext.episodeId, builtForContext.storyboardNumber);
+      
+      const currentSb = db.prepare('SELECT segment_title FROM storyboards WHERE id = ?').get(sbId);
       if (!draft) {
         return response.badRequest(res, '请先填写或生成全能片段描述后再润色（编辑器内容不能为空）');
       }
+      
+      // Get context for intelligent 4s constraint (reuse segment titles)
+      const prevShot2 = db.prepare(
+        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number < ? AND deleted_at IS NULL ORDER BY storyboard_number DESC LIMIT 1`
+      ).get(episodeId, storyboardNumber);
+      
+      const nextShot2 = db.prepare(
+        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number > ? AND deleted_at IS NULL ORDER BY storyboard_number ASC LIMIT 1`
+      ).get(episodeId, storyboardNumber);
       const built = buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {
         universalSegmentOverride: draftRaw,
       });
@@ -737,7 +800,7 @@ function routes(db, log) {
           log,
           'text',
           polishUserPrompt,
-          promptI18n.getUniversalOmniPolishPrompt(),
+          await promptI18n.getUniversalOmniPolishPrompt(),
           {
             scene_key: 'image_polish',
             max_tokens: 4096,
@@ -757,7 +820,14 @@ function routes(db, log) {
         return res.end();
       }
       let text = String(finalRaw).trim();
-      text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec);
+      
+      // Apply normalization with segment context
+      text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec, {
+        segment_title: currentSb?.segment_title || '',
+        prev_segment_title: prevShot2?.segment_title || null,
+        next_segment_title: nextShot2?.segment_title || null
+      });
+      
       text = normalizeUniversalSegmentAtImageSpacing(text);
       const nowIso = new Date().toISOString();
       db.prepare('UPDATE storyboards SET universal_segment_text = ?, updated_at = ? WHERE id = ? AND deleted_at IS NULL').run(

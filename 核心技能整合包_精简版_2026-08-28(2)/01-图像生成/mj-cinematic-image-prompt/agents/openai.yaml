@@ -1,0 +1,4 @@
+interface:
+  display_name: "MJ电影级生图提示词"
+  short_description: "将场景设定拆解为高密度、电影级、可直接用于 Midjourney 的精细化生图提示词。"
+  default_prompt: "请使用 $mj-cinematic-image-prompt，把我的场景设定拆解并重写成 Midjourney 电影级生图提示词。"

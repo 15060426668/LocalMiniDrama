@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scene Asset Decomposition"
+  short_description: "Break scene references into traceable reusable assets"
+  default_prompt: "Use $scene-asset-decomposition to derive an evidence-bound scene master and reusable visual asset kit."
+
+policy:
+  allow_implicit_invocation: true

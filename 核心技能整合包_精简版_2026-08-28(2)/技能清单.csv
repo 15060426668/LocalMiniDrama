@@ -1,0 +1,24 @@
+分组,技能目录,主要用途,入口文件
+01-图像生成,gpt-image-prompt-field-manual,GPT/DALL-E/Nano Banana 生图与改图提示词,gpt-image-prompt-field-manual/SKILL.md
+01-图像生成,mj-cinematic-image-prompt,电影级 Midjourney 静帧与概念图提示词,mj-cinematic-image-prompt/SKILL.md
+01-图像生成,mj-takopi-2d-house-style,章鱼噼/手绘 2D 统一画风与角色场景提示词,mj-takopi-2d-house-style/SKILL.md
+01-图像生成,mj-xianxia-megastructure,仙侠巨构与巨物美学提示词,mj-xianxia-megastructure/SKILL.md
+01-图像生成,psychological-anime-imagegen,心理动画风格静态图生成与改图,psychological-anime-imagegen/SKILL.md
+01-图像生成,qidu-aigc-prompt-atelier,柔和电影质感与 AIGC 提示词修整,qidu-aigc-prompt-atelier/SKILL.md
+02-视频生成,video-prompt-workbench,通用视频/图生视频/文生视频提示词,video-prompt-workbench/SKILL.md
+02-视频生成,dream-suspense-sd,批准分镜转纯文本 SD/Seedance 提示词,dream-suspense-sd/SKILL.md
+02-视频生成,video-shotcraft,Remotion 产品视频、镜头配方、节奏与声音,video-shotcraft/SKILL.md
+02-视频生成,black-subtractive-mixed-media,黑色减法揭示与真人底片/2D 融合视频,black-subtractive-mixed-media/SKILL.md
+03-分镜与导演,director-storyboard-integrated,动画/真人分镜方案、细则、连续性与 SD 承接,director-storyboard-integrated/SKILL.md
+03-分镜与导演,animation-suspense-performance,动画表演、timing/spacing、全画面运动与尾态,animation-suspense-performance/SKILL.md
+03-分镜与导演,2d-guofeng-pv-workflow,2D 国风人物 PV、江湖 PV 与水墨镜头流程,2d-guofeng-pv-workflow/SKILL.md
+03-分镜与导演,cinematic-composition-coach,电影构图案例投喂、反推与训练,cinematic-composition-coach/SKILL.md
+03-分镜与导演,live-action-spatial-previs,真人场景空间预演、走位、机位与轴线,live-action-spatial-previs/SKILL.md
+03-分镜与导演,director-storyboard-training-maintainer,分镜训练素材维护、来源审计与技能迭代,director-storyboard-training-maintainer/SKILL.md
+04-剧本与对白,story-framework,从零建立故事框架与项目档案,story-framework/SKILL.md
+04-剧本与对白,script-writing,从项目档案写正式剧本,script-writing/SKILL.md
+04-剧本与对白,mystery-writer,悬疑/犯罪/惊悚/推理结构与反转,mystery-writer/SKILL.md
+04-剧本与对白,script-roundtable,剧本多视角圆桌诊断,script-roundtable/SKILL.md
+04-剧本与对白,dialogue-doctor,台词七维诊断与逐句改写,dialogue-doctor/SKILL.md
+05-分析、训练与资产,video-story-analysis,逐镜拉片、声音/表演/剪辑证据分析,video-story-analysis/SKILL.md
+05-分析、训练与资产,scene-asset-decomposition,场景图/平面图拆分与资产族整理,scene-asset-decomposition/SKILL.md

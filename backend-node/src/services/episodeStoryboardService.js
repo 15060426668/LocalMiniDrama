@@ -1606,3 +1606,98 @@ module.exports = {
   rebuildVideoPromptForStoryboard,
   splitStoryboardByAudio,
 };
+
+// ─────────────── 缺失的辅助函数补充 ───────────────
+
+/**
+ * 加载角色参考信息 (简化版)
+ * @param {import('better-sqlite3').Database} db
+ * @param {number} sbId 分镜 ID
+ * @param {string[]} charNames 角色名列表
+ * @returns {Array<{id, name, image_url, local_path}>}
+ */
+function loadCharactersForStoryboardPrompt(db, sbId, charNames) {
+  if (!charNames || !charNames.length) return [];
+  const result = [];
+  try {
+    const chars = db.prepare(
+      'SELECT id, name, image_url, local_path FROM characters WHERE drama_id IN (SELECT drama_id FROM storyboards WHERE id = ?) AND deleted_at IS NULL'
+    ).all(sbId);
+    for (const c of chars) {
+      if (charNames.some(n => n.toLowerCase() === c.name.toLowerCase())) {
+        result.push(c);
+      }
+    }
+  } catch (e) {
+    console.warn('[loadCharactersForStoryboardPrompt] Error:', e.message);
+  }
+  return result;
+}
+
+/**
+ * 构建角色外貌描述文本
+ * @param {import('better-sqlite3').Database} db
+ * @param {number} sbId 分镜 ID
+ * @param {string[]} charNames 角色名列表
+ * @returns {string}
+ */
+function buildCharacterAppearanceText(db, sbId, charNames) {
+  if (!charNames || !charNames.length) return '';
+  const appearances = [];
+  try {
+    const chars = db.prepare(
+      'SELECT id, name, appearance FROM characters WHERE drama_id IN (SELECT drama_id FROM storyboards WHERE id = ?) AND deleted_at IS NULL'
+    ).all(sbId);
+    for (const c of chars) {
+      if (charNames.some(n => n.toLowerCase() === c.name.toLowerCase())) {
+        if (c.appearance) {
+          appearances.push(`[角色：${c.name} ${String(c.appearance).trim()}]`);
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('[buildCharacterAppearanceText] Error:', e.message);
+  }
+  return appearances.join('\n');
+}
+
+/**
+ * 构建角色语音锚点映射
+ * @param {Array} charRows 角色行数据
+ * @returns {object} JSON object
+ */
+function buildVoiceAnchorMap(charRows) {
+  if (!charRows || !charRows.length) return {};
+  const map = {};
+  for (const c of charRows) {
+    if (c.name && c.voice_anchor) {
+      map[c.name] = c.voice_anchor;
+    }
+  }
+  return map;
+}
+
+/**
+ * 构建角色语音锚点文本
+ * @param {import('better-sqlite3').Database} db
+ * @param {number} sbId 分镜 ID
+ * @param {string[]} charNames 角色名列表
+ * @returns {string|null}
+ */
+function buildCharacterVoiceAnchors(db, sbId, charNames) {
+  if (!charNames || !charNames.length) return null;
+  const anchors = [];
+  try {
+    const chars = db.prepare(
+      'SELECT id, name, voice_anchor FROM characters WHERE drama_id IN (SELECT drama_id FROM storyboards WHERE id = ?) AND deleted_at IS NULL'
+    ).all(sbId);
+    for (const c of chars) {
+      if (charNames.some(n => n.toLowerCase() === c.name.toLowerCase()) && c.voice_anchor) {
+        anchors.push(`[${c.name}:${c.voice_anchor}]`);
+      }
+    }
+  } catch (e) {
+    console.warn('[buildCharacterVoiceAnchors] Error:', e.message);
+  }
+  return anchors.length ? anchors.join('\n') : null;
+}

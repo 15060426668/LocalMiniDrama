@@ -6144,7 +6144,9 @@ function getSbUniversalOmniRefSlots(sb) {
   return out
 }
 
-/** 全能模式：场景/角色/物品 → 绝对 URL 列表（不含经典分镜中间主图；供可灵 Omni / 火山多图参考，最多 10，方舟侧最多取 9 张） */
+/** 全能模式：场景/角色/物品 → 绝对 URL 列表（不含经典分镜中间主图；供可灵 Omni / 火山多图参考，最多 10，方舟侧最多取 9 张）
+ * 【关键修复】当前端 UI 未勾选时，fallback 到 DB 的 storyboards.characters JSON 和 storyboard_characters 关联表
+ */
 function collectSbOmniReferenceAbsoluteUrls(sb) {
   if (!sb?.id) return []
   const urls = []
@@ -6155,14 +6157,54 @@ function collectSbOmniReferenceAbsoluteUrls(sb) {
     seen.add(abs)
     urls.push(abs)
   }
+  
+  console.log(`[debug] collectSbOmniReferenceAbsoluteUrls`, { sbId: sb.id, hasCharacters: !!sb.characters, uiCharacterIds: getSbCharacterIds(sb.id), charactersRaw: sb.characters })
+  
+  // Step1: 优先使用前端 UI 勾选的场景/角色/道具（用户手动选择状态）
   const scene = getSbSelectedScene(sb.id)
+  console.log(`[debug] scene selected:`, scene ? scene.name : 'none')
   if (scene && hasAssetImage(scene)) pushAbs(assetImageUrl(scene))
-  for (const c of getSbSelectedCharacters(sb.id)) {
+  const uiChars = getSbSelectedCharacters(sb.id)
+  console.log(`[debug] ui chars count:`, uiChars.length)
+  for (const c of uiChars) {
+    console.log(`[debug] adding char ref:`, c.name)
     if (hasAssetImage(c)) pushAbs(assetImageUrl(c))
   }
   for (const p of getSbSelectedProps(sb.id)) {
     if (hasAssetImage(p)) pushAbs(assetImageUrl(p))
   }
+  
+  console.log(`[debug] after Step1, urls count:`, urls.length)
+  
+  // 【关键修复 Step2】如果 UI 没选任何素材，fallback 到 DB 的 characters JSON + storyboard_characters 关联表
+  // 这样即使前端 UI 清空了勾选，只要数据库里有绑定，仍能正确传递参考图
+  if (urls.length === 0 && sb.characters) {
+    try {
+      const charList = typeof sb.characters === 'string' ? JSON.parse(sb.characters) : sb.characters
+      console.log(`[debug] Step2 parsing characters list:`, charList)
+      if (Array.isArray(charList) && charList.length > 0) {
+        // 从 characters 表读取角色并收集图片 URL
+        const allChars = characters.value ?? []
+        console.log(`[debug] Step2 total characters in store:`, allChars.length)
+        for (const item of charList) {
+          const cid = typeof item === 'object' && item != null ? item.id : item
+          const ch = allChars.find((c) => Number(c.id) === Number(cid))
+          if (ch && hasAssetImage(ch)) {
+            console.log(`[debug] Step2 found char ${ch.name} with image`) 
+            pushAbs(assetImageUrl(ch))
+          } else if (ch) {
+            console.log(`[debug] Step2 found char ${ch.name} but NO IMAGE`) 
+          } else {
+            console.log(`[debug] Step2 char id ${cid} not found in store`) 
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[collectSbOmniReferenceAbsoluteUrls] 解析 characters JSON 失败', e)
+    }
+  }
+  
+  console.log(`[debug] final urls length:`, urls.length)
   return urls.slice(0, 10)
 }
 
@@ -6228,13 +6270,15 @@ function isSeedance2VideoModel(modelName) {
 
 /** 全能分镜 + 当前视频配置是否可走多图参考（火山 Seedance 2.0、可灵 Omni、Agnes Video 等） */
 function canUseUniversalOmniVideoApi(cfg) {
+  console.log(cfg, 111);
+  
   if (!cfg) return false
   const proto = String(cfg.api_protocol || '').toLowerCase()
   const provider = String(cfg.provider || '').toLowerCase()
   const model = videoModelNameFromAiConfig(cfg).toLowerCase()
   if (proto === 'kling_omni') return true
   // 选了 volcengine_omni 即表示走多图参考；模型名可能是 996 等网关别名（如 mingiz-sd2），勿再按 seedance 字样拦截
-  if (proto === 'volcengine_omni') return true
+  if (proto.includes('volcengine')) return true
   if (proto === 'agnes' || provider === 'agnes' || /agnes-video/.test(model)) {
     return true
   }

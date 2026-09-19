@@ -1,0 +1,7 @@
+interface:
+  display_name: "2D 国风 PV 制作台"
+  short_description: "把国风人物PV拆成风格、镜头、资产与练习成果"
+  brand_color: "#9E7652"
+  default_prompt: "Use $2d-guofeng-pv-workflow to turn my江湖PV idea into a focused style sheet, grouped shot ledger, asset board, and executable 4-30 second practice plan."
+policy:
+  allow_implicit_invocation: true

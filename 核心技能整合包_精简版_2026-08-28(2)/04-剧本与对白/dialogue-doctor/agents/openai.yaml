@@ -1,0 +1,7 @@
+interface:
+  display_name: "Dialogue Doctor"
+  short_description: "Diagnose and rewrite dialogue at line level."
+  default_prompt: "Use $dialogue-doctor to diagnose this scene's dialogue and propose sharper line-level rewrites."
+
+policy:
+  allow_implicit_invocation: true

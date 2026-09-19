@@ -1,0 +1,7 @@
+interface:
+  display_name: "Video Story Analysis"
+  short_description: "Evidence-based shot analysis and reverse storyboarding"
+  default_prompt: "Use $video-story-analysis to audit an existing video with traceable shot, sound, and continuity evidence."
+
+policy:
+  allow_implicit_invocation: true

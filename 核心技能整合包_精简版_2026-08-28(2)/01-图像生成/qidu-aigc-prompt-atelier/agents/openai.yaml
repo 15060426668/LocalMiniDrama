@@ -1,0 +1,7 @@
+interface:
+  display_name: "Qidu AIGC Prompt Atelier"
+  short_description: "Shape cinematic image and video prompts."
+  default_prompt: "Use $qidu-aigc-prompt-atelier to refine this visual prompt into soft filmic cinematic language."
+
+policy:
+  allow_implicit_invocation: true

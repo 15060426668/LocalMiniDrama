@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Storyboard Sound Mix Manifest",
+  "type": "object",
+  "required": ["delivery_profile", "segments"],
+  "properties": {
+    "delivery_profile": {
+      "enum": ["social_balanced", "social_dense", "dialogue_led", "suspense_low_dynamic", "cinema_preview"]
+    },
+    "segments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "start_s", "end_s", "primary_source", "target_lufs_s", "stems"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "start_s": {"type": "integer", "minimum": 0},
+          "end_s": {"type": "integer", "minimum": 1},
+          "primary_source": {"type": "string", "minLength": 1},
+          "target_lufs_s": {"type": "number", "maximum": 0},
+          "stems": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "bus", "source", "status", "position", "distance_m", "rms_dbfs", "peak_dbfs"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "bus": {"enum": ["ENV", "BODY", "OBJ", "VOX", "FX", "INT", "MUS"]},
+                "source": {"type": "string", "minLength": 1},
+                "status": {"enum": ["onscreen", "offscreen", "subjective", "structural"]},
+                "position": {"type": "string", "minLength": 1},
+                "distance_m": {"type": "number", "minimum": 0},
+                "rms_dbfs": {"type": "number", "maximum": 0},
+                "peak_dbfs": {"type": "number", "maximum": 0},
+                "relative_to_primary_db": {"type": "number", "maximum": 0},
+                "frequency_focus_hz": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {"type": "number", "minimum": 0}
+                },
+                "occlusion_eq": {"type": "string"},
+                "reverb": {"type": "string"},
+                "ducking_masking": {"type": "string"},
+                "visible_reaction": {"type": "string"},
+                "tail_bridge": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

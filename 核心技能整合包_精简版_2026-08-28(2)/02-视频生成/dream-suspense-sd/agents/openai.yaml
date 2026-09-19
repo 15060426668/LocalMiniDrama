@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dream Suspense SD"
+  short_description: "Compile approved storyboards into complete pure-text BASE+A prompts."
+  default_prompt: "Use $dream-suspense-sd to compile the approved storyboard into one execution-complete pure-text BASE LOCK plus timed A beats, preserving references, performance, dialogue, camera causality, and exact tail continuity."
