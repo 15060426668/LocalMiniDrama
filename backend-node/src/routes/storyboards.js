@@ -352,11 +352,11 @@ function routes(db, log) {
         response.internalError(res, err.message || '重新生成布局描述失败');
       }
     },
-    rebuildVideoPrompt: (req, res) => {
+    rebuildVideoPrompt: async (req, res) => {
       try {
         const id = Number(req.params.id);
         if (!id) return response.badRequest(res, '缺少分镜 id');
-        const sb = episodeStoryboardService.rebuildVideoPromptForStoryboard(db, log, id);
+        const sb = await episodeStoryboardService.rebuildVideoPromptForStoryboard(db, log, id);
         if (!sb) return response.notFound(res, '分镜不存在');
         response.success(res, {
           ...sb,
@@ -554,7 +554,7 @@ function routes(db, log) {
     generateUniversalSegmentPrompt: async (req, res) => {
       try {
         const sbId = Number(req.params.id);
-        const built = buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {});
+        const built = await buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {});
         if (!built.ok) {
           if (built.code === 'not_found') return response.notFound(res, built.message);
           return response.badRequest(res, built.message);
@@ -610,7 +610,7 @@ function routes(db, log) {
     /** 全能模式：与 generateUniversalSegmentPrompt 相同逻辑，NDJSON 流式（delta + done） */
     generateUniversalSegmentStream: async (req, res) => {
       const sbId = Number(req.params.id);
-      const built = buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {});
+      const built = await buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {});
       if (!built.ok) {
         if (built.code === 'not_found') return response.notFound(res, built.message);
         return response.badRequest(res, built.message);
@@ -699,11 +699,12 @@ function routes(db, log) {
       const draft = draftRaw.trim();
       
       // Get segment context for intelligent 4s constraint
-      const builtForContext = buildUniversalSegmentUserPromptBundle(db, sbId, {});
+      const builtForContext = await buildUniversalSegmentUserPromptBundle(db, sbId, {});
       if (!builtForContext.ok) {
         return response.badRequest(res, builtForContext.message);
       }
       
+      // Get context for intelligent 4s constraint
       const prevShot = db.prepare(
         `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number < ? AND deleted_at IS NULL ORDER BY storyboard_number DESC LIMIT 1`
       ).get(builtForContext.episodeId, builtForContext.storyboardNumber);
@@ -717,15 +718,7 @@ function routes(db, log) {
         return response.badRequest(res, '请先填写或生成全能片段描述后再润色（编辑器内容不能为空）');
       }
       
-      // Get context for intelligent 4s constraint (reuse segment titles)
-      const prevShot2 = db.prepare(
-        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number < ? AND deleted_at IS NULL ORDER BY storyboard_number DESC LIMIT 1`
-      ).get(episodeId, storyboardNumber);
-      
-      const nextShot2 = db.prepare(
-        `SELECT segment_title FROM storyboards WHERE episode_id = ? AND storyboard_number > ? AND deleted_at IS NULL ORDER BY storyboard_number ASC LIMIT 1`
-      ).get(episodeId, storyboardNumber);
-      const built = buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {
+      const built = await buildUniversalSegmentUserPromptBundle(db, sbId, req.body || {}, {
         universalSegmentOverride: draftRaw,
       });
       if (!built.ok) {

@@ -6,7 +6,7 @@
  * @param {{ universalSegmentOverride?: string | undefined }} opts 若传入则覆盖库中的 universal 写入 CURRENT_UNIVERSAL_SEGMENT
  * @returns {{ ok:true, userPrompt:string, durationLabel:string, durationSec:number, sbId:number, episodeId:number, storyboardNumber:number } | { ok:false, code:'not_found'|'bad_request', message:string }}
  */
-function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {}) {
+async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {}) {
   const bodyIn = reqBody && typeof reqBody === 'object' ? reqBody : {};
   const forceWithoutReferenceImages = !!bodyIn.force_without_reference_images;
 
@@ -469,15 +469,94 @@ function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {}) {
     .filter(Boolean)
     .join('\n');
 
+  // ========== Skill 增强环节 ==========
+  // 如果传入了 draft_universal_segment_text，则调用 Skill 进行润色分析
+  let skillEnhancedDuration = durationSec;
+  if (opts.universalSegmentOverride && opts.universalSegmentOverride.trim()) {
+    try {
+      const skillRegistry = require('./skillRegistry');
+      await skillRegistry.ensureInitialized();
+      
+      const relevantSkills = skillRegistry.getMappingForPromptTemplate('getUniversalOmniPolishPrompt') || [];
+      
+      if (relevantSkills.length > 0) {
+        const enhancedContext = {
+          storyboard: sb,
+          userPrompt,
+          style,
+          videoRatio: dramaAspectRatio || '16:9',
+          draftUniversalText: opts.universalSegmentOverride,
+          timestamp: new Date().toISOString()
+        };
+        
+        for (const skillId of relevantSkills) {
+          try {
+            const skill = skillRegistry.skills.get(skillId);
+            if (!skill) continue;
+            
+            log?.info('[Skill] 调用全能分镜润色技能', {
+              skillId,
+              skillName: skill.name,
+              category: skill.category
+            });
+            
+            const result = await skill.execute(enhancedContext);
+            if (result && result.rules) {
+              // 从 Skill 返回的 Prompt 中解析子分镜时长之和
+              const parsedDuration = parseDurationFromMultiShotPrompt(result.rules);
+              if (parsedDuration > 0 && parsedDuration !== durationSec) {
+                skillEnhancedDuration = Math.min(120, Math.max(1, parsedDuration));
+                console.log(`[Skill] Skill 返回提示词已包含 ${relevantSkills.length} 个子分镜，总时长：${skillEnhancedDuration}s`);
+              }
+            }
+          } catch (skillErr) {
+            console.warn(`[Skill] ${skillId} execute failed in polish context:`, skillErr.message);
+          }
+        }
+      }
+    } catch (registryErr) {
+      console.warn('[Skill] Registry not available or initialization failed in polish:', registryErr.message);
+    }
+  }
+
   return {
     ok: true,
     userPrompt,
-    durationLabel,
-    durationSec,
+    durationLabel: Number.isInteger(skillEnhancedDuration) ? String(skillEnhancedDuration) : String(Math.round(skillEnhancedDuration * 10) / 10),
+    durationSec: skillEnhancedDuration,
     sbId,
     episodeId: Number(sb.episode_id) || 0,
     storyboardNumber: Number(sb.storyboard_number) || 0,
   };
+}
+
+/**
+ * 从 Skill 生成的多分镜 Prompt 中解析子分镜时长之和
+ * 格式示例：
+ *   分镜 1：3 秒：画面...
+ *   分镜 2：4 秒：动作...
+ *   分镜 3：5 秒：结果...
+ */
+function parseDurationFromMultiShotPrompt(promptText) {
+  if (!promptText || typeof promptText !== 'string') return 0;
+  
+  // 匹配「分镜 N：X 秒：」或「分镜 N： X 秒：」格式
+  const shotPattern = /分镜\d+[:：]\s*(\d+(?:\.\d+)?)\s*秒：/gi;
+  const matches = [...promptText.matchAll(shotPattern)];
+  
+  if (matches.length === 0) {
+    return 0;
+  }
+  
+  let totalDuration = 0;
+  for (const match of matches) {
+    const seconds = parseFloat(match[1]);
+    if (Number.isFinite(seconds) && seconds > 0) {
+      totalDuration += seconds;
+    }
+  }
+  
+  return Math.round(totalDuration);
 }
 
 module.exports = { buildUniversalSegmentUserPromptBundle };

@@ -3286,7 +3286,7 @@ const videoDuration = ref(null) // 视频总长度
 /** 分镜生成时是否要求 AI 输出 narration（解说旁白） */
 const storyboardIncludeNarration = ref(false)
 /** 分镜生成是否使用全能模式（universal_segment_text，对接 Seedance / 可灵 Omni） */
-const storyboardUniversalOmni = ref(false)
+const storyboardUniversalOmni = ref(true)
 const storyboardUseFirstLastFrame = ref(false)
 const exportingStoryboardSheet = ref(false)
 /** 生成尾帧时是否注入首帧作站位/构图参考（默认开启） */

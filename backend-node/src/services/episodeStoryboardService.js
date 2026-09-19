@@ -7,6 +7,7 @@ const safeJson = require('../utils/safeJson');
 const { safeParseAIJSON, extractJsonCandidate, repairTruncatedJsonArray, extractFirstArray } = safeJson;
 const loadConfig = require('../config').loadConfig;
 const angleService = require('./angleService');
+const skillRegistry = require('./skillRegistry');
 
 /**
  * 分镜专用 generateText 包装：
@@ -326,7 +327,107 @@ function generateImagePrompt(sb, style) {
   return parts.join('，');
 }
 
-function generateVideoPrompt(sb, style, videoRatio) {
+/**
+ * 生成视频提示词（支持 Skill 增强）- 异步版本
+ * 用于批量润色场景
+ */
+async function generateVideoPrompt(sb, style, videoRatio) {
+  const parts = [];
+  // 场景与标题
+  if (sb.scene_description) {
+    parts.push('场景：' + sb.scene_description);
+  } else if (sb.location) {
+    const scene = sb.time ? sb.location + '，' + sb.time : sb.location;
+    parts.push('场景：' + scene);
+  }
+  if (sb.title) parts.push('镜头标题：' + sb.title);
+  // 动作与对白（核心叙事）
+  if (sb.action) parts.push('动作：' + sb.action);
+  if (sb.dialogue) parts.push('对话：' + sb.dialogue);
+  if (sb.narration) parts.push('解说旁白：' + sb.narration);
+  if (sb.result) parts.push('结果：' + sb.result);
+  // 镜头与运镜
+  const shotType = sb.shot_type || sb.camera_shot_type;
+  if (shotType) parts.push('景别：' + shotType);
+  // 结构化视角：中文标签 + 英文描述（兼顾中英文视频模型）
+  if (sb.angle_h && sb.angle_v && sb.angle_s) {
+    const chLabel = angleService.toChineseLabel(sb.angle_h, sb.angle_v, sb.angle_s);
+    const angleFragment = angleService.toPromptFragment(sb.angle_h, sb.angle_v, sb.angle_s);
+    parts.push(`镜头角度：${chLabel}（${angleFragment}）`);
+  } else {
+    const angle = sb.angle ?? sb.camera_angle;
+    if (angle) parts.push('镜头角度：' + angle);
+  }
+  const movement = sb.movement ?? sb.camera_movement;
+  if (movement) parts.push('运镜：' + movement);
+  // 氛围与情绪
+  if (sb.atmosphere) parts.push('氛围：' + sb.atmosphere);
+  if (sb.emotion) parts.push('情绪：' + sb.emotion);
+  if (sb.emotion_intensity != null && sb.emotion_intensity !== '') {
+    parts.push('情绪强度：' + String(sb.emotion_intensity));
+  }
+  // 声音
+  if (sb.bgm_prompt) parts.push('配乐：' + sb.bgm_prompt);
+  if (sb.sound_effect) parts.push('音效：' + sb.sound_effect);
+  // 时长
+  const durationSec = normalizeDuration(sb.duration) || 5;
+  parts.push('时长：' + durationSec + '秒');
+  // 风格（英文 token 保持英文以兼容视频 AI）与画面比例
+  if (style) parts.push('风格：' + style);
+  if (videoRatio) parts.push('=VideoRatio: ' + videoRatio);
+  
+  const basePrompt = parts.length ? parts.join('。') : '视频场景';
+  
+  // ========== Skill 增强环节 ==========
+  // 根据 promptI18n 映射表调用对应的视频生成技能
+  try {
+    await skillRegistry.ensureInitialized();
+    const relevantSkills = skillRegistry.getMappingForPromptTemplate('getUniversalOmniSegmentPrompt') || 
+                           skillRegistry.getMappingForPromptTemplate('getContinuitySnapshotPrompt') || [];
+    
+    if (relevantSkills.length > 0) {
+      const enhancedContext = {
+        storyboard: sb,
+        basePrompt,
+        style,
+        videoRatio,
+        timestamp: new Date().toISOString()
+      };
+      
+      // 按优先级顺序调用技能
+      for (const skillId of relevantSkills) {
+        try {
+          const skill = skillRegistry.skills.get(skillId);
+          if (!skill) continue;
+          
+          log.info('[Skill] 调用视频提示词增强技能', {
+            skillId,
+            skillName: skill.name,
+            category: skill.category
+          });
+          
+          const result = await skill.execute(enhancedContext);
+          if (result && result.rules) {
+            // 将 Skill 规则注入到基础提示词中
+            return `${basePrompt}\n\n[Skill 增强]\n${result.rules}`;
+          }
+        } catch (skillErr) {
+          console.warn(`[Skill] ${skillId} execute failed:`, skillErr.message);
+          continue;
+        }
+      }
+    }
+  } catch (registryErr) {
+    console.warn('[Skill] Registry not available or initialization failed:', registryErr.message);
+  }
+  
+  return basePrompt;
+}
+
+/**
+ * 生成视频提示词（同步版本，无 Skill 增强）
+ */
+function generateVideoPromptSync(sb, style, videoRatio) {
   const parts = [];
   // 场景与标题
   if (sb.scene_description) {
@@ -417,7 +518,8 @@ function deriveStoryboardFieldsFromAi(sb, style, videoRatio, opts = {}) {
   const description = `【镜头类型】${shotType}\n【运镜】${movement}\n【动作】${action}\n【对话】${dialogue}\n【解说】${narration}\n【结果】${result}\n【情绪】${emotion}`;
   const sbWithAngles = { ...sb, angle_h: angleH, angle_v: angleV, angle_s: angleS };
   const imagePrompt = generateImagePrompt(sbWithAngles, style);
-  const videoPrompt = generateVideoPrompt(sbWithAngles, style, videoRatio);
+  // Note: videoPrompt is still synchronous to maintain compatibility with deriveStoryboardFieldsFromAi callers
+  const videoPrompt = generateVideoPromptSync(sbWithAngles, style, videoRatio);
   const sceneId = sb.scene_id != null ? Number(sb.scene_id) : null;
   const charactersJson = Array.isArray(sb.characters) ? JSON.stringify(sb.characters) : (sb.characters ? JSON.stringify([].concat(sb.characters)) : '[]');
   const propIds = Array.isArray(sb.props) ? sb.props.map(Number).filter(Number.isFinite) : [];
@@ -1318,7 +1420,7 @@ The user enabled narrator voice-over for the whole episode. Every shot object MU
 }
 
 
-function rebuildVideoPromptForStoryboard(db, log, storyboardId) {
+async function rebuildVideoPromptForStoryboard(db, log, storyboardId) {
   const sbId = Number(storyboardId);
   if (!Number.isFinite(sbId) || sbId <= 0) return null;
 
@@ -1376,7 +1478,7 @@ function rebuildVideoPromptForStoryboard(db, log, storyboardId) {
     character_voice_anchors: characterVoiceAnchors,
   };
 
-  const videoPrompt = generateVideoPrompt(sbForPrompt, finalStyle, videoRatio);
+  const videoPrompt = await generateVideoPrompt(sbForPrompt, finalStyle, videoRatio);
   const now = new Date().toISOString();
   db.prepare('UPDATE storyboards SET video_prompt = ?, updated_at = ? WHERE id = ?').run(videoPrompt, now, sbId);
 
