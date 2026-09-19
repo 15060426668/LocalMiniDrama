@@ -1,0 +1,7 @@
+interface:
+  display_name: "Story Framework"
+  short_description: "Build a script project framework from a premise."
+  default_prompt: "Use $story-framework to turn this premise into a structured project archive and outline directions."
+
+policy:
+  allow_implicit_invocation: true

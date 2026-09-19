@@ -449,8 +449,8 @@ function getStoryboardUserPromptSuffix(cfg, shotDuration) {
     : null;
   if (lang === 'en') {
     const durationInstruction = durationHint
-      ? `approximately ${durationHint}s per shot (project setting), adjust ±1s based on dialogue length and action complexity`
-      : 'estimate per shot from dialogue length, action complexity, and emotion';
+      ? `project clip setting ~${durationHint}s (reference only, NOT mandatory). Per skill instructions: set each shot's duration dynamically based on content — typically 2-4s per action beat, dialogue pause, information change, occlusion, or camera landing point. Vary naturally: shorter for quick actions/dialogue, longer for complex movements or emotional beats`
+      : 'estimate per shot from dialogue length, action complexity, and emotion. Per skill instructions: typically 2-4s per action beat, dialogue pause, information change, occlusion, or camera landing point';
     return `
 
 **dialogue field**: "Character: \"line\"". Multiple: "A: \"...\" B: \"...\"". Monologue: "(Monologue) content". No dialogue: "".
@@ -469,8 +469,8 @@ function getStoryboardUserPromptSuffix(cfg, shotDuration) {
     return '\n\n' + _sbUserOverride + _sbUserLocked;
   }
   const durationInstruction = durationHint
-    ? `每镜头约${durationHint}秒（项目配置），综合对话、动作、情绪可适当调整±1秒`
-    : '综合对话、动作、情绪估算每镜时长（秒）';
+    ? `项目配置约${durationHint}秒/段（仅供参考，非强制）。根据 Skill 指导：每个镜头的 duration 应根据内容动态设置，通常为 2-4 秒，按动作完成、台词停顿、信息改变、遮挡或镜头落点划分。快速动作/对白用较短时长，复杂运动/情绪节拍用较长时长`
+    : '根据 Skill 指导：每个镜头的 duration 应根据内容动态设置，通常为 2-4 秒，按动作完成、台词停顿、信息改变、遮挡或镜头落点划分';
   return `
 
 【分镜要素】每个分镜聚焦一个叙事节拍（可包含内部多切镜序列），描述要详尽具体：

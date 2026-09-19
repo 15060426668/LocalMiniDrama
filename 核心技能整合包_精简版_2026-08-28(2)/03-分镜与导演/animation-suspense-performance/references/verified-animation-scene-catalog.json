@@ -1,0 +1,5738 @@
+{
+  "version": "2026-07-16.1",
+  "source": "six locally verified episodes",
+  "scene_sheet_count": 214,
+  "category_definitions": {
+    "classroom_group": {
+      "label": "教室与群体关系",
+      "aliases": [
+        "教室",
+        "课堂",
+        "班级",
+        "课桌",
+        "同学",
+        "群体注视",
+        "全班转头",
+        "孤立",
+        "排斥",
+        "站位拓扑"
+      ]
+    },
+    "threshold_door": {
+      "label": "门与阈限",
+      "aliases": [
+        "开门",
+        "关门",
+        "门板",
+        "拉门",
+        "滑门",
+        "门框",
+        "门缝",
+        "门槛",
+        "玄关",
+        "窗框",
+        "进入",
+        "离开"
+      ]
+    },
+    "pressure_composition": {
+      "label": "压迫构图与尺度",
+      "aliases": [
+        "俯视",
+        "俯拍",
+        "高位",
+        "鸟瞰",
+        "低机位",
+        "仰拍",
+        "负空间",
+        "人物缩小",
+        "环境吞没",
+        "前景遮挡",
+        "几何压迫"
+      ]
+    },
+    "partial_evidence": {
+      "label": "局部证据链",
+      "aliases": [
+        "局部",
+        "手",
+        "脚",
+        "鞋",
+        "物件",
+        "证据",
+        "递进揭示",
+        "完整身体后给",
+        "地面证据",
+        "反应确认"
+      ]
+    },
+    "restrained_acting": {
+      "label": "克制表演与低反应",
+      "aliases": [
+        "微表情",
+        "低反应",
+        "眼神",
+        "停顿",
+        "失焦",
+        "手指",
+        "呼吸",
+        "表演性静止",
+        "延迟反应"
+      ]
+    },
+    "expression_break": {
+      "label": "颜艺与认知击穿",
+      "aliases": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "鱼眼",
+        "广角",
+        "强制透视",
+        "黑眼",
+        "大嘴",
+        "离模",
+        "表情突变"
+      ]
+    },
+    "cute_dark_conflict": {
+      "label": "可爱图形与黑暗事实冲突",
+      "aliases": [
+        "可爱",
+        "星光",
+        "爱心",
+        "粉色",
+        "天真误读",
+        "错误幸福",
+        "图形污染现实",
+        "反差"
+      ]
+    },
+    "style_mutation": {
+      "label": "画风与绘画系统突变",
+      "aliases": [
+        "换画风",
+        "平面化",
+        "白场",
+        "黑场",
+        "粗线",
+        "简笔画",
+        "抽帧",
+        "图形层",
+        "线条替换",
+        "空间抽象"
+      ]
+    },
+    "force_action": {
+      "label": "动作受力与全身夸张",
+      "aliases": [
+        "动作",
+        "受力",
+        "碰撞",
+        "推搡",
+        "抓扯",
+        "跳跃",
+        "跑动",
+        "压缩回弹",
+        "拖拽",
+        "惯性"
+      ]
+    },
+    "environment_aftermath": {
+      "label": "环境接管与余波",
+      "aliases": [
+        "空镜",
+        "余波",
+        "静音",
+        "低声压",
+        "环境继续",
+        "漂亮环境",
+        "空场",
+        "世界没有停",
+        "声音撤走"
+      ]
+    },
+    "memory_time": {
+      "label": "记忆、主观与时间改写",
+      "aliases": [
+        "回忆",
+        "记忆",
+        "主观",
+        "时间回溯",
+        "时间重置",
+        "视角切换",
+        "眼睛进入",
+        "照片",
+        "白化"
+      ]
+    },
+    "object_transition": {
+      "label": "物件语言与转场",
+      "aliases": [
+        "物件",
+        "道具",
+        "匹配转场",
+        "动作匹配",
+        "形状匹配",
+        "遮挡转场",
+        "擦屏",
+        "声音尾桥",
+        "蒙太奇"
+      ]
+    },
+    "family_pressure": {
+      "label": "家庭空间与成人压力",
+      "aliases": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "成人",
+        "儿童视角",
+        "房间",
+        "餐桌",
+        "住宅",
+        "暖光压迫"
+      ]
+    },
+    "public_route": {
+      "label": "公共空间与移动路线",
+      "aliases": [
+        "街道",
+        "车站",
+        "人潮",
+        "旅行",
+        "道路",
+        "公园",
+        "夜路",
+        "移动",
+        "路灯",
+        "公共空间"
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "SC-01-0000-01",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 1,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_01.jpg"
+    },
+    {
+      "id": "SC-01-0000-02",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 2,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_02.jpg"
+    },
+    {
+      "id": "SC-01-0000-03",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 3,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_03.jpg"
+    },
+    {
+      "id": "SC-01-0000-04",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室高位",
+        "课桌阵列",
+        "倾斜构图",
+        "人物缩小",
+        "飞行前景",
+        "群体几何",
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "开场教室段以倾斜人体切片和极高位课桌阵列改变观看尺度。",
+      "curation": "verified_override",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_04.jpg"
+    },
+    {
+      "id": "SC-01-0000-05",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 5,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_05.jpg"
+    },
+    {
+      "id": "SC-01-0000-06",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 6,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_06.jpg"
+    },
+    {
+      "id": "SC-01-0000-07",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 7,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_07.jpg"
+    },
+    {
+      "id": "SC-01-0000-08",
+      "episode": "EP01",
+      "window": "0000",
+      "page": 8,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "公园初遇、外星来历和开场图形语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0000_08.jpg"
+    },
+    {
+      "id": "SC-01-0300-01",
+      "episode": "EP01",
+      "window": "0300",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "public_route",
+        "object_transition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "街道",
+        "车站",
+        "人潮",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "群体关系、公园对话、道具说明与日常蒙太奇",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0300_01.jpg"
+    },
+    {
+      "id": "SC-01-0300-02",
+      "episode": "EP01",
+      "window": "0300",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "public_route",
+        "object_transition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "街道",
+        "车站",
+        "人潮",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "群体关系、公园对话、道具说明与日常蒙太奇",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0300_02.jpg"
+    },
+    {
+      "id": "SC-01-0300-03",
+      "episode": "EP01",
+      "window": "0300",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "public_route",
+        "object_transition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "街道",
+        "车站",
+        "人潮",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "群体关系、公园对话、道具说明与日常蒙太奇",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0300_03.jpg"
+    },
+    {
+      "id": "SC-01-0300-04",
+      "episode": "EP01",
+      "window": "0300",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "public_route",
+        "object_transition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "街道",
+        "车站",
+        "人潮",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "群体关系、公园对话、道具说明与日常蒙太奇",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0300_04.jpg"
+    },
+    {
+      "id": "SC-01-0300-05",
+      "episode": "EP01",
+      "window": "0300",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "public_route",
+        "object_transition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "街道",
+        "车站",
+        "人潮",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "群体关系、公园对话、道具说明与日常蒙太奇",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0300_05.jpg"
+    },
+    {
+      "id": "SC-01-0300-06",
+      "episode": "EP01",
+      "window": "0300",
+      "page": 6,
+      "categories": [
+        "classroom_group",
+        "public_route",
+        "object_transition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "街道",
+        "车站",
+        "人潮",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "群体关系、公园对话、道具说明与日常蒙太奇",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0300_06.jpg"
+    },
+    {
+      "id": "SC-01-0600-01",
+      "episode": "EP01",
+      "window": "0600",
+      "page": 1,
+      "categories": [
+        "restrained_acting",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "微表情",
+        "低反应",
+        "眼神",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "夜路交流、天真承诺与情绪误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0600_01.jpg"
+    },
+    {
+      "id": "SC-01-0600-02",
+      "episode": "EP01",
+      "window": "0600",
+      "page": 2,
+      "categories": [
+        "restrained_acting",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "微表情",
+        "低反应",
+        "眼神",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "夜路交流、天真承诺与情绪误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0600_02.jpg"
+    },
+    {
+      "id": "SC-01-0600-03",
+      "episode": "EP01",
+      "window": "0600",
+      "page": 3,
+      "categories": [
+        "restrained_acting",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "微表情",
+        "低反应",
+        "眼神",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "夜路交流、天真承诺与情绪误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0600_03.jpg"
+    },
+    {
+      "id": "SC-01-0600-04",
+      "episode": "EP01",
+      "window": "0600",
+      "page": 4,
+      "categories": [
+        "restrained_acting",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "微表情",
+        "低反应",
+        "眼神",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "夜路交流、天真承诺与情绪误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0600_04.jpg"
+    },
+    {
+      "id": "SC-01-0600-05",
+      "episode": "EP01",
+      "window": "0600",
+      "page": 5,
+      "categories": [
+        "restrained_acting",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "微表情",
+        "低反应",
+        "眼神",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "夜路交流、天真承诺与情绪误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0600_05.jpg"
+    },
+    {
+      "id": "SC-01-0900-01",
+      "episode": "EP01",
+      "window": "0900",
+      "page": 1,
+      "categories": [
+        "family_pressure",
+        "memory_time",
+        "threshold_door"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "回忆",
+        "记忆",
+        "主观",
+        "开门",
+        "关门",
+        "门板"
+      ],
+      "summary": "家庭内部、门窗遮挡与时间道具",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0900_01.jpg"
+    },
+    {
+      "id": "SC-01-0900-02",
+      "episode": "EP01",
+      "window": "0900",
+      "page": 2,
+      "categories": [
+        "family_pressure",
+        "memory_time",
+        "threshold_door"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "回忆",
+        "记忆",
+        "主观",
+        "开门",
+        "关门",
+        "门板"
+      ],
+      "summary": "家庭内部、门窗遮挡与时间道具",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0900_02.jpg"
+    },
+    {
+      "id": "SC-01-0900-03",
+      "episode": "EP01",
+      "window": "0900",
+      "page": 3,
+      "categories": [
+        "family_pressure",
+        "memory_time",
+        "threshold_door"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "回忆",
+        "记忆",
+        "主观",
+        "开门",
+        "关门",
+        "门板"
+      ],
+      "summary": "家庭内部、门窗遮挡与时间道具",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0900_03.jpg"
+    },
+    {
+      "id": "SC-01-0900-04",
+      "episode": "EP01",
+      "window": "0900",
+      "page": 4,
+      "categories": [
+        "family_pressure",
+        "memory_time",
+        "threshold_door"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "回忆",
+        "记忆",
+        "主观",
+        "开门",
+        "关门",
+        "门板"
+      ],
+      "summary": "家庭内部、门窗遮挡与时间道具",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_0900_04.jpg"
+    },
+    {
+      "id": "SC-01-1200-01",
+      "episode": "EP01",
+      "window": "1200",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "校园群体、明亮环境与人物孤立",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1200_01.jpg"
+    },
+    {
+      "id": "SC-01-1200-02",
+      "episode": "EP01",
+      "window": "1200",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "校园群体、明亮环境与人物孤立",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1200_02.jpg"
+    },
+    {
+      "id": "SC-01-1200-03",
+      "episode": "EP01",
+      "window": "1200",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "校园群体、明亮环境与人物孤立",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1200_03.jpg"
+    },
+    {
+      "id": "SC-01-1200-04",
+      "episode": "EP01",
+      "window": "1200",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "校园群体、明亮环境与人物孤立",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1200_04.jpg"
+    },
+    {
+      "id": "SC-01-1200-05",
+      "episode": "EP01",
+      "window": "1200",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "校园群体、明亮环境与人物孤立",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1200_05.jpg"
+    },
+    {
+      "id": "SC-01-1200-06",
+      "episode": "EP01",
+      "window": "1200",
+      "page": 6,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "校园群体、明亮环境与人物孤立",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1200_06.jpg"
+    },
+    {
+      "id": "SC-01-1500-01",
+      "episode": "EP01",
+      "window": "1500",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "threshold_door",
+        "partial_evidence"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚"
+      ],
+      "summary": "校园走廊、厕所阈限与局部身体证据",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1500_01.jpg"
+    },
+    {
+      "id": "SC-01-1500-02",
+      "episode": "EP01",
+      "window": "1500",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "threshold_door",
+        "partial_evidence"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚"
+      ],
+      "summary": "校园走廊、厕所阈限与局部身体证据",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1500_02.jpg"
+    },
+    {
+      "id": "SC-01-1500-03",
+      "episode": "EP01",
+      "window": "1500",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "threshold_door",
+        "partial_evidence"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚"
+      ],
+      "summary": "校园走廊、厕所阈限与局部身体证据",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1500_03.jpg"
+    },
+    {
+      "id": "SC-01-1500-04",
+      "episode": "EP01",
+      "window": "1500",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "threshold_door",
+        "partial_evidence"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚"
+      ],
+      "summary": "校园走廊、厕所阈限与局部身体证据",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1500_04.jpg"
+    },
+    {
+      "id": "SC-01-1500-05",
+      "episode": "EP01",
+      "window": "1500",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "threshold_door",
+        "partial_evidence"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚"
+      ],
+      "summary": "校园走廊、厕所阈限与局部身体证据",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1500_05.jpg"
+    },
+    {
+      "id": "SC-01-1800-01",
+      "episode": "EP01",
+      "window": "1800",
+      "page": 1,
+      "categories": [
+        "partial_evidence",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "悲剧后果、空场和低反应余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1800_01.jpg"
+    },
+    {
+      "id": "SC-01-1800-02",
+      "episode": "EP01",
+      "window": "1800",
+      "page": 2,
+      "categories": [
+        "partial_evidence",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "悲剧后果、空场和低反应余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1800_02.jpg"
+    },
+    {
+      "id": "SC-01-1800-03",
+      "episode": "EP01",
+      "window": "1800",
+      "page": 3,
+      "categories": [
+        "partial_evidence",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "悲剧后果、空场和低反应余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1800_03.jpg"
+    },
+    {
+      "id": "SC-01-1800-04",
+      "episode": "EP01",
+      "window": "1800",
+      "page": 4,
+      "categories": [
+        "partial_evidence",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "悲剧后果、空场和低反应余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1800_04.jpg"
+    },
+    {
+      "id": "SC-01-1800-05",
+      "episode": "EP01",
+      "window": "1800",
+      "page": 5,
+      "categories": [
+        "partial_evidence",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "悲剧后果、空场和低反应余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1800_05.jpg"
+    },
+    {
+      "id": "SC-01-1800-06",
+      "episode": "EP01",
+      "window": "1800",
+      "page": 6,
+      "categories": [
+        "partial_evidence",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "悲剧后果、空场和低反应余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_1800_06.jpg"
+    },
+    {
+      "id": "SC-01-2100-01",
+      "episode": "EP01",
+      "window": "2100",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "environment_aftermath",
+        "pressure_composition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "空镜",
+        "余波",
+        "静音",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "教室孤立与结尾社会空间",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_2100_01.jpg"
+    },
+    {
+      "id": "SC-01-2100-02",
+      "episode": "EP01",
+      "window": "2100",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "environment_aftermath",
+        "pressure_composition"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "空镜",
+        "余波",
+        "静音",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "教室孤立与结尾社会空间",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep01\\scene_index\\scene_2100_02.jpg"
+    },
+    {
+      "id": "SC-02-0000-01",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "全班转头",
+        "群体注视",
+        "学生回望",
+        "眼睛先动",
+        "头部后转",
+        "视线级联",
+        "不同反应幅度",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "教室谈话被新信息打断，学生按座位与注意路径分批回头，反应方向和幅度不统一。",
+      "curation": "verified_override",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_01.jpg"
+    },
+    {
+      "id": "SC-02-0000-02",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "教室群体注视、开场图形与公园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_02.jpg"
+    },
+    {
+      "id": "SC-02-0000-03",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "教室群体注视、开场图形与公园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_03.jpg"
+    },
+    {
+      "id": "SC-02-0000-04",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "教室群体注视、开场图形与公园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_04.jpg"
+    },
+    {
+      "id": "SC-02-0000-05",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "教室群体注视、开场图形与公园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_05.jpg"
+    },
+    {
+      "id": "SC-02-0000-06",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 6,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "教室群体注视、开场图形与公园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_06.jpg"
+    },
+    {
+      "id": "SC-02-0000-07",
+      "episode": "EP02",
+      "window": "0000",
+      "page": 7,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "public_route"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "教室群体注视、开场图形与公园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0000_07.jpg"
+    },
+    {
+      "id": "SC-02-0300-01",
+      "episode": "EP02",
+      "window": "0300",
+      "page": 1,
+      "categories": [
+        "public_route",
+        "force_action",
+        "restrained_acting"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "森林与公园冲突、逼近和身体关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0300_01.jpg"
+    },
+    {
+      "id": "SC-02-0300-02",
+      "episode": "EP02",
+      "window": "0300",
+      "page": 2,
+      "categories": [
+        "public_route",
+        "force_action",
+        "restrained_acting"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "森林与公园冲突、逼近和身体关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0300_02.jpg"
+    },
+    {
+      "id": "SC-02-0300-03",
+      "episode": "EP02",
+      "window": "0300",
+      "page": 3,
+      "categories": [
+        "public_route",
+        "force_action",
+        "restrained_acting"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "森林与公园冲突、逼近和身体关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0300_03.jpg"
+    },
+    {
+      "id": "SC-02-0300-04",
+      "episode": "EP02",
+      "window": "0300",
+      "page": 4,
+      "categories": [
+        "public_route",
+        "force_action",
+        "restrained_acting"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "森林与公园冲突、逼近和身体关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0300_04.jpg"
+    },
+    {
+      "id": "SC-02-0600-01",
+      "episode": "EP02",
+      "window": "0600",
+      "page": 1,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "夜路、家庭门槛和无法介入",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0600_01.jpg"
+    },
+    {
+      "id": "SC-02-0600-02",
+      "episode": "EP02",
+      "window": "0600",
+      "page": 2,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "夜路、家庭门槛和无法介入",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0600_02.jpg"
+    },
+    {
+      "id": "SC-02-0600-03",
+      "episode": "EP02",
+      "window": "0600",
+      "page": 3,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "夜路、家庭门槛和无法介入",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0600_03.jpg"
+    },
+    {
+      "id": "SC-02-0600-04",
+      "episode": "EP02",
+      "window": "0600",
+      "page": 4,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "夜路、家庭门槛和无法介入",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0600_04.jpg"
+    },
+    {
+      "id": "SC-02-0600-05",
+      "episode": "EP02",
+      "window": "0600",
+      "page": 5,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "夜路、家庭门槛和无法介入",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0600_05.jpg"
+    },
+    {
+      "id": "SC-02-0600-06",
+      "episode": "EP02",
+      "window": "0600",
+      "page": 6,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "夜路、家庭门槛和无法介入",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0600_06.jpg"
+    },
+    {
+      "id": "SC-02-0900-01",
+      "episode": "EP02",
+      "window": "0900",
+      "page": 1,
+      "categories": [
+        "partial_evidence",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "死亡确认、地面证据和天真误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0900_01.jpg"
+    },
+    {
+      "id": "SC-02-0900-02",
+      "episode": "EP02",
+      "window": "0900",
+      "page": 2,
+      "categories": [
+        "partial_evidence",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "死亡确认、地面证据和天真误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0900_02.jpg"
+    },
+    {
+      "id": "SC-02-0900-03",
+      "episode": "EP02",
+      "window": "0900",
+      "page": 3,
+      "categories": [
+        "partial_evidence",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "死亡确认、地面证据和天真误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0900_03.jpg"
+    },
+    {
+      "id": "SC-02-0900-04",
+      "episode": "EP02",
+      "window": "0900",
+      "page": 4,
+      "categories": [
+        "partial_evidence",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "局部",
+        "手",
+        "脚",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "死亡确认、地面证据和天真误读",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_0900_04.jpg"
+    },
+    {
+      "id": "SC-02-1200-01",
+      "episode": "EP02",
+      "window": "1200",
+      "page": 1,
+      "categories": [
+        "environment_aftermath",
+        "memory_time"
+      ],
+      "tags": [
+        "空镜",
+        "余波",
+        "静音",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "事件余波与结尾回收",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep02\\scene_index\\scene_1200_01.jpg"
+    },
+    {
+      "id": "SC-03-0000-01",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 1,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_01.jpg"
+    },
+    {
+      "id": "SC-03-0000-02",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 2,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_02.jpg"
+    },
+    {
+      "id": "SC-03-0000-03",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 3,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_03.jpg"
+    },
+    {
+      "id": "SC-03-0000-04",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 4,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_04.jpg"
+    },
+    {
+      "id": "SC-03-0000-05",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 5,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_05.jpg"
+    },
+    {
+      "id": "SC-03-0000-06",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 6,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_06.jpg"
+    },
+    {
+      "id": "SC-03-0000-07",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 7,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_07.jpg"
+    },
+    {
+      "id": "SC-03-0000-08",
+      "episode": "EP03",
+      "window": "0000",
+      "page": 8,
+      "categories": [
+        "expression_break",
+        "restrained_acting",
+        "public_route"
+      ],
+      "tags": [
+        "颜艺",
+        "崩坏",
+        "恐慌",
+        "微表情",
+        "低反应",
+        "眼神",
+        "街道",
+        "车站",
+        "人潮"
+      ],
+      "summary": "见证者崩坏、普通空间与开场关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0000_08.jpg"
+    },
+    {
+      "id": "SC-03-0300-01",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 1,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_01.jpg"
+    },
+    {
+      "id": "SC-03-0300-02",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 2,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_02.jpg"
+    },
+    {
+      "id": "SC-03-0300-03",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 3,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_03.jpg"
+    },
+    {
+      "id": "SC-03-0300-04",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 4,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_04.jpg"
+    },
+    {
+      "id": "SC-03-0300-05",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 5,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_05.jpg"
+    },
+    {
+      "id": "SC-03-0300-06",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 6,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_06.jpg"
+    },
+    {
+      "id": "SC-03-0300-07",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 7,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_07.jpg"
+    },
+    {
+      "id": "SC-03-0300-08",
+      "episode": "EP03",
+      "window": "0300",
+      "page": 8,
+      "categories": [
+        "public_route",
+        "force_action",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "动作",
+        "受力",
+        "碰撞",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "森林关系、道具交换和全身动作",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0300_08.jpg"
+    },
+    {
+      "id": "SC-03-0600-01",
+      "episode": "EP03",
+      "window": "0600",
+      "page": 1,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "家庭尺度、门框与儿童观看权限",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0600_01.jpg"
+    },
+    {
+      "id": "SC-03-0600-02",
+      "episode": "EP03",
+      "window": "0600",
+      "page": 2,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "家庭尺度、门框与儿童观看权限",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0600_02.jpg"
+    },
+    {
+      "id": "SC-03-0600-03",
+      "episode": "EP03",
+      "window": "0600",
+      "page": 3,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "家庭尺度、门框与儿童观看权限",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0600_03.jpg"
+    },
+    {
+      "id": "SC-03-0600-04",
+      "episode": "EP03",
+      "window": "0600",
+      "page": 4,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "家庭尺度、门框与儿童观看权限",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0600_04.jpg"
+    },
+    {
+      "id": "SC-03-0600-05",
+      "episode": "EP03",
+      "window": "0600",
+      "page": 5,
+      "categories": [
+        "family_pressure",
+        "threshold_door",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "开门",
+        "关门",
+        "门板",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "家庭尺度、门框与儿童观看权限",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0600_05.jpg"
+    },
+    {
+      "id": "SC-03-0900-01",
+      "episode": "EP03",
+      "window": "0900",
+      "page": 1,
+      "categories": [
+        "memory_time",
+        "style_mutation",
+        "classroom_group"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "换画风",
+        "平面化",
+        "白场",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "金色关系插图、平面化和校园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0900_01.jpg"
+    },
+    {
+      "id": "SC-03-0900-02",
+      "episode": "EP03",
+      "window": "0900",
+      "page": 2,
+      "categories": [
+        "memory_time",
+        "style_mutation",
+        "classroom_group"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "换画风",
+        "平面化",
+        "白场",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "金色关系插图、平面化和校园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0900_02.jpg"
+    },
+    {
+      "id": "SC-03-0900-03",
+      "episode": "EP03",
+      "window": "0900",
+      "page": 3,
+      "categories": [
+        "memory_time",
+        "style_mutation",
+        "classroom_group"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "换画风",
+        "平面化",
+        "白场",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "金色关系插图、平面化和校园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0900_03.jpg"
+    },
+    {
+      "id": "SC-03-0900-04",
+      "episode": "EP03",
+      "window": "0900",
+      "page": 4,
+      "categories": [
+        "memory_time",
+        "style_mutation",
+        "classroom_group"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "换画风",
+        "平面化",
+        "白场",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "金色关系插图、平面化和校园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0900_04.jpg"
+    },
+    {
+      "id": "SC-03-0900-05",
+      "episode": "EP03",
+      "window": "0900",
+      "page": 5,
+      "categories": [
+        "memory_time",
+        "style_mutation",
+        "classroom_group"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "换画风",
+        "平面化",
+        "白场",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "金色关系插图、平面化和校园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0900_05.jpg"
+    },
+    {
+      "id": "SC-03-0900-06",
+      "episode": "EP03",
+      "window": "0900",
+      "page": 6,
+      "categories": [
+        "memory_time",
+        "style_mutation",
+        "classroom_group"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "换画风",
+        "平面化",
+        "白场",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "金色关系插图、平面化和校园关系",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_0900_06.jpg"
+    },
+    {
+      "id": "SC-03-1200-01",
+      "episode": "EP03",
+      "window": "1200",
+      "page": 1,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "主观自我、他人扫描和家庭反应",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_1200_01.jpg"
+    },
+    {
+      "id": "SC-03-1200-02",
+      "episode": "EP03",
+      "window": "1200",
+      "page": 2,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "主观自我、他人扫描和家庭反应",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_1200_02.jpg"
+    },
+    {
+      "id": "SC-03-1200-03",
+      "episode": "EP03",
+      "window": "1200",
+      "page": 3,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "主观自我、他人扫描和家庭反应",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_1200_03.jpg"
+    },
+    {
+      "id": "SC-03-1200-04",
+      "episode": "EP03",
+      "window": "1200",
+      "page": 4,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "主观自我、他人扫描和家庭反应",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_1200_04.jpg"
+    },
+    {
+      "id": "SC-03-1200-05",
+      "episode": "EP03",
+      "window": "1200",
+      "page": 5,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "主观自我、他人扫描和家庭反应",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_1200_05.jpg"
+    },
+    {
+      "id": "SC-03-1500-01",
+      "episode": "EP03",
+      "window": "1500",
+      "page": 1,
+      "categories": [
+        "environment_aftermath",
+        "object_transition"
+      ],
+      "tags": [
+        "空镜",
+        "余波",
+        "静音",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "关系后果与结尾物件回收",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep03\\scene_index\\scene_1500_01.jpg"
+    },
+    {
+      "id": "SC-04-0000-01",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_01.jpg"
+    },
+    {
+      "id": "SC-04-0000-02",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_02.jpg"
+    },
+    {
+      "id": "SC-04-0000-03",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_03.jpg"
+    },
+    {
+      "id": "SC-04-0000-04",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_04.jpg"
+    },
+    {
+      "id": "SC-04-0000-05",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_05.jpg"
+    },
+    {
+      "id": "SC-04-0000-06",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 6,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_06.jpg"
+    },
+    {
+      "id": "SC-04-0000-07",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 7,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_07.jpg"
+    },
+    {
+      "id": "SC-04-0000-08",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 8,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_08.jpg"
+    },
+    {
+      "id": "SC-04-0000-09",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 9,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_09.jpg"
+    },
+    {
+      "id": "SC-04-0000-10",
+      "episode": "EP04",
+      "window": "0000",
+      "page": 10,
+      "categories": [
+        "classroom_group",
+        "cute_dark_conflict",
+        "style_mutation"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "可爱",
+        "星光",
+        "爱心",
+        "换画风",
+        "平面化",
+        "白场"
+      ],
+      "summary": "教室关系、图形入侵与开场视觉语法",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0000_10.jpg"
+    },
+    {
+      "id": "SC-04-0300-01",
+      "episode": "EP04",
+      "window": "0300",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "考试压力、纸面证据和家庭行为",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0300_01.jpg"
+    },
+    {
+      "id": "SC-04-0300-02",
+      "episode": "EP04",
+      "window": "0300",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "考试压力、纸面证据和家庭行为",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0300_02.jpg"
+    },
+    {
+      "id": "SC-04-0300-03",
+      "episode": "EP04",
+      "window": "0300",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "考试压力、纸面证据和家庭行为",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0300_03.jpg"
+    },
+    {
+      "id": "SC-04-0300-04",
+      "episode": "EP04",
+      "window": "0300",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "考试压力、纸面证据和家庭行为",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0300_04.jpg"
+    },
+    {
+      "id": "SC-04-0300-05",
+      "episode": "EP04",
+      "window": "0300",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "partial_evidence",
+        "family_pressure"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "局部",
+        "手",
+        "脚",
+        "家庭",
+        "父亲",
+        "母亲"
+      ],
+      "summary": "考试压力、纸面证据和家庭行为",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0300_05.jpg"
+    },
+    {
+      "id": "SC-04-0600-01",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 1,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_01.jpg"
+    },
+    {
+      "id": "SC-04-0600-02",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 2,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_02.jpg"
+    },
+    {
+      "id": "SC-04-0600-03",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 3,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_03.jpg"
+    },
+    {
+      "id": "SC-04-0600-04",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 4,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_04.jpg"
+    },
+    {
+      "id": "SC-04-0600-05",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 5,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_05.jpg"
+    },
+    {
+      "id": "SC-04-0600-06",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 6,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_06.jpg"
+    },
+    {
+      "id": "SC-04-0600-07",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 7,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_07.jpg"
+    },
+    {
+      "id": "SC-04-0600-08",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 8,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_08.jpg"
+    },
+    {
+      "id": "SC-04-0600-09",
+      "episode": "EP04",
+      "window": "0600",
+      "page": 9,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "restrained_acting"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "儿童与成人尺度、校园表演和日常压力",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0600_09.jpg"
+    },
+    {
+      "id": "SC-04-0900-01",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 1,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_01.jpg"
+    },
+    {
+      "id": "SC-04-0900-02",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 2,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_02.jpg"
+    },
+    {
+      "id": "SC-04-0900-03",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 3,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_03.jpg"
+    },
+    {
+      "id": "SC-04-0900-04",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 4,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_04.jpg"
+    },
+    {
+      "id": "SC-04-0900-05",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 5,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_05.jpg"
+    },
+    {
+      "id": "SC-04-0900-06",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 6,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_06.jpg"
+    },
+    {
+      "id": "SC-04-0900-07",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 7,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_07.jpg"
+    },
+    {
+      "id": "SC-04-0900-08",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 8,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_08.jpg"
+    },
+    {
+      "id": "SC-04-0900-09",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 9,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_09.jpg"
+    },
+    {
+      "id": "SC-04-0900-10",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 10,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_10.jpg"
+    },
+    {
+      "id": "SC-04-0900-11",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 11,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_11.jpg"
+    },
+    {
+      "id": "SC-04-0900-12",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 12,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_12.jpg"
+    },
+    {
+      "id": "SC-04-0900-13",
+      "episode": "EP04",
+      "window": "0900",
+      "page": 13,
+      "categories": [
+        "force_action",
+        "style_mutation",
+        "cute_dark_conflict"
+      ],
+      "tags": [
+        "动作",
+        "受力",
+        "碰撞",
+        "换画风",
+        "平面化",
+        "白场",
+        "可爱",
+        "星光",
+        "爱心"
+      ],
+      "summary": "粗线动作、星形主观层和高强度接触",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_0900_13.jpg"
+    },
+    {
+      "id": "SC-04-1200-01",
+      "episode": "EP04",
+      "window": "1200",
+      "page": 1,
+      "categories": [
+        "environment_aftermath",
+        "memory_time"
+      ],
+      "tags": [
+        "空镜",
+        "余波",
+        "静音",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "冲突后的情绪落地与结尾",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_1200_01.jpg"
+    },
+    {
+      "id": "SC-04-1200-02",
+      "episode": "EP04",
+      "window": "1200",
+      "page": 2,
+      "categories": [
+        "environment_aftermath",
+        "memory_time"
+      ],
+      "tags": [
+        "空镜",
+        "余波",
+        "静音",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "冲突后的情绪落地与结尾",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_1200_02.jpg"
+    },
+    {
+      "id": "SC-04-1200-03",
+      "episode": "EP04",
+      "window": "1200",
+      "page": 3,
+      "categories": [
+        "environment_aftermath",
+        "memory_time"
+      ],
+      "tags": [
+        "空镜",
+        "余波",
+        "静音",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "冲突后的情绪落地与结尾",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_1200_03.jpg"
+    },
+    {
+      "id": "SC-04-1200-04",
+      "episode": "EP04",
+      "window": "1200",
+      "page": 4,
+      "categories": [
+        "environment_aftermath",
+        "memory_time"
+      ],
+      "tags": [
+        "空镜",
+        "余波",
+        "静音",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "冲突后的情绪落地与结尾",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep04\\scene_index\\scene_1200_04.jpg"
+    },
+    {
+      "id": "SC-05-0000-01",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 1,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_01.jpg"
+    },
+    {
+      "id": "SC-05-0000-02",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 2,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_02.jpg"
+    },
+    {
+      "id": "SC-05-0000-03",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 3,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_03.jpg"
+    },
+    {
+      "id": "SC-05-0000-04",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 4,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_04.jpg"
+    },
+    {
+      "id": "SC-05-0000-05",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 5,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_05.jpg"
+    },
+    {
+      "id": "SC-05-0000-06",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 6,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_06.jpg"
+    },
+    {
+      "id": "SC-05-0000-07",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 7,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_07.jpg"
+    },
+    {
+      "id": "SC-05-0000-08",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 8,
+      "categories": [
+        "threshold_door",
+        "family_pressure",
+        "partial_evidence"
+      ],
+      "tags": [
+        "开门",
+        "门内暖光",
+        "门外孩子",
+        "家庭阈限",
+        "脚步先行",
+        "完整人物后给",
+        "关门",
+        "门板",
+        "家庭",
+        "父亲",
+        "母亲",
+        "局部",
+        "手",
+        "脚"
+      ],
+      "summary": "门内家庭先以脚步、身体和婴儿出现，门外孩子被冷色走廊留在边界之外。",
+      "curation": "verified_override",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_08.jpg"
+    },
+    {
+      "id": "SC-05-0000-09",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 9,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_09.jpg"
+    },
+    {
+      "id": "SC-05-0000-10",
+      "episode": "EP05",
+      "window": "0000",
+      "page": 10,
+      "categories": [
+        "public_route",
+        "threshold_door",
+        "partial_evidence",
+        "pressure_composition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "开门",
+        "关门",
+        "门板",
+        "局部",
+        "手",
+        "脚",
+        "俯视",
+        "俯拍",
+        "高位"
+      ],
+      "summary": "旅行、人潮、住宅门槛与他人证据扫描",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0000_10.jpg"
+    },
+    {
+      "id": "SC-05-0300-01",
+      "episode": "EP05",
+      "window": "0300",
+      "page": 1,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "公共空间、错误幸福和关系移动",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0300_01.jpg"
+    },
+    {
+      "id": "SC-05-0300-02",
+      "episode": "EP05",
+      "window": "0300",
+      "page": 2,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "公共空间、错误幸福和关系移动",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0300_02.jpg"
+    },
+    {
+      "id": "SC-05-0300-03",
+      "episode": "EP05",
+      "window": "0300",
+      "page": 3,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "公共空间、错误幸福和关系移动",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0300_03.jpg"
+    },
+    {
+      "id": "SC-05-0300-04",
+      "episode": "EP05",
+      "window": "0300",
+      "page": 4,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "公共空间、错误幸福和关系移动",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0300_04.jpg"
+    },
+    {
+      "id": "SC-05-0300-05",
+      "episode": "EP05",
+      "window": "0300",
+      "page": 5,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "公共空间、错误幸福和关系移动",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0300_05.jpg"
+    },
+    {
+      "id": "SC-05-0300-06",
+      "episode": "EP05",
+      "window": "0300",
+      "page": 6,
+      "categories": [
+        "public_route",
+        "cute_dark_conflict",
+        "object_transition"
+      ],
+      "tags": [
+        "街道",
+        "车站",
+        "人潮",
+        "可爱",
+        "星光",
+        "爱心",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "公共空间、错误幸福和关系移动",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0300_06.jpg"
+    },
+    {
+      "id": "SC-05-0600-01",
+      "episode": "EP05",
+      "window": "0600",
+      "page": 1,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "expression_break"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "颜艺",
+        "崩坏",
+        "恐慌"
+      ],
+      "summary": "家庭对话、校园尴尬与短促画风切换",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0600_01.jpg"
+    },
+    {
+      "id": "SC-05-0600-02",
+      "episode": "EP05",
+      "window": "0600",
+      "page": 2,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "expression_break"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "颜艺",
+        "崩坏",
+        "恐慌"
+      ],
+      "summary": "家庭对话、校园尴尬与短促画风切换",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0600_02.jpg"
+    },
+    {
+      "id": "SC-05-0600-03",
+      "episode": "EP05",
+      "window": "0600",
+      "page": 3,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "expression_break"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "颜艺",
+        "崩坏",
+        "恐慌"
+      ],
+      "summary": "家庭对话、校园尴尬与短促画风切换",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0600_03.jpg"
+    },
+    {
+      "id": "SC-05-0600-04",
+      "episode": "EP05",
+      "window": "0600",
+      "page": 4,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "expression_break"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "颜艺",
+        "崩坏",
+        "恐慌"
+      ],
+      "summary": "家庭对话、校园尴尬与短促画风切换",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0600_04.jpg"
+    },
+    {
+      "id": "SC-05-0600-05",
+      "episode": "EP05",
+      "window": "0600",
+      "page": 5,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "expression_break"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "颜艺",
+        "崩坏",
+        "恐慌"
+      ],
+      "summary": "家庭对话、校园尴尬与短促画风切换",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0600_05.jpg"
+    },
+    {
+      "id": "SC-05-0600-06",
+      "episode": "EP05",
+      "window": "0600",
+      "page": 6,
+      "categories": [
+        "family_pressure",
+        "classroom_group",
+        "expression_break"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "教室",
+        "课堂",
+        "班级",
+        "颜艺",
+        "崩坏",
+        "恐慌"
+      ],
+      "summary": "家庭对话、校园尴尬与短促画风切换",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0600_06.jpg"
+    },
+    {
+      "id": "SC-05-0900-01",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 1,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_01.jpg"
+    },
+    {
+      "id": "SC-05-0900-02",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 2,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_02.jpg"
+    },
+    {
+      "id": "SC-05-0900-03",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 3,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_03.jpg"
+    },
+    {
+      "id": "SC-05-0900-04",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 4,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_04.jpg"
+    },
+    {
+      "id": "SC-05-0900-05",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 5,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_05.jpg"
+    },
+    {
+      "id": "SC-05-0900-06",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 6,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_06.jpg"
+    },
+    {
+      "id": "SC-05-0900-07",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 7,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_07.jpg"
+    },
+    {
+      "id": "SC-05-0900-08",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 8,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_08.jpg"
+    },
+    {
+      "id": "SC-05-0900-09",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 9,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_09.jpg"
+    },
+    {
+      "id": "SC-05-0900-10",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 10,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_10.jpg"
+    },
+    {
+      "id": "SC-05-0900-11",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 11,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_11.jpg"
+    },
+    {
+      "id": "SC-05-0900-12",
+      "episode": "EP05",
+      "window": "0900",
+      "page": 12,
+      "categories": [
+        "family_pressure",
+        "force_action",
+        "cute_dark_conflict",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "家庭",
+        "父亲",
+        "母亲",
+        "动作",
+        "受力",
+        "碰撞",
+        "可爱",
+        "星光",
+        "爱心",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "暖光暴力、死亡现场、天真覆盖与静音余波",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_0900_12.jpg"
+    },
+    {
+      "id": "SC-05-1200-01",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 1,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_01.jpg"
+    },
+    {
+      "id": "SC-05-1200-02",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 2,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_02.jpg"
+    },
+    {
+      "id": "SC-05-1200-03",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 3,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_03.jpg"
+    },
+    {
+      "id": "SC-05-1200-04",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 4,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_04.jpg"
+    },
+    {
+      "id": "SC-05-1200-05",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 5,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_05.jpg"
+    },
+    {
+      "id": "SC-05-1200-06",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 6,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_06.jpg"
+    },
+    {
+      "id": "SC-05-1200-07",
+      "episode": "EP05",
+      "window": "1200",
+      "page": 7,
+      "categories": [
+        "style_mutation",
+        "memory_time",
+        "object_transition"
+      ],
+      "tags": [
+        "换画风",
+        "平面化",
+        "白场",
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场"
+      ],
+      "summary": "外星图形世界、抽象念头与现实回落",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep05\\scene_index\\scene_1200_07.jpg"
+    },
+    {
+      "id": "SC-06-0000-01",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 1,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_01.jpg"
+    },
+    {
+      "id": "SC-06-0000-02",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 2,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_02.jpg"
+    },
+    {
+      "id": "SC-06-0000-03",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 3,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_03.jpg"
+    },
+    {
+      "id": "SC-06-0000-04",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 4,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_04.jpg"
+    },
+    {
+      "id": "SC-06-0000-05",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 5,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_05.jpg"
+    },
+    {
+      "id": "SC-06-0000-06",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 6,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_06.jpg"
+    },
+    {
+      "id": "SC-06-0000-07",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 7,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_07.jpg"
+    },
+    {
+      "id": "SC-06-0000-08",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 8,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_08.jpg"
+    },
+    {
+      "id": "SC-06-0000-09",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 9,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_09.jpg"
+    },
+    {
+      "id": "SC-06-0000-10",
+      "episode": "EP06",
+      "window": "0000",
+      "page": 10,
+      "categories": [
+        "threshold_door",
+        "cute_dark_conflict",
+        "classroom_group",
+        "memory_time"
+      ],
+      "tags": [
+        "开门",
+        "关门",
+        "门板",
+        "可爱",
+        "星光",
+        "爱心",
+        "教室",
+        "课堂",
+        "班级",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "门缝观看、关系图形、夜间回忆与群体拓扑",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0000_10.jpg"
+    },
+    {
+      "id": "SC-06-0300-01",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 1,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_01.jpg"
+    },
+    {
+      "id": "SC-06-0300-02",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 2,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_02.jpg"
+    },
+    {
+      "id": "SC-06-0300-03",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 3,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_03.jpg"
+    },
+    {
+      "id": "SC-06-0300-04",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 4,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_04.jpg"
+    },
+    {
+      "id": "SC-06-0300-05",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 5,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_05.jpg"
+    },
+    {
+      "id": "SC-06-0300-06",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 6,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_06.jpg"
+    },
+    {
+      "id": "SC-06-0300-07",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 7,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_07.jpg"
+    },
+    {
+      "id": "SC-06-0300-08",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 8,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_08.jpg"
+    },
+    {
+      "id": "SC-06-0300-09",
+      "episode": "EP06",
+      "window": "0300",
+      "page": 9,
+      "categories": [
+        "memory_time",
+        "partial_evidence",
+        "force_action"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "局部",
+        "手",
+        "脚",
+        "动作",
+        "受力",
+        "碰撞"
+      ],
+      "summary": "时间回溯、地面物件和暴力证据链",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0300_09.jpg"
+    },
+    {
+      "id": "SC-06-0600-01",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 1,
+      "categories": [
+        "memory_time",
+        "object_transition",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "共同旅行、消失、材质型哭泣和时间重置",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_01.jpg"
+    },
+    {
+      "id": "SC-06-0600-02",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 2,
+      "categories": [
+        "memory_time",
+        "object_transition",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "共同旅行、消失、材质型哭泣和时间重置",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_02.jpg"
+    },
+    {
+      "id": "SC-06-0600-03",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 3,
+      "categories": [
+        "memory_time",
+        "object_transition",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "共同旅行、消失、材质型哭泣和时间重置",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_03.jpg"
+    },
+    {
+      "id": "SC-06-0600-04",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 4,
+      "categories": [
+        "memory_time",
+        "object_transition",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "共同旅行、消失、材质型哭泣和时间重置",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_04.jpg"
+    },
+    {
+      "id": "SC-06-0600-05",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 5,
+      "categories": [
+        "memory_time",
+        "object_transition",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "共同旅行、消失、材质型哭泣和时间重置",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_05.jpg"
+    },
+    {
+      "id": "SC-06-0600-06",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 6,
+      "categories": [
+        "memory_time",
+        "object_transition",
+        "environment_aftermath",
+        "restrained_acting"
+      ],
+      "tags": [
+        "回忆",
+        "记忆",
+        "主观",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "共同旅行、消失、材质型哭泣和时间重置",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_06.jpg"
+    },
+    {
+      "id": "SC-06-0600-07",
+      "episode": "EP06",
+      "window": "0600",
+      "page": 7,
+      "categories": [
+        "memory_time",
+        "public_route",
+        "classroom_group"
+      ],
+      "tags": [
+        "重复早晨",
+        "学校入口",
+        "人群经过",
+        "时间线变化",
+        "同构重拍",
+        "回忆",
+        "记忆",
+        "主观",
+        "街道",
+        "车站",
+        "人潮",
+        "教室",
+        "课堂",
+        "班级"
+      ],
+      "summary": "重置后的早晨复用旧镜头顺序，以学校入口和人群路线证明时间线改变。",
+      "curation": "verified_override",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0600_07.jpg"
+    },
+    {
+      "id": "SC-06-0900-01",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 1,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "教室中心孤立",
+        "课桌包围",
+        "群体正常化",
+        "人物被人群吞没",
+        "公开空间压力",
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "主体处于教室中心却被桌椅与同学包围，群体继续日常任务，孤立由空间密度完成。",
+      "curation": "verified_override",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_01.jpg"
+    },
+    {
+      "id": "SC-06-0900-02",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 2,
+      "categories": [
+        "classroom_group",
+        "restrained_acting",
+        "object_transition",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "新时间线、教室孤立、群体移动和记忆残留",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_02.jpg"
+    },
+    {
+      "id": "SC-06-0900-03",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 3,
+      "categories": [
+        "classroom_group",
+        "pressure_composition",
+        "restrained_acting"
+      ],
+      "tags": [
+        "固定低机位",
+        "前景同学腿",
+        "背景孤立者",
+        "群聊移动",
+        "表演性静止",
+        "教室",
+        "课堂",
+        "班级",
+        "俯视",
+        "俯拍",
+        "高位",
+        "微表情",
+        "低反应",
+        "眼神"
+      ],
+      "summary": "前景同学的腿和群聊路线反复遮挡背景孤立者，摄影机固定，排斥由群体运动完成。",
+      "curation": "verified_override",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_03.jpg"
+    },
+    {
+      "id": "SC-06-0900-04",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 4,
+      "categories": [
+        "classroom_group",
+        "restrained_acting",
+        "object_transition",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "新时间线、教室孤立、群体移动和记忆残留",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_04.jpg"
+    },
+    {
+      "id": "SC-06-0900-05",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 5,
+      "categories": [
+        "classroom_group",
+        "restrained_acting",
+        "object_transition",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "新时间线、教室孤立、群体移动和记忆残留",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_05.jpg"
+    },
+    {
+      "id": "SC-06-0900-06",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 6,
+      "categories": [
+        "classroom_group",
+        "restrained_acting",
+        "object_transition",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "新时间线、教室孤立、群体移动和记忆残留",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_06.jpg"
+    },
+    {
+      "id": "SC-06-0900-07",
+      "episode": "EP06",
+      "window": "0900",
+      "page": 7,
+      "categories": [
+        "classroom_group",
+        "restrained_acting",
+        "object_transition",
+        "environment_aftermath"
+      ],
+      "tags": [
+        "教室",
+        "课堂",
+        "班级",
+        "微表情",
+        "低反应",
+        "眼神",
+        "物件",
+        "道具",
+        "匹配转场",
+        "空镜",
+        "余波",
+        "静音"
+      ],
+      "summary": "新时间线、教室孤立、群体移动和记忆残留",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_0900_07.jpg"
+    },
+    {
+      "id": "SC-06-1200-01",
+      "episode": "EP06",
+      "window": "1200",
+      "page": 1,
+      "categories": [
+        "object_transition",
+        "public_route",
+        "memory_time"
+      ],
+      "tags": [
+        "物件",
+        "道具",
+        "匹配转场",
+        "街道",
+        "车站",
+        "人潮",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "普通生活、商店物件选择和结尾落地",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_1200_01.jpg"
+    },
+    {
+      "id": "SC-06-1200-02",
+      "episode": "EP06",
+      "window": "1200",
+      "page": 2,
+      "categories": [
+        "object_transition",
+        "public_route",
+        "memory_time"
+      ],
+      "tags": [
+        "物件",
+        "道具",
+        "匹配转场",
+        "街道",
+        "车站",
+        "人潮",
+        "回忆",
+        "记忆",
+        "主观"
+      ],
+      "summary": "普通生活、商店物件选择和结尾落地",
+      "curation": "bucket_route",
+      "frame_path": "F:\\剧本创作四步骤\\research\\星空兔的救赎\\takopi_full\\ep06\\scene_index\\scene_1200_02.jpg"
+    }
+  ]
+}

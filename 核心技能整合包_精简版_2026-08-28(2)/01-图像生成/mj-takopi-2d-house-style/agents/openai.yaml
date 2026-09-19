@@ -1,0 +1,7 @@
+interface:
+  display_name: "MJ 2D实拍混合细致定调"
+  short_description: "生成含摄影结构与完整人物线稿系统的细致MJ描述"
+  default_prompt: "使用 $mj-takopi-2d-house-style 将这个画面编译为包含构图、镜头、光影、人物比例、五官、头发块面、线条层级与接触细节的无参数MJ描述。"
+
+policy:
+  allow_implicit_invocation: true

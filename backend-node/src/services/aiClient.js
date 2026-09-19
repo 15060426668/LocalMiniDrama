@@ -1,6 +1,7 @@
 // 与 Go pkg/ai + application/services/ai_service 对齐：读取 ai_service_configs，调用 OpenAI 兼容的 chat completions
 const aiConfigService = require('./aiConfigService');
 const { applyDeepSeekChatOptions } = require('./deepseekConfig');
+const skillLoader = require('./skillLoader');
 const https = require('https');
 const http = require('http');
 
@@ -330,10 +331,29 @@ async function generateText(db, log, serviceType, userPrompt, systemPrompt, opti
     }
   }
 
+  // Skill 注入：若 scene_key 对应可用 skill，将其 instructions 合并到 system prompt
+  let effectiveSystemPrompt = systemPrompt || '';
+  if (scene_key) {
+    const skillName = skillLoader.getSkillForScene(scene_key);
+    if (skillName) {
+      const skillPrompt = skillLoader.buildSkillSystemPrompt(skillName);
+      if (skillPrompt) {
+        effectiveSystemPrompt = effectiveSystemPrompt
+          ? `${skillPrompt}\n\n--- Original System Instructions ---\n${effectiveSystemPrompt}`
+          : skillPrompt;
+        log.info('AI generateText: skill injected', { scene_key, skill: skillName, skill_length: skillPrompt.length });
+      } else {
+        log.warn('AI generateText: skill build failed', { scene_key, skill: skillName });
+      }
+    } else {
+      log.info('AI generateText: no skill mapped for scene', { scene_key });
+    }
+  }
+
   let body = {
     model,
     messages: [
-      ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
+      ...(effectiveSystemPrompt ? [{ role: 'system', content: effectiveSystemPrompt }] : []),
       { role: 'user', content: userPrompt },
     ],
     temperature: Number(temperature),

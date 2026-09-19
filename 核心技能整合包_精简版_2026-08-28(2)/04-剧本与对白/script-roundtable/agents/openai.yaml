@@ -1,0 +1,7 @@
+interface:
+  display_name: "Script Roundtable"
+  short_description: "Run multi-perspective script critique."
+  default_prompt: "Use $script-roundtable to diagnose this script with fixed-perspective reviewers and an attending-doctor summary."
+
+policy:
+  allow_implicit_invocation: true

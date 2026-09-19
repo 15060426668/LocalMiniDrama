@@ -1,0 +1,4 @@
+interface:
+  display_name: "动画表演与镜头语言"
+  short_description: "深化动作、表演、画面法则与30秒连续动画执行"
+  default_prompt: "Use $animation-suspense-performance to deepen the approved animation shots with complete acting, timing and spacing, causal effects, full-frame motion, camera continuity, and an inheritable tail state without rewriting the story."

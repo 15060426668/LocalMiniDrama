@@ -1,0 +1,4 @@
+interface:
+  display_name: "Psychological Anime ImageGen"
+  short_description: "根据参考图生成手绘儿童心理动画风格的高质量静态图片"
+  default_prompt: "Use $psychological-anime-imagegen to generate a static psychological childhood-anime frame from my reference images."

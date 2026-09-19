@@ -1,0 +1,7 @@
+interface:
+  display_name: "电影构图训练教练"
+  short_description: "Analyze film composition case libraries."
+  default_prompt: "Use $cinematic-composition-coach to analyze this film composition case and deposit reusable composition rules."
+
+policy:
+  allow_implicit_invocation: true

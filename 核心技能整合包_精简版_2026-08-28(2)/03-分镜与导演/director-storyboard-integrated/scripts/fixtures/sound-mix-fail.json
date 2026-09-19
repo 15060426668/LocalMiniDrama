@@ -1,0 +1,24 @@
+{
+  "delivery_profile": "social_balanced",
+  "segments": [
+    {
+      "id": "bad",
+      "start_s": 0,
+      "end_s": 3,
+      "primary_source": "missing",
+      "target_lufs_s": -18,
+      "stems": [
+        {
+          "id": "ENV-01",
+          "bus": "WRONG",
+          "source": "room",
+          "status": "onscreen",
+          "position": "center",
+          "distance_m": 1,
+          "rms_dbfs": -12,
+          "peak_dbfs": -20
+        }
+      ]
+    }
+  ]
+}

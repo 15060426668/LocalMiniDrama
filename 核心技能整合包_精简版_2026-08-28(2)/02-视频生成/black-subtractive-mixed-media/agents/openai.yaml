@@ -1,0 +1,4 @@
+interface:
+  display_name: "Black Subtractive Mixed Media"
+  short_description: "Stage 2D/live-action transition schemes and prompts"
+  default_prompt: "Use -subtractive-mixed-media to improve my transition idea, present schemes for selection, then wait for approval before assets, detailed storyboard, and SD compilation."

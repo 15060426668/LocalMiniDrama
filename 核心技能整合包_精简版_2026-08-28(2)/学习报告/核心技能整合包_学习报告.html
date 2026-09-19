@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核心技能整合包（精简版）学习报告</title>
+<style>
+  :root{
+    --text:#1A1B1C; --sec:#6B7280; --bg:#F4F3EE; --card:#FFFFFF;
+    --border:#E4E3DD; --accent:#9EACEA; --accent2:#8BC8EA; --accent3:#94D8C3;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Roboto','PingFang SC','Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; font-size:14.5px;}
+  .wrap{max-width:980px; margin:0 auto; padding:24px 20px 64px;}
+  header.hero{background:linear-gradient(135deg, rgba(158,172,234,0.18), rgba(139,200,234,0.28)); border-radius:16px; padding:28px 28px 24px; margin-bottom:28px;}
+  header.hero h1{font-size:24px; font-weight:700; letter-spacing:.5px;}
+  header.hero .sub{margin-top:6px; color:var(--sec); font-size:13.5px;}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+  .tag{background:rgba(255,255,255,.75); border:1px solid rgba(0,0,0,.08); border-radius:999px; padding:3px 12px; font-size:12px; color:var(--sec);}
+  h2{font-size:19px; font-weight:700; margin:36px 0 14px; padding-left:12px; border-left:4px solid var(--accent);}
+  h3{font-size:15.5px; font-weight:600; margin:22px 0 10px;}
+  h4{font-size:14px; font-weight:600; margin:16px 0 6px;}
+  p{margin:8px 0;}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; margin:12px 0;}
+  .grid2{display:flex; flex-wrap:wrap; gap:14px;}
+  .grid2 > div{flex:1 1 300px; min-width:0;}
+  ul,ol{margin:8px 0 8px 22px;}
+  li{margin:4px 0;}
+  code{background:rgba(0,0,0,.05); border-radius:5px; padding:1px 6px; font-size:13px; font-family:Consolas,Menlo,monospace;}
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:13px; background:var(--card); border-radius:10px; overflow:hidden;}
+  th{background:rgba(158,172,234,.16); text-align:left; padding:8px 10px; font-weight:600; white-space:nowrap;}
+  td{border-top:1px solid var(--border); padding:8px 10px; vertical-align:top;}
+  .skill{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px 16px; margin:12px 0;}
+  .skill .name{font-weight:700; font-size:14.5px;}
+  .skill .role{color:var(--sec); font-size:12.5px; margin-top:2px;}
+  .skill .core{margin-top:8px; font-size:13.5px;}
+  .skill .keys{margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;}
+  .key{background:rgba(139,200,234,.14); border:1px solid rgba(139,200,234,.35); color:#25435a; border-radius:999px; padding:2px 10px; font-size:11.5px;}
+  .flow{display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; margin:16px 0;}
+  .fstep{flex:1 1 140px; min-width:0; background:var(--card); border:1px solid var(--border); border-top:3px solid var(--accent2); border-radius:12px; padding:12px; font-size:13px;}
+  .fstep b{display:block; font-size:13.5px;}
+  .fstep .d{color:var(--sec); font-size:12px; margin-top:4px;}
+  .arrow{align-self:center; color:var(--sec); font-size:16px; flex:0 0 auto;}
+  .warn{background:rgba(234,102,104,.08); border-left:4px solid #EA6668; border-radius:8px; padding:10px 14px; margin:10px 0; font-size:13px;}
+  .ok{background:rgba(82,196,26,.08); border-left:4px solid #52C41A; border-radius:8px; padding:10px 14px; margin:10px 0; font-size:13px;}
+  .info{background:rgba(158,172,234,.10); border-left:4px solid var(--accent); border-radius:8px; padding:10px 14px; margin:10px 0; font-size:13px;}
+  .phil{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px 16px; margin:10px 0;}
+  .phil b{color:#3b4a8f;}
+  .small{font-size:12px; color:var(--sec);}
+  .toc{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 20px; margin:16px 0;}
+  .toc a{color:#3b4a8f; text-decoration:none; font-size:13.5px;}
+  .toc li{margin:3px 0;}
+  .footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--border); color:var(--sec); font-size:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>核心技能整合包（精简版）· 学习报告</h1>
+  <div class="sub">AI 短剧 / 动画 / 视频创作六步生产链 · 23 个现行核心技能的系统性学习与复盘</div>
+  <div class="meta">
+    <span class="tag">学习对象：核心技能整合包_精简版_2026-08-28</span>
+    <span class="tag">运行契约：v6.0 / 2026-08-08</span>
+    <span class="tag">技能总数：23</span>
+    <span class="tag">分组：5 类</span>
+    <span class="tag">学习日期：2026-09-19</span>
+  </div>
+</header>
+
+<div class="toc">
+  <b>目录</b>
+  <ol>
+    <li><a href="#s1">技能包总览：是什么、从哪里来、边界在哪</a></li>
+    <li><a href="#s2">六步主创作链：本包的心脏</a></li>
+    <li><a href="#s3">五组 23 技能全景（逐一精读笔记）</a></li>
+    <li><a href="#s4">跨技能设计哲学：九条贯穿全包的规律</a></li>
+    <li><a href="#s5">调用路由与分流规则</a></li>
+    <li><a href="#s6">声音工具链与验证体系</a></li>
+    <li><a href="#s7">学习心得与应用建议</a></li>
+  </ol>
+</div>
+
+<h2 id="s1">一、技能包总览</h2>
+
+<div class="card">
+  <h3>1.1 定位与来源</h3>
+  <p>这是当前工作区 <code>codex-skills</code>（原始目录 <code>F:\剧本创作四步骤\codex-skills</code>）的可复用技能归档，按<b>使用场景</b>重新分组而成，整理日期 2026-08-28。每个技能目录保留原有 <code>SKILL.md</code>、参考资料、脚本、测试夹具和必要示例资产。当前运行契约版本为 <b>v6.0 / 2026-08-08</b>。</p>
+  <p>整套体系服务于<b>「剧本 → 分镜 → 视频生成」的 AI 影视化生产链</b>，覆盖从一张白纸的项目构思，到可交给 SD/Seedance 生成模型执行的纯文本提示词，再到生成结果 QA 回修的完整闭环。</p>
+</div>
+
+<div class="card">
+  <h3>1.2 规模与分组</h3>
+  <table>
+    <tr><th>分组</th><th>技能数</th><th>覆盖场景</th><th>技能</th></tr>
+    <tr><td><b>01-图像生成</b></td><td>6</td><td>GPT/DALL-E、Midjourney 静帧、统一画风、国风巨构、心理动画、提示词修整</td><td>gpt-image-prompt-field-manual、mj-cinematic-image-prompt、mj-takopi-2d-house-style、mj-xianxia-megastructure、psychological-anime-imagegen、qidu-aigc-prompt-atelier</td></tr>
+    <tr><td><b>02-视频生成</b></td><td>4</td><td>通用视频提示词、SD/Seedance 承接、Remotion 产品视频、黑色减法混合媒介</td><td>video-prompt-workbench、dream-suspense-sd、video-shotcraft、black-subtractive-mixed-media</td></tr>
+    <tr><td><b>03-分镜与导演</b></td><td>6</td><td>分镜方案与细则、动画表演、国风 PV、构图训练、真人空间预演、训练维护</td><td>director-storyboard-integrated、animation-suspense-performance、2d-guofeng-pv-workflow、cinematic-composition-coach、live-action-spatial-previs、director-storyboard-training-maintainer</td></tr>
+    <tr><td><b>04-剧本与对白</b></td><td>5</td><td>故事框架、正式剧本、悬疑写作、圆桌诊断、台词诊断</td><td>story-framework、script-writing、mystery-writer、script-roundtable、dialogue-doctor</td></tr>
+    <tr><td><b>05-分析、训练与资产</b></td><td>2</td><td>成片拉片分析、场景资产拆分</td><td>video-story-analysis、scene-asset-decomposition</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>1.3 精简范围（与原工作区的关系）</h3>
+  <ul>
+    <li><b>已移除</b>：3D 导演台源码（storyai-3d-director-desk）、其交接文件、旧版 6 份 DOCX 流程模板、历史分镜训练协议、black-subtractive 的原始样片/逐秒抽帧（约 249MB 训练数据）。</li>
+    <li><b>保留</b>：23 个现行技能目录、各技能的参考规则/脚本/测试夹具/风格参考图；video-shotcraft 的镜头卡、模板、demo、组件和音频资产（因其是制作技能的可执行依赖）。</li>
+    <li><b>排除</b>：node_modules、.vite、dist、__pycache__、临时文件与工作区缓存。</li>
+  </ul>
+  <div class="info">核心启示：这套归档刻意把「训练数据 / 历史模板 / 独立工具」从「现行主流程」中剥离，保证运行时技能链轻量、可路由、可维护。</div>
+</div>
+
+<h2 id="s2">二、六步主创作链（本包的心脏）</h2>
+
+<div class="card">
+  <p>整套体系的推荐主流程是一条<b>六步创作链</b>，每步对应专门技能，前后以「文件契约」交接，任何一步发现问题都<b>返回上游修正，不静默接管</b>：</p>
+  <div class="flow">
+    <div class="fstep"><b>① story-framework</b><div class="d">项目锁：世界观、人物、结构、规则与剧情因果</div></div>
+    <div class="arrow">→</div>
+    <div class="fstep"><b>② script-writing</b><div class="d">场景与行动节拍、正式剧本</div></div>
+    <div class="arrow">→</div>
+    <div class="fstep"><b>③ script-roundtable</b><div class="d">结构、节奏、钩子多视角会诊，回传阻断项</div></div>
+    <div class="arrow">→</div>
+    <div class="fstep"><b>④ dialogue-doctor</b><div class="d">角色声线、逐句改写、台词与口型时间锁</div></div>
+    <div class="arrow">→</div>
+    <div class="fstep"><b>⑤ director-storyboard-integrated</b><div class="d">场景闸门、方案池、正式分镜（+ 动画表现层）</div></div>
+    <div class="arrow">→</div>
+    <div class="fstep"><b>⑥ dream-suspense-sd</b><div class="d">批准分镜 → 纯文本 BASE LOCK + A 区块</div></div>
+  </div>
+  <p class="small">用户批准正式分镜后才进入 Step 6；生成结果再做 QA 与回修（storyboard → 动画 → SD → 模型偏差 → 后期，按首个失败层返工）。</p>
+</div>
+
+<div class="card">
+  <h3>2.1 关键流程锁定（索引中明示的运行契约）</h3>
+  <ul>
+    <li>方案讨论时先给机制不同的候选，不提前锁死单一方案。</li>
+    <li><b>每轮只输出用户当前要求的一个阶段</b>；未收到进入命令不跨到下一阶段。</li>
+    <li>正式分镜使用完整字段、<b>21:9 默认画幅</b>和整秒时间。</li>
+    <li>固定机位 1-4 秒内必须有信息刷新；长运镜通过内部节拍持续刷新。</li>
+    <li>单段支持 <b>4-30 秒</b>；16-30 秒默认使用一份正式分镜、一条 SD 文本和一个 BASE，不在 15 秒重启。</li>
+    <li>动画内部按 2-4 秒自然动作拍组织，<b>12-18 秒附近必须有因果状态刷新</b>。</li>
+    <li>SD 输出只使用正向、可见、可听、可执行事实。</li>
+    <li>分镜是 SD 唯一源表；SD 不得改剧情、台词、镜头任务或删减构图、动作、关系、物件、环境、声光、转场和尾帧。</li>
+    <li>用户侧 SD 只有纯文本 <code>BASE LOCK + 五字段A拍</code>；JSON 永不作为 SD 交付。</li>
+    <li>项目设定只在当前任务明确点名该项目时加载。</li>
+  </ul>
+</div>
+
+<div class="warn">学习要点：这套链最反直觉的规则是「<b>分阶段门控</b>」——不允许一次把全部产出（方案+分镜+SD）堆给用户，而是像生产流水线一样逐站放行，每站都有明确的进入命令和验收标准。</div>
+
+<h2 id="s3">三、五组 23 技能全景（逐一精读笔记）</h2>
+
+<h3>3.1 组 01-图像生成（6 个技能）</h3>
+
+<div class="skill">
+  <div class="name">gpt-image-prompt-field-manual</div>
+  <div class="role">GPT / DALL-E / Nano Banana 生图与改图提示词 · 源：草帽小蔡 GPT 生图提示词手册</div>
+  <div class="core"><b>核心规则</b>：① 所有负向指令改写为正向视觉目标（"不要过度锐化"→"柔和边缘过渡，胶片柔光"）；② 用具体画面结果而非标签堆砌；③ 需要高级质感时加「电影质感底座包」；④ 改图/重绘先保身份、姿势、构图、场景、色调、画幅，再改质感；⑤ 脆弱画面用对比锚点"像 X，不像 Y"；⑥ 模型持续失败时拆两步工作流——GPT 出布局/主体/故事信息，Banana/Nano Banana img2img 精修纹理与边缘。</div>
+  <div class="keys"><span class="key">负向转正向</span><span class="key">电影质感底座</span><span class="key">纹理控制包</span><span class="key">对比锚点</span><span class="key">身份保持</span><span class="key">两步工作流</span></div>
+  <div class="small">高危词提示：除非作为主体事实，避免"精细/复杂/繁复/浓郁/HDR/高细节/8K锐利/hyper-detailed"等，否则会诱发过度锐化与细节堆砌。</div>
+</div>
+
+<div class="skill">
+  <div class="name">mj-cinematic-image-prompt</div>
+  <div class="role">电影级 Midjourney 静帧与概念图提示词</div>
+  <div class="core"><b>核心原则</b>：把提示词写成"一张被设计的图"而非松散视觉描述——① 锁定画面功能（钩子/氛围/故事信息/资产参考）；② 先选镜头（视点、景别、焦段感、景深、画幅）；③ 分层建场景（前景、主体区、中景、背景、顶/地）；④ 定义光源与阴影行为而非情绪词；⑤ 写材质、风化、尺度线索、色板与留白；⑥ 以稳定风格与渲染收尾。字段顺序固定：画风→场景身份→整体空间→主体区域→区域推进→光影结构→材质细节→整体氛围。</div>
+  <div class="keys"><span class="key">镜头先行</span><span class="key">分层场景</span><span class="key">光的行为化</span><span class="key">纯正向语言</span><span class="key">不加 MJ 参数（除非用户给定）</span><span class="key">纯场景禁角色</span></div>
+  <div class="small">特化路由：章鱼P/2D 统一画风请求转发给 mj-takopi-2d-house-style，本技能只补充场景层次与空间构建。</div>
+</div>
+
+<div class="skill">
+  <div class="name">mj-takopi-2d-house-style</div>
+  <div class="role">章鱼噼 / 手绘 2D 统一画风 · 角色与场景提示词 · 参数无关 MJ 描述</div>
+  <div class="core"><b>核心契约</b>：从"可见绘画证据"编译可复用的 MJ 静态描述，模型载荷中<b>绝不出现源名、工作室、艺术家、角色名、MJ 参数</b>。人类角色必须输出「人物执行锁」（9 字段：身份比例/姿势支点重心/脸型五官/眼睛表情/头发结构/线稿系统/平涂阴影色彩/服装手脚道具/光线响应表面质感）；场景资产必须输出「场景执行锁」（7 字段：画幅构图/机位景别/焦段景深/近中远景/光影结构/实拍材质摄影证据/实拍融合）。稳定基线：柔和的适龄剪影→手绘炭笔轮廓→成块发团→哑光面部稀疏五官大湿瞳→克制单层赛璐璐阴影→局部颊/眼下排线→简单但有重量的衣褶。</div>
+  <div class="keys"><span class="key">IP-Free 翻译门</span><span class="key">人物执行锁 9 字段</span><span class="key">场景执行锁 7 字段</span><span class="key">跨文化不换画风</span><span class="key">验证脚本</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">mj-xianxia-megastructure</div>
+  <div class="role">仙侠巨构与巨物美学提示词（天宫、云海、悬浮宫殿、白玉京）</div>
+  <div class="core"><b>核心规则</b>：围绕<b>尺度关系</b>构图而非装饰性仙侠设定；人物通常只是尺度标记/见证者/越界主体（占画面高度 2%-8%）。七种尺度语法：witness 见证 / threshold 门槛 / traverse 穿越 / underbelly 底部仰视 / interior-vista 内景窥外 / near-far inversion 近远大更大 / cosmic wall 宇宙尺度。必须建立至少 4 级尺度链（人→可触碰建筑/树→城/宫殿体量→大气/宇宙场）。发明一个非通用巨构行为（云瀑、悬柱、山壁宫殿、月门、倒悬城、玉质地基、地平线屋脊、星空内构）。</div>
+  <div class="keys"><span class="key">尺度语法 ×7</span><span class="key">4 级尺度链</span><span class="key">人物 2%-8%</span><span class="key">--ar 21:9</span><span class="key">巨物行为创新</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">psychological-anime-imagegen</div>
+  <div class="role">心理动画风格静态图生成与改图（校园日常 / 儿童关系压迫 / 心理近景）</div>
+  <div class="core"><b>核心契约</b>：默认调用内置生图工具（非仅给提示词）。四条风格通道：DAYLIGHT-ORDINARY（明亮日常）/ RELATIONAL-PRESSURE（群体几何压迫）/ PSYCHO-CLOSE（心理近景）/ SURREAL-CONTRAST（高饱和简单吉祥物 vs 细节真人环境），最多 1 主通道 + 1 辅助通道。参考图必须分配角色（身份/风格证据/构图/编辑目标/辅助）。迭代契约：首失败层修复——每次只改一个目标层，其余保持稳定。载荷门：零标题/零片名/零"in the style of"/零分镜结构词（BASE LOCK、A区块、第X秒、运镜、转场、尾帧）。</div>
+  <div class="keys"><span class="key">4 风格通道</span><span class="key">参考图角色化</span><span class="key">首失败层修复</span><span class="key">IP-Free 载荷门</span><span class="key">静态图专属</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">qidu-aigc-prompt-atelier</div>
+  <div class="role">七渡 AIGC 提示词修整 · 柔和电影质感 · 诺兰/星际穿越式实拍电影语言</div>
+  <div class="core"><b>核心规则</b>：负向转正向；大色块优先、克制的细节、柔焦边缘、材质统一；避免在生成提示词中直接写被禁概念（可能触发模型）；对比参照"像 X 不像 Y"；人物写自然皮肤、不完美发丝、湿润高光、非摆拍动态；情绪用微表情/呼吸/凝视/身体紧张而非戏剧化表情。快速风格后缀：柔焦边缘+大色块+胶片颗粒+Kodak Portra 400 色调+电影剧照感。Qidu/Interstellar 画宪：诺兰《星际穿越》质感、霍特玛掌镜、IMAX 65mm、柯达 Vision3 5219、球面镜头浅景深、胶片化学调色、无数字锐化。</div>
+  <div class="keys"><span class="key">负向转正向</span><span class="key">快速风格后缀</span><span class="key">Interstellar 画宪</span><span class="key">保构图改质感</span></div>
+</div>
+
+<h3>3.2 组 02-视频生成（4 个技能）</h3>
+
+<div class="skill">
+  <div class="name">video-prompt-workbench</div>
+  <div class="role">通用视频 / 图生视频 / 文生视频提示词工作台（含视频反推）</div>
+  <div class="core"><b>双模式</b>：① 生成模式（Text→Video、Image Analysis→Prompt、Image Ref→Video、Mixed）；② 反推模式（上传视频分析/还原其提示词）。关键判断：素材将作为视频模型参考时，<b>不要用长视觉描述替代它</b>——参考素材是主要视觉/运动锚点，只添加运动、镜头、环境变化、风格与用户要求。反推时上传视频是唯一事实源。输出政策固定：输入类型判断→用户意图判断→中文理解→英文正向提示词→负向提示词→镜头与运动提示→推荐参数→最终可复制版本。</div>
+  <div class="keys"><span class="key">生成/反推双模式</span><span class="key">参考素材即锚点</span><span class="key">固定输出政策</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">dream-suspense-sd</div>
+  <div class="role">梦导 SD · 六步链 Step 6 · 批准分镜 → 纯文本 SD/Seedance 提示词</div>
+  <div class="core"><b>唯一用户输出格式</b>：纯文本 <code>【BASE LOCK】+【A区块·模型执行词】</code>。BASE 只保存跨整段稳定且影响生成的事实（媒介/参考绑定、角色身份不变量、空间轴线道具初态、光色帧感声床）；A 区块拥有所有时间变化，每个 A 拍五字段：镜头与构图 / 主体动作与表演 / 关系物件环境反馈 / 声光与转场触发 / 尾帧与连续性。<b>JSON 永远不作为用户侧交付</b>，即使请求明确要"JSON 视频 Prompt"。来源边界：只编译已批准正式分镜，来源覆盖默认 100%；台词逐字继承不改写；单段 4-30 秒整秒覆盖，16-30 秒一个 BASE 不在 15 秒重启；12-18 秒附近必须有一次因果刷新；普通连接动作约 0.3-1.2 秒完成。</div>
+  <div class="keys"><span class="key">BASE LOCK + 五字段 A 拍</span><span class="key">只编译已批准分镜</span><span class="key">来源 100% 覆盖</span><span class="key">纯文本 / 禁 JSON</span><span class="key">参考槽位名可见</span></div>
+  <div class="small">图生视频/首尾帧：参考图/首帧/尾帧是约束不是故事来源；多参考图必须明确每张绑定哪些项目（人物/场景/动作/服装/构图/质感），防止权限互相覆盖。</div>
+</div>
+
+<div class="skill">
+  <div class="name">video-shotcraft</div>
+  <div class="role">Remotion 电影感产品视频 · 152 张镜头配方卡 + Ink Press 模板 + 六阶段流水线</div>
+  <div class="core"><b>三种模式（互不合并）</b>：① 直接使用模板（Ink Press 换产品复现）；② 自主自由创作（Agent 连续推进不逐阶段确认）；③ 共同创作（产品简报→需求决策→视觉方向→镜头映射→分镜逐级确认，放行后才进入制作）。核心理念：复刻既有页面必须用真实截图（dev server + 无头浏览器全页 2x 纹理 + 元素级抠图 + layout.json）；视觉语言必须从产品自身生长（先提取设计 token 再蒙皮）；电影感来自运镜光影节奏声音而非炫技；每镜头只讲一个动效；强节奏 BGM 必须卡拍（librosa 求真实 BPM/相位 + 切点误差 ≤3f）；确定性渲染禁 Date.now()/Math.random()；交付前派独立 subagent 终检；成片默认询问是否导出剪映工程。</div>
+  <div class="keys"><span class="key">152 镜头卡</span><span class="key">三模式</span><span class="key">真实截图硬门槛</span><span class="key">音乐卡点 ≤3f</span><span class="key">设计 token 蒙皮</span><span class="key">剪映导出</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">black-subtractive-mixed-media</div>
+  <div class="role">黑色减法揭示 · 彩色 2D 人物 × 真人底片融合 · 动态观看权限设计</div>
+  <div class="core"><b>核心教义</b>：黑色是"主动空间遮罩"而非暗度滤镜——给它来源、边界、方向、覆盖变化和落定状态。三组不变量家族：实拍底片 / 彩色 2D 角色 / 跨媒介接触规则，先各自锁定再加风格润色。表演驱动开口（凝视、手、步、触、呼吸、转身让遮罩开合移动），揭示不充当与主体无关的装饰擦除。进入真人底片必须证明深度：共地接触、前景遮挡、正确投影、反射/溢色、视差/景深、环境粒子穿行（至少四项）。阶段契约严格：idea → 导演改进 → 方案池 → 用户选择/组合 → 静态资产包 → 详细分镜 → 细节批准 → SD 编译 → 结果修复。</div>
+  <div class="keys"><span class="key">黑色=空间遮罩</span><span class="key">三不变量族</span><span class="key">表演驱动开口</span><span class="key">深度证明 ≥4 项</span><span class="key">阶段契约</span><span class="key">失败诊断库</span></div>
+</div>
+
+<h3>3.3 组 03-分镜与导演（6 个技能）</h3>
+
+<div class="skill">
+  <div class="name">director-storyboard-integrated</div>
+  <div class="role">一体化导演分镜 · 六步链 Step 5 · 动画/真人分镜方案、细则、连续性与 SD 承接</div>
+  <div class="core"><b>核心机制</b>：① 场景可拍闸门（场景功能/入口/目标/阻力/策略/触发/节拍链/段内转折/退出变化/下一段债务，任一生病先修上游）；② 方案阶段返回 0-6 个真正不同的方案（每案写主戏剧事务/节拍骨架/画面所有者/调度机位/动画主引擎/声音物件因果/尾态/AIGC 风险），不在方案阶段输出镜头表；③ 正式分镜完整字段：段级事实锁+镜号整秒时间+戏剧变化+镜头构图+主体关系表演+物件环境 NPC+动画表达+声音台词+转场尾帧；④ 用户阶段状态机：每轮只交付当前请求阶段；⑤ 媒介路由：画面中承担主要表演的主体决定动画/非动画。实拍证据姿态 E0-E4（记忆→静帧→乱序帧→连续视频→逐帧源视频），方法证据 MTH0-4，转译标注 OBS/INF/ALT/RULE。</div>
+  <div class="keys"><span class="key">场景可拍闸门</span><span class="key">方案池 0-6 案</span><span class="key">用户阶段状态机</span><span class="key">E0-E4 证据分级</span><span class="key">镜头切换须有触发</span><span class="key">禁机械正反打</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">animation-suspense-performance</div>
+  <div class="role">动画表演深化 · Step 5 内部动画表现层 · timing/spacing、全画面运动、尾态</div>
+  <div class="core"><b>核心机制</b>：在导演事实锁内深化表演。每个动作按<b>八槽链</b>展开：意图→预备/支点→发力→路径→接触/阻力→峰值→恢复→尾态。普通段 vs 表现段：日常/群聊/吃饭不需要每拍离模，但必须持续有 Moving Hold、任务、视线呼吸低幅变化、背景反节拍；只有现实表演不足以表达时才激活主表达引擎（最多 1 主 + 1 辅助算子），并必须回答谁触发/从哪进入/怎样改变行动关系/怎样归还/留下什么。台词逐字继承；包袱结构=铺垫→误判/升级→兑现→反应。16-30 秒保持一个主戏剧事务，不在 15 秒重置。一行运动台账格式：时间|画面所有者|主体任务八槽进度|脸呼吸|支点重心手脚|接触次级材质|对手听者NPC|道具环境力|声音光影线条|摄影机路径落点|结果残留下一拍继承。</div>
+  <div class="keys"><span class="key">八槽动作链</span><span class="key">普通段/表现段</span><span class="key">主表达引擎 1+1</span><span class="key">一行运动台账</span><span class="key">尾态继承</span><span class="key">硬伤门</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">2d-guofeng-pv-workflow</div>
+  <div class="role">2D 国风人物 PV · 江湖 PV · 水墨/卷轴/卡牌感视觉 → 可执行生产系统</div>
+  <div class="core"><b>风格 DNA 五层</b>：人物身份层（轮廓先认人，登场=进入空间+完成动作+留下关系后果）、山河与历史层（每次拉远增加信息或改变关系）、墨纸印刷层（墨渗/描线/撕页/印章只在有因果时出现）、动作与时间层（日常动作可信、关键动作预备/爆发/顿帧/余势四段，高光每 4-8 秒最多一次）、声音与材质层（纸木金属雨衣料脚步现实触感；音乐重拍才交给刀锋/印章/标题落地）。江湖配比建议：人物关系生活 50% / 山河门派 25% / 兵器动作高光 15% / 墨纸材质奇观 10%。七级学习阶梯（4 秒单人物→24-30 秒原创江湖片段）。硬性禁区：不复制《三国杀》《无悔华夏》等作品的角色/卡面/标题/逐镜构图，只提炼公开可观察的运动、材质与叙事机制。</div>
+  <div class="keys"><span class="key">风格 DNA 五层</span><span class="key">江湖配比 50/25/15/10</span><span class="key">七级学习阶梯</span><span class="key">资产板/镜头台账</span><span class="key">IP 禁区</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">cinematic-composition-coach</div>
+  <div class="role">电影构图案例投喂、反推、评分与构图案例库训练</div>
+  <div class="core"><b>边界</b>：只在用户明确要训练/投喂/归档/反推/评分电影构图案例时使用；普通分镜构图由一体化分镜技能处理。三层分析：叙事层（情绪/关系/权力/故事信息）→视觉层（构图法则/镜头/机位/光影/色彩/深度/运动）→语言层（分镜字段/AIGC 提示词表达）。每个正式案例必须含：叙事层/视觉层/语言层/复刻方法（为何有效、如何用、何处用、避免什么失败），可后附跨案例母模式总结。SD/Seedance 构图闸门：每个镜头/时间段必须声明构图类型、叙事功能、前中后景、主体画幅占比与屏幕位置、视线向量与运动向量、光-构图关系；没有可解释构图功能的镜头必须重设计。</div>
+  <div class="keys"><span class="key">只做构图训练</span><span class="key">三层分析</span><span class="key">案例摄入协议</span><span class="key">SD 构图闸门</span><span class="key">案例库沉淀</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">live-action-spatial-previs</div>
+  <div class="role">真人场景空间预演 · 走位、机位、画面左右、轴线与可视化沙盘</div>
+  <div class="core"><b>契约</b>：在分镜/镜头表之前建立并审计俯视空间预演。保护不可变输入：场景身份、时间、演员身份、台词归属、动作顺序与结果、明确出入场、故事目的与情绪节拍；请求的镜头在受保护事实下无法成立时，返回 <code>storyboard_conflict</code> 与最小几何解释，不静默改故事。工作流：建立基线（北为上、每个演员/道具/机位有位置与朝向）→锁定移动（during_shot/between_shots）→解算每个机位五问（演员在哪朝向哪、机位在哪多高朝哪、看到主体哪面、屏幕左/右/深处是什么、谁在画内/画外）→几何检查（画面左右由机位朝向推导，不靠直觉）→运行 scripts/sandtable.py 渲染 HTML 沙盘。几何规则：机位朝向决定屏幕方向；要表达表情/视线/口型须把机位放在主体前半球；"没看到"不是把演员排除出画的方法；轴线保留到有动机的跨越。</div>
+  <div class="keys"><span class="key">俯视坐标基线</span><span class="key">机位五问</span><span class="key">画面左右由机位推导</span><span class="key">storyboard_conflict</span><span class="key">HTML 沙盘</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">director-storyboard-training-maintainer</div>
+  <div class="role">分镜训练素材维护、来源审计、去污染与技能迭代</div>
+  <div class="core"><b>核心机制</b>：训练治理与运行时技能分离。证据分级：A（看过的素材/连续截图/可靠制作材料/已核验源事实）、B（稳定的场景机制但无已核验镜头级事实）、C（生成表/二手摘要/记忆/象征解读/未支撑的时长焦段色温百分比分贝台词微动作）。故事世界污染防火墙：清除捐赠者 lore、命名身份、情节解、超自然解释、标志性物件、特许经营设计、生成的伪精确。去重规则：按戏剧功能与状态迁移合并，不按地点或技法名；两连样例无新增规则/边界/组合/SD 锚点后登记为覆盖证据。只沉淀：可复用规则、失败边界、可迁移镜头模板、新检索触发/组合语法、SD 可见锚点或质量门。</div>
+  <div class="keys"><span class="key">A/B/C 证据分级</span><span class="key">污染防火墙</span><span class="key">按戏剧功能去重</span><span class="key">运行时边界</span><span class="key">回归套件</span></div>
+</div>
+
+<h3>3.4 组 04-剧本与对白（5 个技能）</h3>
+
+<div class="skill">
+  <div class="name">story-framework</div>
+  <div class="role">六步链 Step 1 · 从零建立故事框架与项目档案</div>
+  <div class="core"><b>七步流程</b>：收集核心信息 → 生成方向卡 → 确定大纲格式与差异轴 → 输出两版大纲 → 询问是否进入多视角评审 → 定稿方向 → 输出可复用项目档案。匹配创作人设；用户给对标作品时先提取 5-7 条可迁移 DNA 规则。每次实质性输出必须附创作笔记（核心情感目标/关键取舍/仍薄弱处），并诚实指出至少一个真实弱点。主产物是项目档案+所选大纲，档案含项目锁（命题、体裁/格式、受众/平台、单集与分段时长约束、情感目标、人物身份与关系、世界规则、重复地点/道具、长弧承诺、视觉媒介、下游不可改写事实）。</div>
+  <div class="keys"><span class="key">七步框架</span><span class="key">两版大纲</span><span class="key">DNA 提取</span><span class="key">创作笔记</span><span class="key">项目档案</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">script-writing</div>
+  <div class="role">六步链 Step 2 · 从项目档案写正式剧本</div>
+  <div class="core"><b>模式系统</b>：M1 标准剧本（场景化生产输出更强）/ M2 小说化剧本（情绪可读性与散文流更强）；分集包装是序列化作品的包装层，非并列模式。<b>节奏系统</b>：R1 短剧 / R2 长篇连续剧 / R3 短视频 / R4 单元剧 / R5 微电影 / R6 院线电影。场景包交接（给 Step 3/4 诊断与最终 Step 5）：目标平台、场景/分段时长与节奏模式、场景功能与入口状态、角色目标阻力当前策略、可见触发与因果节拍链（cause→visible action→feedback→state change）、段内转折/退出差量/下一段债务、人物/观众知情权限、道具归属/地点连续/必需身体动作、对白草稿状态（临时或锁定）。场景包中不规定机位与 SD 措辞。</div>
+  <div class="keys"><span class="key">M1/M2 双模式</span><span class="key">R1-R6 节奏矩阵</span><span class="key">分集包装</span><span class="key">场景包交接</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">mystery-writer</div>
+  <div class="role">悬疑/犯罪/惊悚/推理编剧 V5.8 · 七宗罪式 + 林奇式 + 诺兰式三大风格模板</div>
+  <div class="core"><b>去 AI 味 10 条硬铁则（最高优先级）</b>：禁完美人物 / 禁直白情绪（情绪必须落成具体细节）/ 禁工整对话（结巴、说一半、答非所问）/ 禁顺拐剧情（永远不给观众预期的东西）/ 禁标准答案（留 1-2 个解释不通的细节）/ 禁形容词副词堆砌（禁"诡异、恐怖、突然、缓缓地"）/ 禁大道理主题 / 禁 NPC 路人（连路人都要有奇怪之处）/ 禁标准化反应（有人笑有人愣有人做无意义动作）/ 禁无代价胜利（赢了必须失去点什么）。<b>悬疑发动机 9 部件</b>：谜面/真相/假答案/视角/主角欲望/对手阻力/线索链/误导链/代价。三种风格模板：A《七宗罪》社会派犯罪（天气是角色、文戏核心、反类型结局）、B 林奇式心理梦（矛盾欲望/每场价值移动/最小节拍/潜台词/假顶点坍缩；身体写作、感官恐怖、无功能道具、日常错位）、C 诺兰式高概念（矛盾欲望对/规则说明戏剧化/嵌套信息差/最低点贴最高点/框架叙事闭合/开放式结局道具承载；高概念规则、反向骗局、双重高潮、道具三埋三收）。抖音/AIGC 短剧节奏门：0-3 秒给可截图传播的视觉问题、每 15 秒段落小钩子、每 30 秒改变观众的问题。100 分制自检（80 分合格）。</div>
+  <div class="keys"><span class="key">去AI味 10 铁则</span><span class="key">悬疑发动机 9 部件</span><span class="key">三大风格模板</span><span class="key">炸弹理论</span><span class="key">三角剧情迂回</span><span class="key">剧情攻击性</span><span class="key">100 分自检</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">script-roundtable</div>
+  <div class="role">六步链 Step 3 · 剧本多视角圆桌诊断（只诊断，不改写）</div>
+  <div class="core"><b>流程</b>：自检 → 确认用户身份（作者/评估者/学习者）→ 确认诊断粒度 → 按作品类型自动组评审团（用户可调整）→ 评审轮流发言（持固定立场、用剧本具体证据、允许分歧、禁和稀泥）→ 值班医生综合。结尾三清单：已确认需保留的优势 / 阻断性故事与台词问题（必须返回上游）/ 非阻断的导演机会（给 Step 5）。绝不把诊断出的弱点当作已批准的改写。用户问怎么改→交回 Step 2；用户要逐句台词手术→交 Step 4。</div>
+  <div class="keys"><span class="key">固定视角评审团</span><span class="key">证据支撑</span><span class="key">值班医生三清单</span><span class="key">只诊断不改写</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">dialogue-doctor</div>
+  <div class="role">六步链 Step 4 · 台词七维诊断与逐句改写</div>
+  <div class="core"><b>七维框架</b>：声纹 / 潜台词 / 冲突驱动 / 类型声 / 信息效率 / 节奏与音乐性 / 金句潜力。默认全量诊断（除非用户要求更窄模式）；每句改写必须说明理由与改进的维度；台词扁平或全员同声要直说。边界：不改写整部剧本、不改故事结构，结构问题推回 Step 3/2。<b>台词锁交接</b>（给 Step 5）：精确文本、说话人、语言、说话人目标、表面意义/潜台词、新信息、言语行为、声纹提示、表达方式、估计干净说话时长、最小停顿与口型窗口、听者变化、预期打断或沉默、前置强调/尾动作、不可或缺的身体动作。批准词装不进可用窗口时上报超载并返回用户批准修订，Step 5 可调度时间与反应但不得静默改写锁定文本。</div>
+  <div class="keys"><span class="key">七维框架</span><span class="key">台词锁交接</span><span class="key">改写必给理由</span><span class="key">不越界改结构</span></div>
+</div>
+
+<h3>3.5 组 05-分析、训练与资产（2 个技能）</h3>
+
+<div class="skill">
+  <div class="name">video-story-analysis</div>
+  <div class="role">成片证据化分析 · 逐镜拉片、声音/表演/剪辑分析、反推分镜与训练迁移</div>
+  <div class="core"><b>四维独立深度</b>：证据（概览采样 / 逐镜切点审 / 短区间原生帧取证）、报告（L0 计划缺口 / L1 概览 / L2 逐镜报告 / L3 取证附录）、学习（仅当用户要练习/迁移/评估）、制作（仅当提供剧本/分镜/提示词/剪辑版本做对齐）。<b>证据标签</b>：OBS 直接可见可闻事实 / SRC 提供的制作源记录 / INF 有证据支撑的功能解释 / ALT 仍成立的竞争解释 / RULE 有条件和失败模式的可迁移规则。输入降级表：只有片名梗概→只能做意图分析与缺口计划（无镜头/声音主张）；静帧或乱序帧→只允许构图/可见关系/状态差异（无完整运动/切点/声音）；连续定时视频→范围内可主张镜头/调度/表演/剪辑/听过的声音；字幕/ASR 未听音频→只允许文本时序与措辞（声音设计未知）。反推分镜是生产型画像，不是第二套证据系统。切点未经相邻连续帧复核不得标记为确认。</div>
+  <div class="keys"><span class="key">OBS/INF/ALT/RULE</span><span class="key">E0-E4 屏幕证据</span><span class="key">输入降级表</span><span class="key">切点须复核</span><span class="key">L0-L3 报告</span></div>
+</div>
+
+<div class="skill">
+  <div class="name">scene-asset-decomposition</div>
+  <div class="role">场景图/平面/立面/剖面/资产板 → 可追溯空间母版与视觉资产族</div>
+  <div class="core"><b>证据三态</b>：O（观察：直接可见或一致视图确认）/ I（推断：透视/重复/接触/构造逻辑支撑）/ U（未知：遮挡、画外或矛盾）。不得把 I/U 当作断言事实；单张透视最多允许一张局部关系图，不授权完整平面/四立面/不可见背面。<b>工作流</b>：分类参考可证明什么 → 建证据台账（源 ROI、身份指纹、置信度、尺度锚、父子/接触关系、可见/隐藏面、输出模式、实例组、覆盖优先级）→ 选择场景路线（仅证据化类别：室内建筑/外部街区/自然地形/工业机械/载具舱室）→ 锁定空间母版（X/Y/Z、up/forward、原点、相对尺度、相机范围、重复节奏）→ 2D 空间图闸门（有稳定轴/尺度锚/连接证据才输出平面；最多一份必要立面/剖面）→ 按视觉身份分解（SPACE/VOLUME、SHELL/TERRAIN/FRAME、OPENING/ACCESS、模组套件、固定装配、hero/道具/杂物/软装/植被、材质/饰条/贴花、光/FX/背景）→ P0-P3 覆盖优先级 → 确定性视觉板 → 交接空间预演。生图前必须展示确认卡（场景类型、不变量、允许空间图、资产组、推断边界、板比例），明确确认后才生成。</div>
+  <div class="keys"><span class="key">O/I/U 三态</span><span class="key">空间母版</span><span class="key">P0-P3 优先级</span><span class="key">2D 图闸门</span><span class="key">生图前确认卡</span></div>
+</div>
+
+<h2 id="s4">四、跨技能设计哲学（九条贯穿全包的规律）</h2>
+
+<div class="phil"><b>1. 阶段门控，一次只交付一个阶段。</b>从 story-framework 的七步到 black-subtractive 的阶段契约，再到 director-storyboard 的用户阶段状态机——整套体系反对"一口气全产出"，要求逐站放行、明确进入命令、验收后再前进。</div>
+<div class="phil"><b>2. 正向语言铁律（负向转正向）。</b>gpt-image-prompt、mj-cinematic、qidu、dream-suspense-sd 全部执行同一规则：模型载荷只写"要生成什么"，不写"不要什么"；负面清单留在内部或人工审核附注。理由：文生图/文生视频模型可能激活被禁概念。</div>
+<div class="phil"><b>3. 证据分级与来源审计无处不在。</b>video-story-analysis 用 E0-E4 屏幕证据 + MTH0-4 方法证据 + OBS/INF/ALT/RULE；scene-asset 用 O/I/U；training-maintainer 用 A/B/C；director-storyboard 转译对标用 OBS/INF/ALT/RULE。规则一致：推断不得伪装成事实，来源必须可追溯。</div>
+<div class="phil"><b>4. 用户侧纯文本，JSON 永不交付。</b>dream-suspense-sd 与 director-storyboard 反复强调：用户侧 SD 只有 <code>BASE LOCK + A 区块</code>；JSON 只允许内部配置、测试夹具与验证器结果。可复制载荷与内部账本严格分离。</div>
+<div class="phil"><b>5. 无 IP 依赖（去源名翻译）。</b>mj-takopi、psychological-anime、2d-guofeng 都把"参考了谁"留在内部证据登记，模型载荷只写可见的形状、比例、线条、明暗、色彩、光影、材质与构图，绝不出现标题/片名/工作室/艺术家/角色名/<code>in the style of</code>。</div>
+<div class="phil"><b>6. 发现上游问题就返回上游，不静默接管。</b>director-storyboard 的六步权限、script-roundtable 只诊断不改写、animation-suspense 输入不完整返回导演层——链上每步只做自己该做的，越权即污染。</div>
+<div class="phil"><b>7. 时间经济与信息刷新。</b>4-30 秒单段、2-4 秒自然动作拍、12-18 秒强制一次因果刷新、固定机位 1-4 秒内有信息、普通连接动作 0.3-1.2 秒完成、每镜只讲一个动效、高光每 4-8 秒最多一次。核心：密度衡量执行信息，不衡量拖长。</div>
+<div class="phil"><b>8. 表现 > 描述（反情绪词）。</b>mystery-writer 禁"她很害怕/气氛紧张"，animation-suspense 禁"走过去、害怕、激烈打斗"作为执行内容，director-storyboard 禁用风格词/情绪词/镜头名替代可见动作。一切落到姿势、支点、路径、接触、反应、尾态。</div>
+<div class="phil"><b>9. 尾态继承与验证闭环。</b>每拍尾帧=下一拍入口（SD、动画、分镜均强制）；几乎每个技能带验证脚本（validate_mj_description.py、validate_storyboard_sd.py、validate_animation_performance.py、validate_prompt.py、sandtable.py、run_static_regression.ps1 等），交付前必须过验证器，且"结构通过≠内容成立"。</div>
+
+<h2 id="s5">五、调用路由与分流规则</h2>
+
+<div class="card">
+  <h3>5.1 分流场景</h3>
+  <table>
+    <tr><th>场景</th><th>路由</th></tr>
+    <tr><td>从零开始的新项目</td><td>story-framework → script-writing → script-roundtable → dialogue-doctor → director-storyboard-integrated（+ animation-suspense-performance）→ 用户批准 → dream-suspense-sd → 生成结果 QA 与回修</td></tr>
+    <tr><td>已有成片/截图/逐帧材料</td><td>video-story-analysis → director-storyboard-integrated</td></tr>
+    <tr><td>有场景图/平面图/立面图/资产板</td><td>scene-asset-decomposition → live-action-spatial-previs → director-storyboard-integrated</td></tr>
+    <tr><td>真人场景需逐镜空间核对</td><td>live-action-spatial-previs 建立并确认空间基准 → 回 director-storyboard 写正式分镜</td></tr>
+    <tr><td>用户点名校对/对标拉片</td><td>video-story-analysis 先做证据化拆解 → 可迁移规律进分镜</td></tr>
+    <tr><td>分镜获批后进生成</td><td>dream-suspense-sd 只编译，不改故事/镜头/构图</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>5.2 专项技能边界（防止误调用）</h3>
+  <table>
+    <tr><th>技能</th><th>独立职责</th><th>调用边界</th></tr>
+    <tr><td>cinematic-composition-coach</td><td>电影构图案例投喂/截图反推/案例库训练</td><td>普通分镜构图由一体化分镜技能处理</td></tr>
+    <tr><td>video-prompt-workbench</td><td>通用视频/参考图视频反推提示词</td><td>五字段 A 拍和分镜转 SD 交给 dream-suspense-sd</td></tr>
+    <tr><td>black-subtractive-mixed-media</td><td>黑色减法揭示/2D×真人融合/观看权限设计</td><td>正式分镜交给一体化导演，批准后由 dream-suspense-sd 编译</td></tr>
+    <tr><td>mj-cinematic-image-prompt</td><td>MJ 静帧/概念图/资产图提示词</td><td>不负责视频分镜逻辑</td></tr>
+    <tr><td>gpt-image-prompt-field-manual</td><td>GPT 生图/改图/身份保持</td><td>不负责视频时间线</td></tr>
+    <tr><td>qidu-aigc-prompt-atelier</td><td>柔和电影质感与提示词表面修整</td><td>不改变剧情、镜头、动作和连续性</td></tr>
+    <tr><td>2d-guofeng-pv-workflow</td><td>2D 国风 PV 风格 DNA/镜头台账/资产板</td><td>批准后正式分镜仍由 director-storyboard 产出</td></tr>
+    <tr><td>director-storyboard-training-maintainer</td><td>训练素材维护/来源审计/技能迭代</td><td>普通"设计分镜/进入 SD"请求不得触发</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>5.3 归档入口（不参与默认路由）</h3>
+  <p class="small">旧技能 script-to-storyboard、storyboard-to-seedance、suspense-director-storyboard、video-prompt-metatemplate 已被当前主链完全覆盖，保存在 <code>_archive/legacy-skills</code>，仅用于显式追溯；其中 NeoWOW 成片工作流案例已迁移至 dream-suspense-sd/references。历史归档不覆盖当前六步主链及 Step 5 动画表现层。</p>
+</div>
+
+<h2 id="s6">六、声音工具链与验证体系</h2>
+
+<div class="card">
+  <h3>6.1 声音工具链</h3>
+  <p>分镜声音设计 → <code>sound-mix-metering.md</code> 计划计量 → <code>calculate_sound_mix.py</code> 计划叠加检查 → <code>compile_sound_cue_sheet.py</code> 后期交接 → <code>analyze_audio_delivery.py</code> 真实 PCM WAV 验收。声音和画面一样走"计划 → 检查 → 交接 → 验收"的闭环。</p>
+</div>
+
+<div class="card">
+  <h3>6.2 主要验证脚本清单</h3>
+  <table>
+    <tr><th>技能</th><th>验证脚本</th><th>用途</th></tr>
+    <tr><td>mj-takopi-2d-house-style</td><td>validate_mj_description.py --profile detailed-character / detailed-scene / hybrid-scene</td><td>MJ 描述合法性、IP 词、参数、正负向语言</td></tr>
+    <tr><td>psychological-anime-imagegen</td><td>validate_prompt.py --file --forbidden-term</td><td>生图提示词 IP 词与结构检查</td></tr>
+    <tr><td>director-storyboard-integrated</td><td>validate_storyboard_sd.py --mode storyboard / --mode sd；run_static_regression.ps1</td><td>分镜字段、SD 覆盖、静态回归</td></tr>
+    <tr><td>animation-suspense-performance</td><td>validate_animation_performance.py --profile expressive/scene/mixed-reality --mode handoff</td><td>动画表演、场景、混合现实、交接</td></tr>
+    <tr><td>dream-suspense-sd</td><td>compile_model_profile.py --profile seedance_execution；validate_storyboard_sd.py --mode sd --source-storyboard</td><td>模型载荷编译与来源覆盖</td></tr>
+    <tr><td>live-action-spatial-previs</td><td>sandtable.py input.json -o output.html</td><td>HTML 空间沙盘渲染（纯标准库）</td></tr>
+    <tr><td>2d-guofeng-pv-workflow</td><td>render_pv_board.py</td><td>资产/镜头板 HTML 渲染（无第三方依赖）</td></tr>
+    <tr><td>director-storyboard-training-maintainer</td><td>quick_validate.py；run_behavioral_regression.py（34 案行为套件）</td><td>技能结构校验与行为回归</td></tr>
+  </table>
+  <div class="info">验证体系的设计哲学：验证器只补充判断，结构通过 ≠ 内容成立——每个技能都保留人工/语义终检（导演成立、动作可执行、尾态可继承、来源 100% 覆盖）。</div>
+</div>
+
+<h2 id="s7">七、学习心得与应用建议</h2>
+
+<div class="card">
+  <h3>7.1 这套体系的三个最值得借鉴的设计</h3>
+  <ol>
+    <li><b>把"创意工作"工程化成"可门控流水线"</b>：每阶段有明确输入契约（项目锁/场景包/台词锁/批准分镜）、明确产出、明确验收，问题按职责回传上游。这解决了 AI 创作中最常见的"跑偏越改越远"问题。</li>
+    <li><b>以"执行密度"代替"形容词密度"</b>：全包一致反对情绪词/风格词/水动作，要求把每个意图落成可执行的身体事实（姿势、支点、路径、接触、反应、尾态），这是 AI 生成内容质量的分水岭。</li>
+    <li><b>证据纪律贯穿全程</b>：从拉片分析到训练素材入库都做分级（OBS/INF/ALT、O/I/U、A/B/C、E0-E4），"推断"永远不能伪装成"事实"，从根上防止了内容污染。</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h3>7.2 应用建议（按实际项目场景选链）</h3>
+  <ul>
+    <li><b>悬疑短剧（目标平台抖音/视频号）</b>：mystery-writer（用 AIGC 短剧节奏门）→ script-writing（R1 短剧节奏）→ dialogue-doctor → director-storyboard-integrated → dream-suspense-sd。参考《钟馗嫁妹》《天庭三大反骨仔》式高频刷新逻辑。</li>
+    <li><b>2D 国风 PV / 宣传片</b>：2d-guofeng-pv-workflow（风格 DNA + 七级阶梯）→ animation-suspense-performance → dream-suspense-sd；静帧资产用 mj-takopi-2d-house-style。</li>
+    <li><b>产品宣传视频</b>：video-shotcraft 三模式（推荐共同创作，逐级确认简报/方向/映射/分镜），真实页面截图 + 音乐卡点 + 独立终检。</li>
+    <li><b>已有成片要复盘/反推</b>：video-story-analysis（先定证据深度与报告级别）→ 可迁移规律进 director-storyboard。</li>
+    <li><b>风格化混合媒介（2D 人物入真人）</b>：black-subtractive-mixed-media 全阶段契约 → dream-suspense-sd 动画路线七字段。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>7.3 使用注意</h3>
+  <ul>
+    <li>技能包内多个 <code>SKILL.md</code> 引用了原始路径（<code>F:\剧本创作四步骤\codex-skills</code>、DOCX 源文档），归档后这些路径可能不存在——按技能说明和包内 references/scripts 实操即可，不依赖外部源文件。</li>
+    <li>本包是"技能编排规则集"，不含 3D 导演台等已剥离工具；涉及真人 GUI/桌面操作（如本地软件安装验证）应另行按 computer-use 类能力处理。</li>
+    <li>各技能验证脚本为 Python/PowerShell，运行前需确认本机 Python 环境；脚本说明均在各技能目录内。</li>
+  </ul>
+</div>
+
+<div class="footer">
+  本报告基于对技能包内全部 23 份 SKILL.md 及 README.md、本地技能调用索引.md、精简变更清单.md、技能清单.csv 的完整精读整理而成。学习日期：2026-09-19。报告中所有结构、字段与规则均来自上述原始文档，未添加外部推断。
+</div>
+
+</div>
+</body>
+</html>

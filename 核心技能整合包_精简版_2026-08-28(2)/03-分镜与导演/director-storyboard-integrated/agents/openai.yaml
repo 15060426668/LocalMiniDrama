@@ -1,0 +1,4 @@
+interface:
+  display_name: "Director Storyboard Integrated"
+  short_description: "Move from story logic through schemes to an executable 30-second storyboard."
+  default_prompt: "Use $director-storyboard-integrated to verify scene and dialogue logic, design distinct storyboard schemes, then turn my approved choice into one coherent executable 4-30 second storyboard with animation performance and continuity."

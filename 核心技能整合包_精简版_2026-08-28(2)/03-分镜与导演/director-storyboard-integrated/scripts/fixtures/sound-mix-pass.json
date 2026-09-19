@@ -1,0 +1,53 @@
+{
+  "delivery_profile": "social_balanced",
+  "segments": [
+    {
+      "id": "S1",
+      "start_s": 0,
+      "end_s": 3,
+      "primary_source": "OBJ-01",
+      "target_lufs_s": -20,
+      "stems": [
+        {
+          "id": "OBJ-01",
+          "bus": "OBJ",
+          "source": "door lock gear",
+          "status": "offscreen",
+          "position": "rear left",
+          "distance_m": 2.0,
+          "rms_dbfs": -24,
+          "peak_dbfs": -14,
+          "relative_to_primary_db": 0,
+          "frequency_focus_hz": [900, 4200],
+          "occlusion_eq": "LPF 3.5kHz through door",
+          "reverb": "RT60 1.2s, wet 18%",
+          "ducking_masking": "ENV ducks 3dB for 0.4s",
+          "visible_reaction": "shoulders lock before head turn",
+          "tail_bridge": "L-cut 1s"
+        },
+        {
+          "id": "BODY-01",
+          "bus": "BODY",
+          "source": "controlled breath",
+          "status": "onscreen",
+          "position": "center close",
+          "distance_m": 0.4,
+          "rms_dbfs": -30,
+          "peak_dbfs": -20,
+          "relative_to_primary_db": -6
+        },
+        {
+          "id": "ENV-01",
+          "bus": "ENV",
+          "source": "apartment room tone",
+          "status": "onscreen",
+          "position": "wide field",
+          "distance_m": 3.0,
+          "rms_dbfs": -38,
+          "peak_dbfs": -28,
+          "relative_to_primary_db": -14
+        }
+      ]
+    }
+  ]
+}

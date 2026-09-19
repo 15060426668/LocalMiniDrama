@@ -1,0 +1,9 @@
+{
+  "characters": ["女人"],
+  "space": ["门在画面左侧", "厨房在右侧"],
+  "props": ["钥匙在托盘"],
+  "lights": ["门侧冷光", "厨房暖光"],
+  "sound_sources": ["右后方水声", "左后方门锁"],
+  "incoming_tail": "空托盘",
+  "fragile_anchors": ["钥匙位置", "视线方向", "门锁方位"]
+}

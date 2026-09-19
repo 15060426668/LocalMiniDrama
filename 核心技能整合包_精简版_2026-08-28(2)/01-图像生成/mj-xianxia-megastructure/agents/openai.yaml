@@ -1,0 +1,4 @@
+interface:
+  display_name: "MJ Xianxia Megastructure"
+  short_description: "仙侠巨物美学 Midjourney 提示词工坊"
+  default_prompt: "Use $mj-xianxia-megastructure to turn this xianxia scene into an imaginative Midjourney megastructure prompt."
