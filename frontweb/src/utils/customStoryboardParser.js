@@ -354,6 +354,7 @@ function validateDurations(shots, totalDuration) {
 /**
  * 构建全能片段文本（universal_segment_text）
  * 保留原始导入文本，并自动添加 @图片N 引用以绑定素材（场景、角色、道具）
+ * 策略：只在素材声明的位置添加 @图片N 标记，不修改其他文本内容
  * @param {string} originalBlock 原始导入文本块
  * @param {number} totalDuration 总时长
  * @param {string} sceneName 场景名称
@@ -374,60 +375,67 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
   // 顺序：场景(1) → 角色(2+) → 道具(角色后)
   let currentSlotIndex = 1
   
-  // 场景引用
+  // 1. 场景引用：在场景名称前添加 @图片N（只替换第一次出现）
   if (hasScene) {
     const sceneAtRef = `@图片${currentSlotIndex}`
     currentSlotIndex++
     
-    // 在文本开头添加场景引用（如果还没有的话）
-    const sceneRefPattern = new RegExp(`^\\s*${sceneName}`, 'm')
-    if (!result.includes(sceneAtRef)) {
-      // 查找场景名称第一次出现的位置，在前面插入 @图片N
-      const sceneNameIndex = result.indexOf(sceneName)
-      if (sceneNameIndex > -1) {
-        result = result.substring(0, sceneNameIndex) + `${sceneAtRef} ` + result.substring(sceneNameIndex)
-      }
+    // 只在场景名称第一次出现的位置添加标记
+    const sceneNameIndex = result.indexOf(sceneName)
+    if (sceneNameIndex > -1 && !result.includes(sceneAtRef)) {
+      result = result.substring(0, sceneNameIndex) + `${sceneAtRef} ` + result.substring(sceneNameIndex)
     }
   }
   
-  // 构建角色名到 @图片N 的映射
-  const charNameToAtMap = {}
+  // 2. 角色引用：只在【出场人物】区块中添加 @图片N
   if (hasCharacters) {
-    characterList.forEach((char, i) => {
-      charNameToAtMap[char.name] = `@图片${currentSlotIndex + i}`
-    })
+    // 查找【出场人物】区块
+    const charSectionMatch = result.match(/【出场人物】([\s\S]*?)(?=\n\s*【|$)/)
+    if (charSectionMatch) {
+      const charSectionStart = charSectionMatch.index
+      const charSectionFull = charSectionMatch[0]
+      
+      // 在【出场人物】区块中为每个角色添加 @图片N
+      let modifiedCharSection = charSectionFull
+      characterList.forEach((char, i) => {
+        const atRef = `@图片${currentSlotIndex + i}`
+        // 只替换【出场人物】区块中的角色名
+        const escapedName = char.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        modifiedCharSection = modifiedCharSection.replace(
+          new RegExp(escapedName, 'g'),
+          `${atRef} ${char.name}`
+        )
+      })
+      
+      // 替换回原文
+      result = result.substring(0, charSectionStart) + modifiedCharSection + result.substring(charSectionStart + charSectionFull.length)
+    }
+    
     currentSlotIndex += characterList.length
   }
 
-  // 构建道具名到 @图片N 的映射
-  const propNameToAtMap = {}
+  // 3. 道具引用：只在【道具】区块中添加 @图片N
   if (hasProps) {
-    propList.forEach((prop, i) => {
-      propNameToAtMap[prop.name] = `@图片${currentSlotIndex + i}`
-    })
-  }
-
-  // 将文案中的角色名替换为 @图片N
-  if (hasCharacters) {
-    // 按角色名长度降序排序，优先替换长名称（避免部分匹配问题）
-    const sortedCharNames = Object.keys(charNameToAtMap).sort((a, b) => b.length - a.length)
-    for (const charName of sortedCharNames) {
-      const atRef = charNameToAtMap[charName]
-      // 使用正则全局替换，确保所有出现的地方都替换
-      const regex = new RegExp(charName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')
-      result = result.replace(regex, atRef)
-    }
-  }
-
-  // 将文案中的道具名替换为 @图片N
-  if (hasProps) {
-    // 按道具名长度降序排序，优先替换长名称（避免部分匹配问题）
-    const sortedPropNames = Object.keys(propNameToAtMap).sort((a, b) => b.length - a.length)
-    for (const propName of sortedPropNames) {
-      const atRef = propNameToAtMap[propName]
-      // 使用正则全局替换，确保所有出现的地方都替换
-      const regex = new RegExp(propName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')
-      result = result.replace(regex, atRef)
+    // 查找【道具】区块
+    const propSectionMatch = result.match(/【道具】([\s\S]*?)(?=\n\s*【|$)/)
+    if (propSectionMatch) {
+      const propSectionStart = propSectionMatch.index
+      const propSectionFull = propSectionMatch[0]
+      
+      // 在【道具】区块中为每个道具添加 @图片N
+      let modifiedPropSection = propSectionFull
+      propList.forEach((prop, i) => {
+        const atRef = `@图片${currentSlotIndex + i}`
+        // 只替换【道具】区块中的道具名
+        const escapedName = prop.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        modifiedPropSection = modifiedPropSection.replace(
+          new RegExp(escapedName, 'g'),
+          `${atRef} ${prop.name}`
+        )
+      })
+      
+      // 替换回原文
+      result = result.substring(0, propSectionStart) + modifiedPropSection + result.substring(propSectionStart + propSectionFull.length)
     }
   }
 
@@ -437,11 +445,9 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
     hasProps,
     characterCount: characterList?.length || 0,
     propCount: propList?.length || 0,
-    charNameToAtMap,
-    propNameToAtMap,
     originalLength: originalBlock.length,
     resultLength: result.length,
-    first200Chars: result.substring(0, 200)
+    first300Chars: result.substring(0, 300)
   })
 
   return result
