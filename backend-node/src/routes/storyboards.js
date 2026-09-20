@@ -9,6 +9,7 @@ const promptI18n = require('../services/promptI18n');
 const angleService = require('../services/angleService');
 const { buildUniversalSegmentUserPromptBundle } = require('../services/universalSegmentPromptBundle');
 const { normalizeUniversalSegmentShotDurations } = require('../services/universalSegmentDurationNormalize');
+const storyboardImporter = require('../services/storyboardImporter');
 
 /** 润色接口：邻镜结构化摘要（含全能片段与其它提示词字段） */
 function formatNeighborShotPolishContext(row) {
@@ -817,8 +818,8 @@ function routes(db, log) {
       // Apply normalization with segment context
       text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec, {
         segment_title: currentSb?.segment_title || '',
-        prev_segment_title: prevShot2?.segment_title || null,
-        next_segment_title: nextShot2?.segment_title || null
+        prev_segment_title: prevShot?.segment_title || null,
+        next_segment_title: nextShot?.segment_title || null
       });
       
       text = normalizeUniversalSegmentAtImageSpacing(text);
@@ -1132,11 +1133,11 @@ function routes(db, log) {
         const episodeId = Number(req.body?.episode_id);
         const overwrite = !!req.body?.overwrite; // 是否覆盖已有值
         if (!episodeId) return response.badRequest(res, 'episode_id 必填');
-
+    
         const rows = db.prepare(
           'SELECT id, angle_s, shot_type, atmosphere, time, description, action, movement, lighting_style, depth_of_field FROM storyboards WHERE episode_id = ? AND deleted_at IS NULL ORDER BY storyboard_number ASC'
         ).all(episodeId);
-
+    
         let updated = 0;
         const now = new Date().toISOString();
         const stmt = db.prepare(
@@ -1145,14 +1146,14 @@ function routes(db, log) {
         const stmtOverwrite = db.prepare(
           'UPDATE storyboards SET movement = ?, lighting_style = ?, depth_of_field = ?, updated_at = ? WHERE id = ?'
         );
-
+    
         for (const row of rows) {
           const inferred = angleService.inferPhotographyParams(row);
           // 只更新缺少的字段（除非 overwrite=true）
           const newMovement   = overwrite ? inferred.movement   : (row.movement      ? null : inferred.movement);
           const newLighting   = overwrite ? inferred.lighting_style : (row.lighting_style ? null : inferred.lighting_style);
           const newDof        = overwrite ? inferred.depth_of_field : (row.depth_of_field  ? null : inferred.depth_of_field);
-
+    
           if (overwrite) {
             if (inferred.movement || inferred.lighting_style || inferred.depth_of_field) {
               stmtOverwrite.run(inferred.movement, inferred.lighting_style, inferred.depth_of_field, now, row.id);
@@ -1165,12 +1166,94 @@ function routes(db, log) {
             }
           }
         }
-
+    
         log.info('[分镜] batchInferParams 完成', { episode_id: episodeId, total: rows.length, updated, overwrite });
         response.success(res, { total: rows.length, updated });
       } catch (err) {
         log.error('storyboards batchInferParams', { error: err.message });
         response.internalError(res, err.message);
+      }
+    },
+    
+    /**
+     * POST /api/v1/storyboards/import-excel
+     * 从 Excel 文件导入分镜数据
+     * body: { episode_id: number, file: base64 encoded excel } OR { episode_id: number, data: parsed_excel_json }
+     */
+    importFromExcel: async (req, res) => {
+      try {
+        const episodeId = Number(req.body?.episode_id);
+        if (!episodeId) return response.badRequest(res, 'episode_id 必填');
+    
+        // 检查是否有上传的文件或已解析的数据
+        let excelData = req.body.data;
+            
+        if (!excelData && req.files && req.files.file) {
+          // 如果有文件上传，先读取并转换为 JSON
+          const file = req.files.file[0];
+          const filePath = file.path;
+          // TODO: 使用 like-xlsx 或其他库解析 Excel
+          // 这里假定为前端已经转好 JSON
+          log.warn('importFromExcel', { message: '需要集成 Excel 解析库' });
+          return response.badRequest(res, '需要先集成 Excel 解析库，建议前端直接传 JSON 格式');
+        }
+    
+        if (!excelData) {
+          return response.badRequest(res, '请提供 Excel 文件数据（data 字段为 JSON 数组）');
+        }
+    
+        // 验证数据结构
+        if (!Array.isArray(excelData)) {
+          return response.badRequest(res, 'Excel 数据必须为数组格式');
+        }
+    
+        // 获取场景和角色资产映射
+        const scenes = db.prepare('SELECT id, location FROM scenes WHERE episode_id = ? AND deleted_at IS NULL').all(episodeId);
+        const characters = db.prepare(`
+          SELECT sc.id, sc.name, ec.character_id
+          FROM scenes_sc characters sc
+          JOIN episode_characters ec ON sc.drama_id = ec.drama_id AND sc.episode_id = ec.episode_id
+          WHERE ec.episode_id = ?
+        `).all(episodeId);
+    
+        // 构建资产映射
+        const assetMapping = {
+          scenes: {},
+          characters: {}
+        };
+    
+        scenes.forEach(scene => {
+          assetMapping.scenes[scene.location] = scene.id;
+        });
+    
+        characters.forEach(char => {
+          assetMapping.characters[char.name] = char.character_id;
+        });
+    
+        // 导入分镜
+        const result = await storyboardImporter.importStoryboardsFromExcel(
+          db,
+          log,
+          episodeId,
+          excelData,
+          assetMapping
+        );
+    
+        if (!result.success) {
+          log.error('Import storyboards failed', { imported: result.imported, failed: result.failed, errors: result.errors });
+          response.badRequest(res, `导入完成但存在失败项：${result.failed} 个失败`);
+        } else {
+          log.info('Import storyboards success', { imported: result.imported, episodeId });
+          response.success(res, { 
+            message: `成功导入 ${result.imported} 个分镜`,
+            imported: result.imported,
+            failed: result.failed,
+            errors: result.errors
+          });
+        }
+      } catch (err) {
+        log.error('storyboards importFromExcel', { error: err.message, stack: err.stack });
+        response.internalError(res, err.message || '导入失败');
       }
     },
   };

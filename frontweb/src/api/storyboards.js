@@ -140,4 +140,8 @@ export const storyboardsAPI = {
   splitByAudio(id) {
     return request.post(`/storyboards/${id}/split-by-audio`, {})
   },
+  /** 从 Excel 导入分镜 */
+  importFromExcel(dramaId, data) {
+    return request.post('/storyboards/import-excel', { episode_id: dramaId, data })
+  },
 }

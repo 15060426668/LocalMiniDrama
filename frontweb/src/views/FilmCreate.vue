@@ -900,6 +900,15 @@
               >
                 批量生成分镜视频
               </el-button>
+              <el-button
+                type="success"
+                plain
+                size="large"
+                :disabled="!currentEpisodeId || batchImageRunning || batchVideoRunning"
+                @click="showImportDialog = true"
+              >
+                📥 从 Excel 导入分镜
+              </el-button>
               <el-button v-if="batchImageRunning" size="large" type="danger" plain @click="batchImageStopping = true">停止图片</el-button>
               <el-button v-if="batchVideoRunning" size="large" type="danger" plain @click="batchVideoStopping = true">停止视频</el-button>
             </div>
@@ -951,13 +960,77 @@
         </div>
         <div v-if="storyboardGenerating || universalOmniPolishRunning" class="storyboard-generating-tip">
           <el-icon class="is-loading"><Loading /></el-icon>
-          <span v-if="universalOmniPolishRunning">
-            正在润色全能提示词：第 {{ universalOmniPolishProgress.current }} / {{ universalOmniPolishProgress.total }} 镜
-            <template v-if="universalOmniPolishProgress.label">（{{ universalOmniPolishProgress.label }}）</template>
-            …
-          </span>
-          <span v-else>正在分析剧本并拆解分镜，请稍候...</span>
+          <span>{{ storyboardGenerating ? '正在生成分镜...' : '正在优化全能模式提示词...' }}</span>
         </div>
+        
+        <!-- Excel 分镜导入对话框 -->
+        <el-dialog
+          v-model="showImportDialog"
+          title="📥 从 Excel 导入分镜"
+          width="900px"
+          :close-on-click-modal="false"
+        >
+          <el-tabs v-model="importMethod" type="card">
+            <el-tab-pane label="粘贴文本" name="paste">
+              <div style="margin-bottom:12px">
+                <el-alert
+                  title="Excel 模板说明"
+                  type="info"
+                  :closable="false"
+                  show-icon
+                >
+                  <template #default>
+                    <p style="margin:8px 0;font-size:13px;text-align:left">每行一个分镜数据，格式为：`====【视频编号】====总时长（秒）、场景、人物\n镜头 XX(X.Xs) 描述`。</p>
+                    <p style="margin:4px 0;font-size:12px;color:#666">示例：<code>====【01-01】====30、书房、张三</code><br/><code>镜头 01(3.5s) 坐在书桌前翻阅文件...</code></p>
+                  </template>
+                </el-alert>
+                <el-input
+                  v-model="importTextContent"
+                  type="textarea"
+                  :rows="12"
+                  placeholder="请在这里粘贴从 Excel 复制的分镜数据，每行一个分镜..."
+                  style="margin-top:12px;"
+                ></el-input>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="上传 JSON" name="file">
+              <div style="text-align:center;padding:40px 20px">
+                <el-upload
+                  class="upload-demo"
+                  drag
+                  accept=".json,.xlsx,.xls"
+                  :auto-upload="false"
+                  :on-change="handleJsonFileChange"
+                  :limit="1"
+                >
+                  <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
+                  <div class="el-upload__text">
+                    拖拽 JSON/XLSX 文件到此处，或<em>点击选择</em>
+                  </div>
+                  <template #tip>
+                    <div style="font-size:12px;color:#889aeb;margin-top:8px">支持 Excel 导出的 JSON 或直接粘贴文本</div>
+                  </template>
+                </el-upload>
+                <div v-if="jsonFileData" style="margin-top:16px;text-align:left">
+                  <p style="color:#52c41a;font-weight:600">✓ 已加载：{{ jsonFileData.length }} 条分镜数据</p>
+                  <el-button size="small" @click="jsonFileData = null">取消加载</el-button>
+                </div>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        
+          <template #footer>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:13px;color:#666">
+                ⚠️ 导入将自动创建分镜并提取角色、场景关联，确认是否继续？
+              </div>
+              <el-button :loading="importLoading" type="primary" @click="validateImportAndConfirm">
+                确认导入
+              </el-button>
+            </div>
+          </template>
+        </el-dialog>
+                
         <div v-if="sbTruncatedWarning && !sbTruncatedDismissed && storyboards.length > 0" class="sb-truncated-warning">
           <el-icon><WarningFilled /></el-icon>
           <span>检测到分镜可能不完整（AI 输出被截断），请确认分镜数量是否符合预期，必要时可重新生成。</span>
@@ -3135,6 +3208,108 @@ const allActiveTaskItems = computed(() => {
 
 const allActiveTaskLabels = computed(() => allActiveTaskItems.value.map((t) => t.label))
 
+async function handleJsonFileChange(file) {
+  if (importLoading.value) return
+  
+  const fileObj = file.raw
+  if (!fileObj) return
+  
+  importLoading.value = true
+  try {
+    const text = await fileObj.text()
+    let parsedData
+    
+    // 尝试解析 JSON
+    try {
+      parsedData = JSON.parse(text)
+      // 检查是否为数组格式或含 data 属性
+      jsonFileData.value = Array.isArray(parsedData) ? parsedData : (parsedData.data || null)
+      if (!jsonFileData.value) {
+        ElMessage.error('JSON 格式不正确：期望数组或包含 data 字段')
+        return
+      }
+    } catch {
+      // 非 JSON 文件，可能是 CSV 或其他文本格式
+      ElMessage.warning('检测到非 JSON 文件，请在粘贴标签页复制粘贴分镜数据')
+      importMethod.value = 'paste'
+      importTextContent.value = text
+      return
+    }
+    
+    if (jsonFileData.value.length === 0) {
+      ElMessage.warning('文件中没有分镜数据')
+      jsonFileData.value = null
+    } else {
+      ElMessage.success(`✓ 已加载 ${jsonFileData.value.length} 条分镜数据`)
+    }
+  } catch (e) {
+    ElMessage.error('读取文件失败：' + (e.message || e))
+  } finally {
+    importLoading.value = false
+  }
+}
+
+function validateImportAndConfirm() {
+  if (importMethod.value === 'paste') {
+    if (!importTextContent.value.trim()) {
+      ElMessage.warning('请输入分镜文本内容')
+      return
+    }
+    confirmImport(importTextContent.value, 'text')
+  } else {
+    if (!jsonFileData.value || jsonFileData.value.length === 0) {
+      ElMessage.warning('请先上传文件或粘贴文本')
+      return
+    }
+    confirmImport(jsonFileData.value, 'file')
+  }
+}
+
+async function confirmImport(data, source) {
+  try {
+    importLoading.value = true
+    
+    // 如果是文本，切分成块
+    let importData
+    if (typeof data === 'string') {
+      // 按 `====【视频编号】====` 分隔符切分
+      const blocks = []
+      const lines = data.split('\n')
+      let currentBlock = ''
+      for (const line of lines) {
+        if (line.match(/^==+\s*\[/)) {
+          if (currentBlock) blocks.push(currentBlock.trim())
+          currentBlock = line
+        } else {
+          currentBlock += '\n' + line
+        }
+      }
+      if (currentBlock) blocks.push(currentBlock.trim())
+      importData = blocks.length > 0 ? blocks : [data]
+    } else {
+      importData = data
+    }
+    
+    // 调用后端接口
+    const res = await storyboardsAPI.importFromExcel(dramaId.value, importData)
+    
+    if (res && res.success) {
+      ElMessage.success(`✓ 成功导入 ${res.count || res.data?.length || 0} 条分镜数据`)
+      showImportDialog.value = false
+      // 刷新分镜列表
+      await loadEpisodeStoryboards()
+      jsonFileData.value = null
+      importTextContent.value = ''
+    } else {
+      ElMessage.error(res?.error || '导入失败')
+    }
+  } catch (e) {
+    ElMessage.error('导入失败：' + (e.message || e))
+  } finally {
+    importLoading.value = false
+  }
+}
+
 async function cancelActiveTask(item) {
   if (!item) return
   try {
@@ -3234,6 +3409,12 @@ const batchVideoProgress = ref({ current: 0, total: 0, failed: 0 })
 const batchVideoErrors = ref([])
 // P0-1: 连贯帧模式
 const videoFrameContiguity = ref(false)
+const showImportDialog = ref(false) // 导入分镜对话框
+// P0-2: Excel 导入相关变量
+const importMethod = ref('paste') // 'paste' | 'file'
+const importTextContent = ref('')
+const jsonFileData = ref(null)
+const importLoading = ref(false)
 // P0-3: 分镜超分辨率 loading set
 const upscalingSbIds = reactive(new Set())
 // P2-4: TTS 状态
@@ -7034,9 +7215,10 @@ async function startBatchVideoGeneration() {
     let prevVideoItem = null  // 连贯帧：保存上一条已完成的视频记录
 
     let videoQueueIdx = 0
+    let batchVideoFailureStops = false // 单个失败即停止标志（非响应式）
     const videoWorker = async () => {
       while (videoQueueIdx < todo.length) {
-        if (batchVideoStopping.value) break
+        if (batchVideoStopping.value || batchVideoFailureStops) break
         const sb = todo[videoQueueIdx++]
         const universal = isSbUniversalMode(sb.id)
         const omniRefs = universal ? collectSbOmniReferenceAbsoluteUrls(sb) : []
@@ -7107,6 +7289,8 @@ async function startBatchVideoGeneration() {
               batchVideoErrors.value.push(`#${sb.storyboard_number ?? sb.id}: ${pollRes.error || '生成失败'}`)
               batchVideoProgress.value = { ...batchVideoProgress.value, failed: batchVideoProgress.value.failed + 1 }
               prevVideoItem = null
+              // 单个失败立即停止批量生成
+              batchVideoFailureStops = true
             } else if (contiguity && pollRes?.status === 'completed') {
               // 连贯帧：保存本条视频用于下一条
               const vList = sbVideos.value[sb.id] || []
@@ -7123,6 +7307,8 @@ async function startBatchVideoGeneration() {
           batchVideoErrors.value.push(`#${sb.storyboard_number ?? sb.id}: ${e.message || '提交失败'}`)
           batchVideoProgress.value = { ...batchVideoProgress.value, failed: batchVideoProgress.value.failed + 1 }
           if (contiguity) prevVideoItem = null
+          // 单个失败立即停止批量生成
+          batchVideoFailureStops = true
         } finally {
           generatingSbVideoIds.delete(sb.id)
         }

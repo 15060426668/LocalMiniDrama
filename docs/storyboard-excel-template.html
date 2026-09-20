@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>分镜 Excel 导入模板</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    h1 { color: #333; }
+    .template-info { background: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; vertical-align: top; }
+    th { background-color: #4CAF50; color: white; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    .shot-row { background-color: #fff3e0 !important; }
+    .example-data { color: #666; font-size: 0.9em; }
+    code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>📋 LocalMiniDrama 分镜 Excel 导入模板</h1>
+  
+  <div class="template-info">
+    <h2>使用说明：</h2>
+    <ol>
+      <li><strong>数据结构</strong>：每个对象代表一个视频编号块（如"01-01"、"01-02"等）</li>
+      <li><strong>总时长计算</strong>：系统会自动根据所有镜头的秒数之和取整作为该分镜的时长</li>
+      <li><strong>自动关联</strong>：场景和角色名称需与已存在的素材库中完全匹配</li>
+      <li><strong>格式要求</strong>：</li>
+      <ul>
+        <li><code>durationSec</code>：镜头时长，单位秒（如 3.4、6.4）</li>
+        <li><code>shotType</code>：景别（全景、中景、近景、特写等）</li>
+        <li><code>cameraPos</code>：机位角度（高机位、低机位、平视、侧拍、肩后等）</li>
+        <li><code>cameraMove</code>：运镜方式（缓慢推近、快速横移、静态浅焦、横移跟拍等）</li>
+      </ul>
+    </ol>
+  </div>
+
+  <h2>JSON 模板示例：</h2>
+  <pre id="jsonExample"></pre>
+
+  <h2>前端使用示例：</h2>
+  <pre><code>// 1. 创建 Excel 文件或转换为 JSON
+const excelData = [
+  {
+    videoId: "01-01",
+    totalDuration: "13.6s",
+    scene: "SC01 中和宫庭院大树下",
+    characters: ["林君雪·浅朱庭院宫装", "丹珍", "巧心", "谷雨"],
+    scenarioDesc: "白日近黄昏...",
+    lighting: "LG01 庭院斜阳：斜阳 5200K...",
+    logicLock: "先交代浅坑...",
+    shots: [
+      {
+        shotNo: 1,
+        durationSec: 3.4,
+        shotType: "全景",
+        cameraPos: "高机位",
+        cameraMove: "缓慢推近",
+        visualDesc: "←承上...",
+        remarks: ""
+      },
+      // ...更多镜头
+    ]
+  }
+];
+
+// 2. 发送到后端
+const response = await fetch('/api/v1/storyboards/import-excel', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    episode_id: 8,  // 剧集 ID
+    data: excelData  // 上面定义的 JSON 数组
+  })
+});
+
+const result = await response.json();
+console.log(result);
+// { success: true, message: "成功导入 X 个分镜", imported: X, failed: Y }</code></pre>
+
+  <script>
+    // 生成示例 JSON
+    const template = [{
+      "videoId": "01-01",
+      "totalDuration": "13.6s",
+      "scene": "SC01 中和宫庭院大树下",
+      "characters": ["林君雪·浅朱庭院宫装", "丹珍", "巧心", "谷雨"],
+      "scenarioDesc": "白日近黄昏，中和宫庭院大树下已有一个浅坑；林君雪蹲在坑边持小铲，脸上沾土，丹珍、巧心、谷雨围在她身边。",
+      "lighting": "LG01 庭院斜阳：斜阳 5200K、强度 34%；树荫环境光 6200K、强度 18%；泥土与酒坛反光 3600K、强度 14%。",
+      "logicLock": "先交代浅坑、酒坛和皇后亲自挖土，再以支脸嘟囔表现体力不支；三名宫女始终围在树下。",
+      "shots": [
+        {
+          "shotNo": 1,
+          "durationSec": 3.4,
+          "shotType": "全景",
+          "cameraPos": "高机位",
+          "cameraMove": "缓慢推近",
+          "visualDesc": "←承上，【大树下浅坑只挖开薄薄一层，酒坛等在旁边；林君雪蹲地握着小铲，丹珍、巧心、谷雨围成半圈】。",
+          "remarks": ""
+        },
+        {
+          "shotNo": 2,
+          "durationSec": 6.4,
+          "shotType": "中近景",
+          "cameraPos": "平视",
+          "cameraMove": "静态浅焦",
+          "visualDesc": "【林君雪用一只手支着脸，小铲无力垂在另一只手里；她看着迟迟挖不深的坑，带着鼻尖泥点小声嘟囔】。",
+          "remarks": "林君雪（台词 01）：“太累了。人家书上说酿酒埋树下，怎么挖了这么久这坑就是不见下去？”"
+        },
+        {
+          "shotNo": 3,
+          "durationSec": 3.8,
+          "shotType": "近景",
+          "cameraPos": "侧拍",
+          "cameraMove": "缓慢横移",
+          "visualDesc": "【丹珍忍笑递出帕子，巧心已经蹲下查看林君雪脸上的土；谷雨扶稳坑边酒坛】；→衔接至视频编号 02：丹珍的帕子已经递到林君雪面前。",
+          "remarks": ""
+        }
+      ]
+    }];
+
+    document.getElementById('jsonExample').textContent = JSON.stringify(template, null, 2);
+  </script>
+</body>
+</html>

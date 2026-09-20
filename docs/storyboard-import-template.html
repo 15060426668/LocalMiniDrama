@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分镜 Excel 导入模板 - LocalMiniDrama</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .download-section {
+            padding: 30px;
+            text-align: center;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .section p {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        
+        .example-box {
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        
+        .example-title {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        
+        .example-text {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1e293b;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #92400e;
+        }
+        
+        .field-info {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 12px;
+            margin: 16px 0;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .field-desc {
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        .tips {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tip-icon {
+            color: #10b981;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .tip-content {
+            color: #166534;
+            line-height: 1.6;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        tr:hover {
+            background: #f1f5f9;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .tag-required {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .tag-optional {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .tag-field {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 24px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📥 分镜 Excel 导入模板</h1>
+            <p>LocalMiniDrama 批量分镜导入专用格式<br>准备好你的分镜内容，一键导入项目</p>
+        </div>
+        
+        <div class="download-section">
+            <!-- JavaScript 生成并下载 Excel 模板 -->
+            <script>
+                function createExcelTemplate() {
+                    // 使用 JavaScript 创建简单的 CSV 格式数据
+                    const templateData = `📥 LocalMiniDrama 分镜 Excel 导入模板使用说明
+
+使用方法：
+========
+1. 将此文件的内容复制粘贴到 Excel 中
+2. 每行填写一个完整的分镜块（从====开始到下一个===或文件结束）
+3. 保存为 .xlsx 或 .csv 格式
+4. 在分镜页面点击"📥 从 Excel 导入分镜"上传此文件
+
+数据格式规范：
+============
+====【视频编号】====总时长（秒）、场景名、人物 1、人物 2...
+镜头 XX(X.Xs) 画面描述
+台词："角色对白内容"
+运镜：景别 + 机位 + 运动（可选）
+备注：特殊要求（可选）
+
+详细规则：
+========
+1. 分隔符必须准确：每行的"====【XX-XX】===="必须完全一致
+2. 视频编号格式：【集数 - 分镜序号】，如【01-01】表示第 1 集第 1 个分镜
+3. 镜头序号不要跳号，可以中断补上（如 01, 02, 03...）
+4. 场景和人物名称必须与系统中已存在的素材名称完全一致（包括空格、中英文字符）
+5. 支持中文括号 ( ) 或英文括号 ()
+6. 每个镜头必须有画面描述（不能为空）
+
+字段详解：
+========
+【视频编号】
+   格式：【XX-YY】其中 XX=集数，YY=分镜序号在同一集内的序号
+   示例：【01-01】、【02-03】、【05-12】
+
+【总时长】
+   单位：秒，整数或小数均可
+   注意：系统会自动累加所有镜头时长并取整
+
+【场景名】
+   必填项，必须与系统中的场景名称完全匹配
+   提示：建议直接从系统中复制场景名称
+
+【人物】
+   多个角色用逗号或顿号分隔
+   必须与系统中的角色名称完全匹配
+   示例：张三、李四、王五
+
+镜头信息格式：
+=============
+格式：镜头 XX(X.Xs) 画面开头
+
+示例 1: 镜头 01(3.5s) 坐在书桌前翻阅文件
+示例 2: 镜头 02(6.4s) 站起来走到窗边眺望远方
+示例 3: 镜头 03(3.8s) 回头看向书桌上的照片
+
+完整示例：
+========
+====【01-01】====30、书房、张三
+镜头 01(3.5s) 坐在书桌前翻阅文件
+台词："这份报告终于完成了..."
+运镜：特写，固定镜头
+备注：体现疲惫感
+
+镜头 02(6.4s) 站起来走到窗边眺望远方
+台词："接下来的挑战..."
+运镜：中景，缓慢推镜头
+备注：窗外夜景
+
+镜头 03(3.8s) 回头看向书桌上的照片
+台词："一定会努力 overcome 的"
+运镜：全景，摇镜头到照片
+
+====
+
+====【02-02】====45、公园、李四、王五
+镜头 01(5.4s) 两人在长椅上交谈，秋日午后阳光洒在脸上
+台词："听说项目通过了？"
+运镜：近景，轻微晃动模拟手持
+
+镜头 02(2.6s) 点头微笑
+台词："是啊，不容易啊"
+运镜：特写，自然光
+
+镜头 03(5.8s) 看向远处的孩子玩耍
+台词："看到新一代成长真好"
+运镜：远景，缓慢拉远
+
+===`
+
+                    // 创建 Blob 并触发下载
+                    const blob = new Blob([templateData], { type: 'text/plain;charset=utf-8' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'storyboard-import-template.txt';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            </script>
+            
+            <button onclick="createExcelTemplate()" class="download-btn" style="cursor:pointer;border:none;outline:none;background:transparent;font:inherit;">
+                ⬇️ 下载 Excel 模板（TXT 格式）
+            </button>
+            
+            <p style="margin-top: 16px; color: #64748b">建议使用 Microsoft Excel、WPS 或 LibreOffice Calc 编辑<br/><span style="font-size:12px;color:#999">将下载的 TXT 文件复制到 Excel 中即可使用</span></p>
+        </div>
+        
+        <div class="content">
+            <!-- 格式说明 -->
+            <div class="section">
+                <h2>📋 数据格式规范</h2>
+                <p>每个分镜块必须遵循以下结构，按行填写：</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段名称</th>
+                            <th>格式要求</th>
+                            <th>必填</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>分镜标题</strong></td>
+                            <td><code>====【XX-XX】====总时长、场景名、人物 1、人物 2...</code></td>
+                            <td><span class="tag tag-required">是</span></td>
+                            <td>视频编号、总时长（秒）、关联的场景和人物（逗号分隔）</td>
+                        </tr>
+                        <tr>
+                            <td><strong>镜头 XX(X.Xs)</strong></td>
+                            <td><code>镜头 01(3.5s)</code> 或 <code>镜头 01(3.5s)</code></td>
+                            <td><span class="tag tag-required">是</span></td>
+                            <td>支持中文或英文括号，小数点后一位</td>
+                        </tr>
+                        <tr>
+                            <td><strong>画面描述</strong></td>
+                            <td>纯文本</td>
+                            <td><span class="tag tag-required">是</span></td>
+                            <td>详细描述该镜头的画面内容，包含动作、环境等</td>
+                        </tr>
+                        <tr>
+                            <td><strong>台词</strong></td>
+                            <td><code>台词："XXX"</code></td>
+                            <td><span class="tag tag-optional">否</span></td>
+                            <td>角色的对白或旁白</td>
+                        </tr>
+                        <tr>
+                            <td><strong>运镜</strong></td>
+                            <td><code>运镜：景别 + 机位 + 运动</code></td>
+                            <td><span class="tag tag-optional">否</span></td>
+                            <td>景别可选：大特写/特写/近景/中景/全景/远景</td>
+                        </tr>
+                        <tr>
+                            <td><strong>备注</strong></td>
+                            <td><code>备注：xxx</code></td>
+                            <td><span class="tag tag-optional">否</span></td>
+                            <td>特殊要求、情感表达、氛围提示等</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="example-box">
+                    <div class="example-title">✅ 完整示例：</div>
+                    <div class="example-text">====【01-01】====30、书房、张三
+镜头 01(3.5s) 坐在书桌前翻阅文件
+台词："这份报告终于完成了..."
+运镜：特写，固定镜头
+备注：体现疲惫感
+
+镜头 02(6.4s) 站起来走到窗边眺望远方
+台词："接下来的挑战..."
+运镜：中景，缓慢推镜头
+备注：窗外夜景
+
+镜头 03(3.8s) 回头看向书桌上的照片
+台词："一定会努力 overcome 的"
+运镜：全景，摇镜头到照片
+
+====【02-02】====45、公园、李四、王五
+镜头 01(5.4s) 两人在长椅上交谈，秋日午后阳光洒在脸上
+台词："听说项目通过了？"
+运镜：近景，轻微晃动模拟手持
+
+镜头 02(2.6s) 点头微笑
+台词："是啊，不容易啊"
+运镜：特写，自然光
+
+镜头 03(5.8s) 看向远处的孩子玩耍
+台词："看到新一代成长真好"
+运镜：远景，缓慢拉远
+
+镜头 04(5.2s) 回到对话状态
+运镜：中景</div>
+                </div>
+            </div>
+            
+            <!-- 字段详解 -->
+            <div class="section">
+                <h2>🔍 字段详解</h2>
+                
+                <div class="field-info">
+                    <div class="field-name">🎬 分镜标题</div>
+                    <div class="field-desc">
+                        <strong>格式：</strong><code>====【XX-XX】====总时长（秒）、场景名、人物 1、人物 2...</code><br>
+                        <strong>说明：</strong>
+                        <ul style="margin-top: 8px; margin-left: 20px; line-height: 1.8;">
+                            <li><span class="tag tag-field">视频编号</span> 用双中括号，如【01-01】代表第 1 集第 1 个分镜</li>
+                            <li><span class="tag tag-field">总时长</span> 单位秒，系统会自动验证并取整</li>
+                            <li><span class="tag tag-field">场景名</span> 必须与系统中已存在的场景名称完全一致</li>
+                            <li><span class="tag tag-field">人物</span> 多个角色用逗号或顿号分隔，需与角色库匹配</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="field-info">
+                    <div class="field-name">🎞️ 镜头信息</div>
+                    <div class="field-desc">
+                        <strong>格式：</strong><code>镜头 XX(X.Xs) 画面开头</code><br>
+                        <strong>说明：</strong>
+                        <ul style="margin-top: 8px; margin-left: 20px; line-height: 1.8;">
+                            <li>数字顺序不要跳号，可以中断补上（如 01, 02, 03...）</li>
+                            <li>时长必须带 s 后缀，保留一位小数</li>
+                            <li>支持中文括号 <code>( )</code> 或英文括号 <code>()</code></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="field-info">
+                    <div class="field-name">📝 画面描述</div>
+                    <div class="field-desc">
+                        <strong>说明：</strong>这是最重要的字段，将作为 AI 生成图像的核心提示词。<br>
+                        <strong>建议：</strong>
+                        <ul style="margin-top: 8px; margin-left: 20px; line-height: 1.8;">
+                            <li>明确主体动作（"张三坐在书桌前翻阅红色封面文件"）</li>
+                            <li>描述环境细节（"暖黄色台灯下，窗外细雨"）</li>
+                            <li>提及光影效果（"逆光剪影"、"柔和侧光"）</li>
+                            <li>避免空泛词汇（"漂亮的场景"应改为具体描述）</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="field-info">
+                    <div class="field-name">🎵 台词</div>
+                    <div class="field-desc">
+                        <strong>格式：</strong><code>台词："XXX"</code>（注意使用英文引号）<br>
+                        <strong>说明：</strong>角色的对白内容，如果有多个人物同时说话，可以用不同镜头分别表述。</div>
+                </div>
+                
+                <div class="field-info">
+                    <div class="field-name">📷 运镜</div>
+                    <div class="field-desc">
+                        <strong>格式：</strong><code>运镜：景别，机位，运动</code><br>
+                        <strong>景别选项：</strong><span class="tag tag-field">大特写</span><span class="tag tag-field">特写</span><span class="tag tag-field">近景</span><span class="tag tag-field">中景</span><span class="tag tag-field">全景</span><span class="tag tag-field">远景</span><br>
+                        <strong>机位选项：</strong>固定镜头 / 仰拍 / 俯拍 / 平视 / 主观视角<br>
+                        <strong>运动选项：</strong>推镜头 / 拉镜头 / 摇镜头 / 移镜头 / 跟拍 / 环绕</div>
+                </div>
+                
+                <div class="field-info">
+                    <div class="field-name">💭 备注</div>
+                    <div class="field-desc">补充说明特殊要求，如情感表达、氛围、材质细节等。</div>
+                </div>
+            </div>
+            
+            <!-- 使用步骤 -->
+            <div class="section">
+                <h2>📖 使用步骤</h2>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li style="margin-bottom: 12px;"><strong>下载模板</strong> - 点击上方按钮下载 <code>storyboard-import-template.xlsx</code></li>
+                    <li style="margin-bottom: 12px;"><strong>准备数据</strong> - 在 Excel 中按上述格式填写分镜内容</li>
+                    <li style="margin-bottom: 12px;"><strong>保存为 JSON</strong> - 每行一个完整的分镜块（从 <code>====【</code> 开始到下一个 <code>====【</code> 或文件结束）</li>
+                    <li style="margin-bottom: 12px;"><strong>上传导入</strong> - 在分镜页面选择"上传 JSON"标签页，拖拽文件到此处</li>
+                    <li style="margin-bottom: 12px;"><strong>确认导入</strong> - 系统会验证格式并创建分镜</li>
+                </ol>
+                
+                <div class="tips">
+                    <div class="tip-item">
+                        <div class="tip-icon">✓</div>
+                        <div class="tip-content"><strong>准备工作：</strong>确保已在系统中录入对应的角色素材（图片/视频）和场景素材，否则无法自动关联。</div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">✓</div>
+                        <div class="tip-content"><strong>测试建议：</strong>首次导入建议先试 5-10 条，确认格式无误后再批量导入大量分镜。</div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">✓</div>
+                        <div class="tip-content"><strong>时长计算：</strong>系统会自动累加所有镜头秒数，最终取整（如 13.6s → 14s），手动输入的时长会被替换。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 常见问题 -->
+            <div class="section">
+                <h2>❓ 常见问题</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>问题</th>
+                            <th>解决方案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>为什么我的分镜没关联上角色/场景？</strong></td>
+                            <td>检查名称是否完全一致（包括空格、中英文字符）。可以在系统中查找对应素材的名称复制使用。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>总分镜显示时长与实际不符？</strong></td>
+                            <td>这是正常的，系统会自动重新计算并取整。如需调整，可在导入后手动修改单个镜头时长。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>如何导出已导入的分镜？</strong></td>
+                            <td>目前只支持导入功能，导出功能正在开发中。可暂时通过截图或复制文本方式备份。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>一次最多能导入多少条？</strong></td>
+                            <td>理论上没有上限，但建议分批导入（每次不超过 50 条）以便及时发现错误。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 注意事项 -->
+            <div class="section">
+                <h2>⚠️ 注意事项</h2>
+                <div class="tips">
+                    <div class="tip-item">
+                        <div class="tip-icon">!</div>
+                        <div class="tip-content"><strong>分隔符必须准确：</strong>每行的 <code>====【XX-XX】====</code> 必须完全一致，不能用其他符号代替。</div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">!</div>
+                        <div class="tip-content"><strong>必须至少有一个镜头：</strong>没有镜头的分镜无法保存。</div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">!</div>
+                        <div class="tip-content"><strong>画面描述不能为空：</strong>每个镜头必须有画面描述，否则会导致 AI 生成失败。</div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">!</div>
+                        <div class="tip-content"><strong>场景和人物名称要完全匹配：</strong>区分大小写和空格，建议直接从系统中复制名称。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>LocalMiniDrama • Excel 分镜导入模板 v1.0 • Generated for Batch Storyboard Import</p>
+            <p style="margin-top: 8px;">如有问题请参考 <a href="./excel-import-feature.md" style="color: #667eea;">使用说明文档</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // 简单的客户端处理，用于演示如何处理 Excel 数据
+        console.log('模板加载完成，请根据实际情况使用此页面');
+    </script>
+</body>
+</html>
