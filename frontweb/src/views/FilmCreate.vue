@@ -881,6 +881,10 @@
               <el-icon><Upload /></el-icon>
               导入自定义分镜
             </ElButton>
+            <ElButton type="danger" plain size="large" :disabled="!currentEpisodeId || storyboards.length === 0" @click="onDeleteAllStoryboards">
+              <el-icon><Delete /></el-icon>
+              一键删除分镜
+            </ElButton>
           </div>
           <template v-if="storyboards.length > 0">
             <div class="sb-batch-right">
@@ -6918,6 +6922,40 @@ async function onDeleteSingleStoryboard(id){
     })
     await storyboardsAPI.delete(id)
     ElMessage.success('删除成功')
+    await loadDrama() // 刷新列表
+  } catch (e) {
+    if (e !== 'cancel') {
+      ElMessage.error(e.message || '删除失败')
+    }
+  }
+}
+
+async function onDeleteAllStoryboards() {
+  try {
+    const boards = storyboards.value || []  // ✅ 获取实际数组
+    if (boards.length === 0) {
+      ElMessage.warning('当前没有可删除的分镜')
+      return
+    }
+    await ElMessageBox.confirm(
+      `确定要删除当前剧集的全部 ${boards.length} 个分镜吗？此操作不可恢复。`,
+      '一键删除分镜',
+      {
+        confirmButtonText: '全部删除',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger'
+      }
+    )
+    
+    const ids = boards.map(sb => sb.id)
+    const deletePromises = ids.map(id => storyboardsAPI.delete(id).catch(e => {
+      console.error(`删除分镜 ${id} 失败:`, e)
+      return null
+    }))
+    
+    await Promise.all(deletePromises)
+    ElMessage.success(`已删除 ${ids.length} 个分镜`)
     await loadDrama() // 刷新列表
   } catch (e) {
     if (e !== 'cancel') {

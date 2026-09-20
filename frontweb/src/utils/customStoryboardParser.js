@@ -13,6 +13,12 @@ export function parseCustomStoryboards(text, context = {}) {
   let globalShotNumber = 1
 
   const videoBlocks = splitByVideoNumber(text)
+  
+  console.log('[前端解析器] 分割出的视频块数量:', videoBlocks.length)
+  videoBlocks.forEach((block, i) => {
+    const headerMatch = block.match(/总时长：([\d.]+)s\s*｜\s*场景：(.+?)\s*｜\s*人物：(.+?)(?=\n|$)/)
+    console.log(`[前端解析器] 视频块 ${i + 1}:`, headerMatch ? `场景=${headerMatch[2]}, 人物=${headerMatch[3]}` : '未找到头部信息')
+  })
 
   for (const block of videoBlocks) {
     try {
@@ -33,11 +39,13 @@ export function parseCustomStoryboards(text, context = {}) {
     throw new Error('未解析到任何分镜，请检查格式是否正确')
   }
 
+  console.log('[前端解析器] 最终解析出的分镜数量:', storyboards.length)
   return storyboards
 }
 
 function splitByVideoNumber(text) {
-  const regex = /={10,}【视频编号[\d-]+】={10,}/g
+  // 兼容两种格式：视频编号 01-01（有空格）和 视频编号01-01（无空格）
+  const regex = /={10,}【视频编号\s*[\d-]+】={10,}/g
   const parts = text.split(regex)
   return parts.filter(p => p.trim()).map(p => p.trim())
 }
@@ -58,10 +66,12 @@ function parseVideoBlock(block, context) {
   const lightingMatch = block.match(/【光线】([\s\S]*?)(?=【|$)/)
   const lightingLockMatch = block.match(/【本编号场景光影锁】([\s\S]*?)(?=【|$)/)
   const charactersMatch = block.match(/【出场人物】([\s\S]*?)(?=【|$)/)
+  const propsMatch = block.match(/【道具】([\s\S]*?)(?=【|$)/)
 
   const sceneState = sceneStateMatch ? sceneStateMatch[1].trim() : ''
   const lighting = lightingMatch ? lightingMatch[1].trim() : ''
   const lightingLock = lightingLockMatch ? lightingLockMatch[1].trim() : ''
+  const propsText = propsMatch ? propsMatch[1].trim() : ''
   
   // 优先使用【出场人物】区块，否则使用头部的人物信息
   let charactersText = charactersMatch ? charactersMatch[1].trim() : characterNames.join('、')
@@ -82,12 +92,19 @@ function parseVideoBlock(block, context) {
     name: name
   }))
 
+  // Parse props
+  const propNames = propsText ? propsText.split(/[、，,]/).map(n => n.trim()).filter(Boolean) : []
+  const propList = propNames.map(name => ({
+    id: null,
+    name: name
+  }))
+
   const shots = parseShots(block)
 
   validateDurations(shots, totalDuration)
 
-  // Build universal_segment_text
-  const universalSegmentText = buildUniversalSegmentText(shots, totalDuration, sceneName, lighting)
+  // 保留原始导入文本，并在其中添加 @图片N 引用以绑定素材（场景、角色、道具）
+  const universalSegmentText = buildUniversalSegmentText(block, totalDuration, sceneName, lighting, sceneId, characterList, propList)
 
   // Build dialogue from all shots
   const allDialogues = shots
@@ -121,6 +138,7 @@ function parseVideoBlock(block, context) {
     image_prompt: '',
     polished_prompt: '',
     characters: JSON.stringify(characterList),
+    prop_ids: JSON.stringify(propList.map(p => p.id)),
     scene_id: sceneId,
     creation_mode: 'universal',
     status: 'pending',
@@ -137,7 +155,8 @@ function parseVideoBlock(block, context) {
 function parseShots(block) {
   const shots = []
   
-  const shotRegex = /镜头(\d+)（([\d.]+)s）([^\n]+)\n\s*画面描述（大白话）：([\s\S]*?)\n\s*备注：([\s\S]*?)(?=镜头\d+|$)/g
+  // 兼容两种格式：镜头 01（有空格）和 镜头01（无空格）
+  const shotRegex = /镜头\s*(\d+)（([\d.]+)s）([^\n]+)\n\s*画面描述（大白话）：([\s\S]*?)\n\s*备注：([\s\S]*?)(?=镜头\s*\d+|$)/g
   
   let match
   while ((match = shotRegex.exec(block)) !== null) {
@@ -254,7 +273,8 @@ function parseDialogue(remark) {
     return ''
   }
 
-  const dialogueRegex = /(.+?)（台词\d+）：[""](.+?)[""]/
+  // 兼容两种格式：台词 01（有空格）和 台词01（无空格）
+  const dialogueRegex = /(.+?)（台词\s*\d+）：[""](.+?)[""]/
   const match = remark.match(dialogueRegex)
 
   if (match) {
@@ -333,27 +353,98 @@ function validateDurations(shots, totalDuration) {
 
 /**
  * 构建全能片段文本（universal_segment_text）
+ * 保留原始导入文本，并自动添加 @图片N 引用以绑定素材（场景、角色、道具）
+ * @param {string} originalBlock 原始导入文本块
+ * @param {number} totalDuration 总时长
+ * @param {string} sceneName 场景名称
+ * @param {string} lighting 光线信息
+ * @param {number|null} sceneId 场景ID（用于判断是否有场景参考图）
+ * @param {Array<{id: number, name: string}>} characterList 角色列表
+ * @param {Array<{id: number, name: string}>} propList 道具列表
+ * @returns {string} 全能片段文本（原始内容 + @图片N 引用）
  */
-function buildUniversalSegmentText(shots, totalDuration, sceneName, lighting) {
-  const lines = []
+function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, lighting, sceneId, characterList, propList) {
+  let result = originalBlock
 
-  // 第1行：环境描述
-  lines.push(`场景：${sceneName}。光线：${lighting || '自然光'}。`)
-
-  // 第2行：子分镜数量声明
-  lines.push(`由以下${shots.length}个分镜组成，总时长${totalDuration}秒。`)
-
-  // 第3行：参考图约束
-  lines.push('参考图：场景图→角色图顺序。')
-
-  // 第4行起：各子分镜描述
-  for (let i = 0; i < shots.length; i++) {
-    const shot = shots[i]
-    const shotLine = `分镜${i + 1}：${shot.duration}秒: ${shot.visualDescription}`
-    lines.push(shotLine)
+  const hasScene = sceneId !== null
+  const hasCharacters = characterList && characterList.length > 0
+  const hasProps = propList && propList.length > 0
+  
+  // 计算各素材的 @图片N 起始位置
+  // 顺序：场景(1) → 角色(2+) → 道具(角色后)
+  let currentSlotIndex = 1
+  
+  // 场景引用
+  if (hasScene) {
+    const sceneAtRef = `@图片${currentSlotIndex}`
+    currentSlotIndex++
+    
+    // 在文本开头添加场景引用（如果还没有的话）
+    const sceneRefPattern = new RegExp(`^\\s*${sceneName}`, 'm')
+    if (!result.includes(sceneAtRef)) {
+      // 查找场景名称第一次出现的位置，在前面插入 @图片N
+      const sceneNameIndex = result.indexOf(sceneName)
+      if (sceneNameIndex > -1) {
+        result = result.substring(0, sceneNameIndex) + `${sceneAtRef} ` + result.substring(sceneNameIndex)
+      }
+    }
+  }
+  
+  // 构建角色名到 @图片N 的映射
+  const charNameToAtMap = {}
+  if (hasCharacters) {
+    characterList.forEach((char, i) => {
+      charNameToAtMap[char.name] = `@图片${currentSlotIndex + i}`
+    })
+    currentSlotIndex += characterList.length
   }
 
-  return lines.join('\n')
+  // 构建道具名到 @图片N 的映射
+  const propNameToAtMap = {}
+  if (hasProps) {
+    propList.forEach((prop, i) => {
+      propNameToAtMap[prop.name] = `@图片${currentSlotIndex + i}`
+    })
+  }
+
+  // 将文案中的角色名替换为 @图片N
+  if (hasCharacters) {
+    // 按角色名长度降序排序，优先替换长名称（避免部分匹配问题）
+    const sortedCharNames = Object.keys(charNameToAtMap).sort((a, b) => b.length - a.length)
+    for (const charName of sortedCharNames) {
+      const atRef = charNameToAtMap[charName]
+      // 使用正则全局替换，确保所有出现的地方都替换
+      const regex = new RegExp(charName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')
+      result = result.replace(regex, atRef)
+    }
+  }
+
+  // 将文案中的道具名替换为 @图片N
+  if (hasProps) {
+    // 按道具名长度降序排序，优先替换长名称（避免部分匹配问题）
+    const sortedPropNames = Object.keys(propNameToAtMap).sort((a, b) => b.length - a.length)
+    for (const propName of sortedPropNames) {
+      const atRef = propNameToAtMap[propName]
+      // 使用正则全局替换，确保所有出现的地方都替换
+      const regex = new RegExp(propName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')
+      result = result.replace(regex, atRef)
+    }
+  }
+
+  console.log('[前端解析器-buildUniversalSegmentText] 处理后的全能提示词:', {
+    hasScene,
+    hasCharacters,
+    hasProps,
+    characterCount: characterList?.length || 0,
+    propCount: propList?.length || 0,
+    charNameToAtMap,
+    propNameToAtMap,
+    originalLength: originalBlock.length,
+    resultLength: result.length,
+    first200Chars: result.substring(0, 200)
+  })
+
+  return result
 }
 
 export function previewParseResult(text, context = {}) {

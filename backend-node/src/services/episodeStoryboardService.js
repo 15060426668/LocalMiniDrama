@@ -236,6 +236,14 @@ function getStoryboardsForEpisode(db, episodeId) {
       const sceneRow = db.prepare('SELECT * FROM scenes WHERE id = ? AND deleted_at IS NULL').get(r.scene_id);
       if (sceneRow) background = rowToScene(sceneRow);
     }
+    
+    // 读取道具关联
+    let propIds = [];
+    try {
+      const propLinks = db.prepare('SELECT prop_id FROM storyboard_props WHERE storyboard_id = ?').all(r.id);
+      propIds = propLinks.map((p) => p.prop_id);
+    } catch (_) {}
+    
     return {
       id: r.id,
       episode_id: r.episode_id,
@@ -268,6 +276,7 @@ function getStoryboardsForEpisode(db, episodeId) {
         if (typeof r.characters !== 'string') return Array.isArray(r.characters) ? r.characters : [];
         try { return JSON.parse(r.characters); } catch (_) { return []; }
       })(),
+      prop_ids: propIds,
       composed_image: r.composed_image,
       video_url: r.video_url,
       audio_local_path: r.audio_local_path ?? null,
