@@ -7034,9 +7034,10 @@ async function startBatchVideoGeneration() {
     let prevVideoItem = null  // 连贯帧：保存上一条已完成的视频记录
 
     let videoQueueIdx = 0
+    let batchVideoFailureStops = false // 单个失败即停止标志（非响应式）
     const videoWorker = async () => {
       while (videoQueueIdx < todo.length) {
-        if (batchVideoStopping.value) break
+        if (batchVideoStopping.value || batchVideoFailureStops) break
         const sb = todo[videoQueueIdx++]
         const universal = isSbUniversalMode(sb.id)
         const omniRefs = universal ? collectSbOmniReferenceAbsoluteUrls(sb) : []
@@ -7107,6 +7108,8 @@ async function startBatchVideoGeneration() {
               batchVideoErrors.value.push(`#${sb.storyboard_number ?? sb.id}: ${pollRes.error || '生成失败'}`)
               batchVideoProgress.value = { ...batchVideoProgress.value, failed: batchVideoProgress.value.failed + 1 }
               prevVideoItem = null
+              // 单个失败立即停止批量生成
+              batchVideoFailureStops = true
             } else if (contiguity && pollRes?.status === 'completed') {
               // 连贯帧：保存本条视频用于下一条
               const vList = sbVideos.value[sb.id] || []
@@ -7123,6 +7126,8 @@ async function startBatchVideoGeneration() {
           batchVideoErrors.value.push(`#${sb.storyboard_number ?? sb.id}: ${e.message || '提交失败'}`)
           batchVideoProgress.value = { ...batchVideoProgress.value, failed: batchVideoProgress.value.failed + 1 }
           if (contiguity) prevVideoItem = null
+          // 单个失败立即停止批量生成
+          batchVideoFailureStops = true
         } finally {
           generatingSbVideoIds.delete(sb.id)
         }

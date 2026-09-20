@@ -817,8 +817,8 @@ function routes(db, log) {
       // Apply normalization with segment context
       text = normalizeUniversalSegmentShotDurations(text, durationLabel, durationSec, {
         segment_title: currentSb?.segment_title || '',
-        prev_segment_title: prevShot2?.segment_title || null,
-        next_segment_title: nextShot2?.segment_title || null
+        prev_segment_title: prevShot?.segment_title || null,
+        next_segment_title: nextShot?.segment_title || null
       });
       
       text = normalizeUniversalSegmentAtImageSpacing(text);
