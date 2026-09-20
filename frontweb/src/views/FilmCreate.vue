@@ -3252,6 +3252,48 @@ const batchVideoProgress = ref({ current: 0, total: 0, failed: 0 })
 const batchVideoErrors = ref([])
 // P0-1: 连贯帧模式
 const videoFrameContiguity = ref(false)
+
+// 批量视频生成状态持久化 key
+const BATCH_VIDEO_STORAGE_KEY = 'batchVideoState'
+
+function saveBatchVideoState() {
+  try {
+    localStorage.setItem(BATCH_VIDEO_STORAGE_KEY, JSON.stringify({
+      running: batchVideoRunning.value,
+      stopping: batchVideoStopping.value,
+      progress: batchVideoProgress.value,
+      errors: batchVideoErrors.value,
+      episodeId: currentEpisodeId.value,
+    }))
+  } catch (_) {}
+}
+
+function restoreBatchVideoState() {
+  try {
+    const raw = localStorage.getItem(BATCH_VIDEO_STORAGE_KEY)
+    if (!raw) return false
+    const state = JSON.parse(raw)
+    // 只恢复当前剧集的未完成状态
+    if (state.episodeId !== currentEpisodeId.value) {
+      localStorage.removeItem(BATCH_VIDEO_STORAGE_KEY)
+      return false
+    }
+    if (state.running) {
+      batchVideoRunning.value = true
+      batchVideoStopping.value = !!state.stopping
+      batchVideoProgress.value = state.progress || { current: 0, total: 0, failed: 0 }
+      batchVideoErrors.value = state.errors || []
+      return true
+    }
+  } catch (_) {}
+  return false
+}
+
+function clearBatchVideoState() {
+  try {
+    localStorage.removeItem(BATCH_VIDEO_STORAGE_KEY)
+  } catch (_) {}
+}
 // P0-3: 分镜超分辨率 loading set
 const upscalingSbIds = reactive(new Set())
 // P2-4: TTS 状态
@@ -7072,6 +7114,7 @@ async function startBatchVideoGeneration() {
   batchVideoErrors.value = []
   batchVideoStopping.value = false
   batchVideoRunning.value = true
+  saveBatchVideoState()
   try {
     // 仅当媒体数据尚未加载时才全量拉取，避免点击时触发大量冗余请求
     if (Object.keys(sbVideos.value).length === 0) {
@@ -7199,6 +7242,7 @@ async function startBatchVideoGeneration() {
         }
         videoDoneCount++
         batchVideoProgress.value = { ...batchVideoProgress.value, current: videoDoneCount }
+        saveBatchVideoState()
       }
     }
     await Promise.allSettled(Array.from({ length: Math.min(videoConcurrency, todo.length) }, () => videoWorker()))
@@ -7210,6 +7254,8 @@ async function startBatchVideoGeneration() {
     }
   } finally {
     batchVideoRunning.value = false
+    batchVideoStopping.value = false
+    clearBatchVideoState()
   }
 }
 
@@ -8277,6 +8323,8 @@ function applyRouteToStore() {
 onMounted(async () => {
   loadPipelineConcurrency()
   applyRouteToStore()
+  // 恢复批量视频生成状态
+  restoreBatchVideoState()
 })
 
 watch(() => route.params.id, () => {
