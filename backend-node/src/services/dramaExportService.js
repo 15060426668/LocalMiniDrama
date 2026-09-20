@@ -69,7 +69,16 @@ function parseSbChars(raw) {
   if (!raw) return [];
   try {
     const arr = typeof raw === 'string' ? JSON.parse(raw) : raw;
-    return Array.isArray(arr) ? arr.map(Number).filter(n => !isNaN(n)) : [];
+    if (!Array.isArray(arr)) return [];
+    
+    // 兼容两种格式：
+    // 1. 旧格式：纯数字数组 [2, 1]
+    // 2. 新格式：对象数组 [{id: 2, name: "丹珍"}, {id: 1, name: "林君雪"}]
+    return arr.map(item => {
+      if (typeof item === 'number') return item;
+      if (typeof item === 'object' && item !== null) return item.id;
+      return NaN;
+    }).filter(n => !isNaN(n));
   } catch (_) { return []; }
 }
 
