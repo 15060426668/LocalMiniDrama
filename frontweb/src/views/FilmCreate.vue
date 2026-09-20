@@ -4810,7 +4810,16 @@ function getSbSelectedCharacters(sbId) {
   const ids = getSbCharacterIds(sbId)
   if (!ids.length) return []
   const list = characters.value ?? []
-  return ids.map((id) => list.find((c) => Number(c.id) === Number(id))).filter(Boolean)
+  console.log(`[getSbSelectedCharacters] sbId: ${sbId}, 角色IDs: [${ids.join(', ')}], 角色列表总数: ${list.length}`)
+  const result = ids.map((id) => {
+    const found = list.find((c) => Number(c.id) === Number(id))
+    if (!found) {
+      console.warn(`[getSbSelectedCharacters] 角色ID ${id} 在列表中未找到`)
+    }
+    return found
+  }).filter(Boolean)
+  console.log(`[getSbSelectedCharacters] 查找结果: ${result.map(c => `id:${c.id}|name:${c.name}`).join(', ') || '未找到'}`)
+  return result
 }
 
 /** 当前分镜选中的物品对象列表（用于下方缩略图） */

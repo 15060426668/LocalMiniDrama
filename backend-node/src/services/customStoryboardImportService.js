@@ -54,7 +54,7 @@ function importCustomStoryboards(db, log, params) {
       characters, creation_mode, status, segment_index, segment_title,
       created_at, updated_at
     ) VALUES (
-      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'universal', 'pending', ?, ?, ?, ?
+      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )
   `);
 
@@ -67,6 +67,7 @@ function importCustomStoryboards(db, log, params) {
 
   db.transaction(() => {
     for (const sb of storyboards) {
+      console.log(`[导入分镜-INSERT前] title=${sb.title}, characters=${sb.characters}`);
       const result = insertStmt.run(
         episodeId,
         sb.scene_id || null,
@@ -94,6 +95,8 @@ function importCustomStoryboards(db, log, params) {
         sb.image_prompt || null,
         sb.polished_prompt || null,
         sb.characters || '[]',
+        'universal',
+        'pending',
         sb.segment_index || 1,
         sb.segment_title || '',
         now,
@@ -101,6 +104,10 @@ function importCustomStoryboards(db, log, params) {
       );
 
       insertedIds.push(result.lastInsertRowid);
+
+      // 关键调试：验证刚插入的characters字段是否正确保存
+      const verifyRow = db.prepare('SELECT characters FROM storyboards WHERE id = ?').get(result.lastInsertRowid);
+      console.log(`[导入分镜-验证] sbId=${result.lastInsertRowid}, title=${sb.title}, characters字段=${verifyRow?.characters}`);
 
       // 插入道具关联到 storyboard_props 表
       // 关键修复：sb.prop_ids 是 JSON 字符串，需要解析为数组
@@ -192,7 +199,8 @@ function parseVideoBlock(block, context) {
   // 例如："SC02 明家破旧土屋 → 厨房后门" -> "SC02 明家破旧土屋厨房后门"
   let rawSceneName = headerMatch[2].trim();
   const sceneName = rawSceneName.replace(/[→→]+/g, '').replace(/\s+/g, ' ').trim();
-  const characterNames = headerMatch[3].split('、').map(n => n.trim()).filter(Boolean);
+  // 关键修复：不再从头部信息提取角色名，只从【出场人物】区块提取
+  // const characterNames = headerMatch[3].split('、').map(n => n.trim()).filter(Boolean);
 
   const sceneStateMatch = block.match(/【场景与连续状态】([\s\S]*?)(?=【|$)/);
   const lightingMatch = block.match(/【光线】([\s\S]*?)(?=【|$)/);
@@ -205,8 +213,12 @@ function parseVideoBlock(block, context) {
   const lightingLock = lightingLockMatch ? lightingLockMatch[1].trim() : '';
   const propsText = propsMatch ? propsMatch[1].trim() : '';
   
-  // 优先使用【出场人物】区块，否则使用头部的人物信息
-  let charactersText = charactersMatch ? charactersMatch[1].trim() : characterNames.join('、');
+  // 关键修复：始终使用头部的人物信息，因为【出场人物】区块可能不完整
+  // 头部信息包含所有应该出现在当前分镜中的角色
+  const headerCharacterNames = headerMatch[3].split('、').map(n => n.trim()).filter(Boolean);
+  let charactersText = headerCharacterNames.join('、');
+  
+  console.log('[角色提取] 使用头部人物信息:', charactersText);
   
   // 清理角色名：只保留第一行，去除后续的镜头描述
   // 例如："丹珍、林君雪\n\n镜头01..." -> "丹珍、林君雪"
@@ -215,13 +227,16 @@ function parseVideoBlock(block, context) {
   const sceneId = matchScene(sceneName, sceneMap, db, episodeId);
 
   // 关键修复：先清理括号内的描述信息，再分割角色名
-  // 例如："陈婶子（高大健壮、圆脸）。" -> "陈婶子"
-  const cleanedCharactersText = charactersText.replace(/[（(][^）)]*[）)].*/g, '');
-  const allCharacterNames = cleanedCharactersText.split(/[、，,]/).map(n => n.trim()).filter(Boolean);
+  // 例如："陈婶子（高大健壮、圆脸）。明樱（红棉袄）、明海" -> "陈婶子。明樱、明海"
+  // 注意：不能使用 .* 否则会删除括号后面的内容！
+  const cleanedCharactersText = charactersText.replace(/[（(][^）)]*[）)]/g, '');
+  // 清理角色名末尾的句号等标点符号
+  const allCharacterNames = cleanedCharactersText.split(/[、，,]/).map(n => n.replace(/[。！？.!?\s]+$/g, '').trim()).filter(Boolean);
   
   // 去重：避免同一个视频块内重复匹配相同角色
   const uniqueCharacterNames = [...new Set(allCharacterNames)];
   const characterList = matchCharactersFromDatabase(context.db, episodeId, uniqueCharacterNames);
+  console.log('[导入分镜] matchCharactersFromDatabase返回后, characterList:', characterList.map(c => `${c.id}:${c.name}`).join(', '));
 
   // 解析并匹配道具
   // 关键修复：只提取【道具】区块中第一行的内容，避免包含后续的镜头描述
@@ -235,14 +250,23 @@ function parseVideoBlock(block, context) {
 
   const shots = parseShots(block);
 
+  console.log('[导入分镜] buildUniversalSegmentText调用前, characterList:', characterList.map(c => `${c.id}:${c.name}`).join(', '));
+
   // 保留原始导入文本，并在其中添加 @图片N 引用以绑定素材（场景、角色、道具）
   const universalSegmentText = buildUniversalSegmentText(block, totalDuration, sceneName, lighting, sceneId, characterList, propList);
+
+  console.log('[导入分镜] buildUniversalSegmentText调用后, characterList:', characterList.map(c => `${c.id}:${c.name}`).join(', '));
 
   // Build dialogue from all shots
   const allDialogues = shots
     .map(shot => shot.dialogue)
     .filter(d => d && d.trim())
     .join('\n');
+
+  const charactersJson = JSON.stringify(characterList);
+
+  console.log('[导入分镜] 即将构建storyboard对象, characterList:', characterList.map(c => `${c.id}:${c.name}`).join(', '));
+  console.log('[导入分镜] charactersJson:', charactersJson);
 
   const storyboard = {
     episode_id: episodeId,
@@ -269,7 +293,7 @@ function parseVideoBlock(block, context) {
     video_prompt: '',
     image_prompt: '',
     polished_prompt: '',
-    characters: JSON.stringify(characterList),
+    characters: charactersJson,
     prop_ids: JSON.stringify(propList.map(p => p.id)),
     scene_id: sceneId,
     creation_mode: 'universal',
@@ -665,6 +689,7 @@ function matchPropsFromDatabase(db, episodeId, names) {
   console.log('[道具匹配] 数据库中的道具列表:', allProps.map(p => ({ name: p.name, hasImage: !!(p.image_url || p.local_path) })));
 
   const matchedProps = [];
+  const matchedIds = new Set(); // 去重：避免同一个道具ID被多次添加
 
   for (const name of names) {
     console.log('[道具匹配] 尝试匹配道具:', name);
@@ -678,11 +703,18 @@ function matchPropsFromDatabase(db, episodeId, names) {
         console.warn('[道具匹配] 道具名称匹配但无图片素材，跳过:', name);
         continue;
       }
+      // 去重检查
+      if (matchedIds.has(matched.id)) {
+        console.log('[道具匹配] 道具ID已存在，跳过:', name, '-> id:', matched.id);
+        continue;
+      }
       console.log('[道具匹配] 精确匹配成功:', name, '-> id:', matched.id);
       matchedProps.push({
         id: matched.id,
-        name: matched.name
+        name: matched.name,
+        originalName: name // 保存原始名称用于替换
       });
+      matchedIds.add(matched.id);
       continue;
     }
 
@@ -696,11 +728,18 @@ function matchPropsFromDatabase(db, episodeId, names) {
         console.warn('[道具匹配] 道具名称匹配但无图片素材，跳过:', name);
         continue;
       }
+      // 去重检查
+      if (matchedIds.has(matched.id)) {
+        console.log('[道具匹配] 道具ID已存在，跳过:', name, '->', matched.name, 'id:', matched.id);
+        continue;
+      }
       console.log('[道具匹配] 模糊匹配成功:', name, '->', matched.name, 'id:', matched.id);
       matchedProps.push({
         id: matched.id,
-        name: matched.name
+        name: matched.name,
+        originalName: name // 保存原始名称用于替换
       });
+      matchedIds.add(matched.id);
       continue;
     }
 
@@ -713,11 +752,18 @@ function matchPropsFromDatabase(db, episodeId, names) {
         console.warn('[道具匹配] 道具名称匹配但无图片素材，跳过:', name);
         continue;
       }
+      // 去重检查
+      if (matchedIds.has(matched.id)) {
+        console.log('[道具匹配] 道具ID已存在，跳过:', name, '->', matched.name, 'id:', matched.id);
+        continue;
+      }
       console.log('[道具匹配] 包含匹配成功:', name, '->', matched.name, 'id:', matched.id);
       matchedProps.push({
         id: matched.id,
-        name: matched.name
+        name: matched.name,
+        originalName: name // 保存原始名称用于替换
       });
+      matchedIds.add(matched.id);
       continue;
     }
 
@@ -749,14 +795,19 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
   const hasCharacters = characterList && characterList.length > 0;
   const hasProps = propList && propList.length > 0;
   
+  console.log(`[buildUniversalSegmentText] 初始状态: sceneId=${sceneId}, hasScene=${hasScene}, characterCount=${characterList?.length || 0}, propCount=${propList?.length || 0}`);
+  
   // 计算各素材的 @图片N 起始位置
   // 顺序：场景(1) → 角色(2+) → 道具(角色后)
   let currentSlotIndex = 1;
+  console.log(`[buildUniversalSegmentText] 初始currentSlotIndex: ${currentSlotIndex}`);
   
   // 1. 场景引用：在【场景与连续状态】区块中添加 @图片N
   if (hasScene) {
     const sceneAtRef = `@图片${currentSlotIndex}`;
+    console.log(`[buildUniversalSegmentText] 场景绑定: @图片${currentSlotIndex}, 之后currentSlotIndex++`);
     currentSlotIndex++;
+    console.log(`[buildUniversalSegmentText] 场景绑定后currentSlotIndex: ${currentSlotIndex}`);
     
     // 查找【场景与连续状态】区块
     const sceneSectionMatch = result.match(/【场景与连续状态】([\s\S]*?)(?=\n\s*【|$)/);
@@ -774,6 +825,8 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
   
   // 2. 角色引用：只在【出场人物】区块中添加 @图片N
   if (hasCharacters) {
+    console.log(`[buildUniversalSegmentText] 角色绑定开始: currentSlotIndex=${currentSlotIndex}, characterCount=${characterList.length}`);
+    
     // 查找【出场人物】区块
     const charSectionMatch = result.match(/【出场人物】([\s\S]*?)(?=\n\s*【|$)/);
     if (charSectionMatch) {
@@ -784,6 +837,7 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
       let modifiedCharSection = charSectionFull;
       characterList.forEach((char, i) => {
         const atRef = `@图片${currentSlotIndex + i}`;
+        console.log(`[buildUniversalSegmentText] 角色绑定: ${char.name} -> ${atRef}`);
         // 只替换【出场人物】区块中的角色名
         const escapedName = char.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         modifiedCharSection = modifiedCharSection.replace(
@@ -796,31 +850,45 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
       result = result.substring(0, charSectionStart) + modifiedCharSection + result.substring(charSectionStart + charSectionFull.length);
     }
     
+    console.log(`[buildUniversalSegmentText] 角色绑定后currentSlotIndex: ${currentSlotIndex} + ${characterList.length} = ${currentSlotIndex + characterList.length}`);
     currentSlotIndex += characterList.length;
+    console.log(`[buildUniversalSegmentText] 角色绑定最终currentSlotIndex: ${currentSlotIndex}`);
   }
 
   // 3. 道具引用：只在【道具】区块中添加 @图片N（关键修复：绝不替换其他区域的文本）
   if (hasProps && propList.length > 0) {
+    console.log(`[道具绑定] 开始绑定道具, currentSlotIndex: ${currentSlotIndex}, propList数量: ${propList.length}`);
+    console.log(`[道具绑定] propList详情: ${propList.map((p, i) => `索引${i}: id=${p.id}|name=${p.name}|originalName=${p.originalName}|@图片${currentSlotIndex + i}`).join(', ')}`);
+    
     // 查找【道具】区块
     const propSectionMatch = result.match(/【道具】([\s\S]*?)(?=\n\s*【|$)/);
     if (propSectionMatch) {
       const propSectionStart = propSectionMatch.index;
       const propSectionFull = propSectionMatch[0];
       
+      console.log(`[道具绑定] 找到【道具】区块: ${propSectionFull.substring(0, 100)}`);
+      
       // 在【道具】区块中为每个道具添加 @图片N
-      // 关键：只修改 propSectionFull 这个局部字符串，不会影响画面描述等其他区域
+      // 关键修复：使用 originalName（原始名称）进行替换，而不是数据库中的完整名称
+      // 例如：【道具】区块中是"十二块灵石"，originalName是"十二块灵石"，而不是"十二块灵石（玲珑石阵）"
       let modifiedPropSection = propSectionFull;
       propList.forEach((prop, i) => {
         const atRef = `@图片${currentSlotIndex + i}`;
+        const nameToReplace = prop.originalName || prop.name; // 优先使用原始名称
+        console.log(`[道具绑定] 正在替换: ${nameToReplace} -> ${atRef} ${nameToReplace}`);
         // 只替换【道具】区块中的道具名（使用精确匹配，避免替换其他区域的相同文本）
-        const escapedName = prop.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const escapedName = nameToReplace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         // 使用精确匹配：道具名前后不能是中文字符（避免"手机"匹配到"智能手机"）
         const regex = new RegExp(`(?<![\\u4e00-\\u9fa5a-zA-Z0-9])${escapedName}(?![\\u4e00-\\u9fa5a-zA-Z0-9])`, 'g');
-        modifiedPropSection = modifiedPropSection.replace(regex, `${atRef} ${prop.name}`);
+        modifiedPropSection = modifiedPropSection.replace(regex, `${atRef} ${nameToReplace}`);
       });
+      
+      console.log(`[道具绑定] 替换后的【道具】区块: ${modifiedPropSection.substring(0, 200)}`);
       
       // 替换回原文
       result = result.substring(0, propSectionStart) + modifiedPropSection + result.substring(propSectionStart + propSectionFull.length);
+    } else {
+      console.warn('[道具绑定] 未找到【道具】区块，跳过道具引用添加');
     }
     
     currentSlotIndex += propList.length;

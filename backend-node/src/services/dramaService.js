@@ -335,12 +335,21 @@ function rowToEpisode(r) {
 }
 
 function parseStoryboardCharacters(charactersStr) {
-  if (!charactersStr || typeof charactersStr !== 'string') return [];
+  if (!charactersStr || typeof charactersStr !== 'string') {
+    console.log('[parseStoryboardCharacters] 输入为空或非字符串, type:', typeof charactersStr, 'value:', charactersStr);
+    return [];
+  }
   try {
     const parsed = JSON.parse(charactersStr);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.map((c) => (typeof c === 'object' && c != null && c.id != null ? Number(c.id) : Number(c))).filter((n) => Number.isFinite(n));
-  } catch (_) {
+    if (!Array.isArray(parsed)) {
+      console.log('[parseStoryboardCharacters] 解析后不是数组:', typeof parsed);
+      return [];
+    }
+    const result = parsed.map((c) => (typeof c === 'object' && c != null && c.id != null ? Number(c.id) : Number(c))).filter((n) => Number.isFinite(n));
+    console.log('[parseStoryboardCharacters] 成功解析, 原始长度:', charactersStr.length, '结果数量:', result.length);
+    return result;
+  } catch (e) {
+    console.log('[parseStoryboardCharacters] JSON解析失败, 原始值:', charactersStr.substring(0, 300), '错误:', e.message);
     return [];
   }
 }

@@ -76,8 +76,11 @@ function parseVideoBlock(block, context) {
   const lightingLock = lightingLockMatch ? lightingLockMatch[1].trim() : ''
   const propsText = propsMatch ? propsMatch[1].trim() : ''
   
-  // 优先使用【出场人物】区块，否则使用头部的人物信息
-  let charactersText = charactersMatch ? charactersMatch[1].trim() : characterNames.join('、')
+  // 关键修复：始终使用头部的人物信息，因为【出场人物】区块可能不完整
+  // 头部信息包含所有应该出现在当前分镜中的角色
+  let charactersText = characterNames.join('、')
+  
+  console.log('[前端解析器-视频' + (headerMatch[0].match(/【视频编号([\d-]+)】/)?.[1] || startShotNumber) + '] charactersText:', charactersText.substring(0, 100));
   
   // 清理角色名：只保留第一行，去除后续的镜头描述
   charactersText = charactersText.split(/\n/)[0].trim()
@@ -85,9 +88,11 @@ function parseVideoBlock(block, context) {
   const sceneId = matchScene(sceneName, sceneMap)
 
   // 关键修复：先清理括号内的描述信息，再分割角色名
-  // 例如："陈婶子（高大健壮、圆脸）。" -> "陈婶子"
-  const cleanedCharactersText = charactersText.replace(/[（(][^）)]*[）)].*/g, '')
-  const allCharacterNames = cleanedCharactersText.split(/[、，,]/).map(n => n.trim()).filter(Boolean)
+  // 例如："陈婶子（高大健壮、圆脸）。明樱（红棉袄）、明海" -> "陈婶子。明樱、明海"
+  // 注意：不能使用 .* 否则会删除括号后面的内容！
+  const cleanedCharactersText = charactersText.replace(/[（(][^）)]*[）)]/g, '')
+  // 清理角色名末尾的句号等标点符号
+  const allCharacterNames = cleanedCharactersText.split(/[、，,]/).map(n => n.replace(/[。！？.!?\s]+$/g, '').trim()).filter(Boolean)
   
   // 去重
   const uniqueCharacterNames = [...new Set(allCharacterNames)]
@@ -451,7 +456,7 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
     }
   }
 
-  console.log('[前端解析器-buildUniversalSegmentText] 处理后的全能提示词:', {
+  console.log('[前端解析器-buildUniversalSegmentText] 处理后的全能提示词:', JSON.stringify({
     hasScene,
     hasCharacters,
     hasProps,
@@ -460,7 +465,7 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
     originalLength: originalBlock.length,
     resultLength: result.length,
     first300Chars: result.substring(0, 300)
-  })
+  }))
 
   return result
 }
