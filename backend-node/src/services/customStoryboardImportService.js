@@ -463,9 +463,9 @@ function matchScene(name, sceneMap, db, episodeId) {
     if (episode) {
       console.log('[场景匹配] 开始匹配场景:', name, 'drama_id:', episode.drama_id);
       
-      // Get all scenes for this drama
+      // Get all scenes for this drama (包含图片信息)
       const allScenes = db.prepare(
-        'SELECT id, location FROM scenes WHERE drama_id = ? AND deleted_at IS NULL ORDER BY location ASC'
+        'SELECT id, location, image_url, local_path FROM scenes WHERE drama_id = ? AND deleted_at IS NULL ORDER BY location ASC'
       ).all(episode.drama_id);
 
       console.log('[场景匹配] 数据库中的场景列表:', allScenes.map(s => s.location));
@@ -473,6 +473,12 @@ function matchScene(name, sceneMap, db, episodeId) {
       // Exact match
       let matched = allScenes.find(s => s.location === name);
       if (matched) {
+        // 检查是否有图片素材
+        const hasImage = matched.image_url || matched.local_path;
+        if (!hasImage) {
+          console.warn('[场景匹配] 场景名称匹配但无图片素材，跳过:', name);
+          return null;
+        }
         console.log('[场景匹配] 精确匹配成功:', name, '-> id:', matched.id);
         return matched.id;
       }
@@ -481,6 +487,12 @@ function matchScene(name, sceneMap, db, episodeId) {
       const normalizedName = name.replace(/[·\s\-_]/g, '');
       matched = allScenes.find(s => s.location.replace(/[·\s\-_]/g, '') === normalizedName);
       if (matched) {
+        // 检查是否有图片素材
+        const hasImage = matched.image_url || matched.local_path;
+        if (!hasImage) {
+          console.warn('[场景匹配] 场景名称匹配但无图片素材，跳过:', name);
+          return null;
+        }
         console.log('[场景匹配] 模糊匹配成功:', name, '->', matched.location, 'id:', matched.id);
         return matched.id;
       }
@@ -488,6 +500,12 @@ function matchScene(name, sceneMap, db, episodeId) {
       // Contains match
       matched = allScenes.find(s => s.location.includes(name) || name.includes(s.location));
       if (matched) {
+        // 检查是否有图片素材
+        const hasImage = matched.image_url || matched.local_path;
+        if (!hasImage) {
+          console.warn('[场景匹配] 场景名称匹配但无图片素材，跳过:', name);
+          return null;
+        }
         console.log('[场景匹配] 包含匹配成功:', name, '->', matched.location, 'id:', matched.id);
         return matched.id;
       }
@@ -519,12 +537,12 @@ function matchCharactersFromDatabase(db, episodeId, names) {
 
   console.log('[角色匹配] 开始匹配, drama_id:', episode.drama_id, '角色名:', names);
 
-  // 获取该 drama 下所有角色
+  // 获取该 drama 下所有角色（包含图片信息）
   const allCharacters = db.prepare(
-    'SELECT id, name FROM characters WHERE drama_id = ? AND deleted_at IS NULL ORDER BY name ASC'
+    'SELECT id, name, image_url, local_path FROM characters WHERE drama_id = ? AND deleted_at IS NULL ORDER BY name ASC'
   ).all(episode.drama_id);
 
-  console.log('[角色匹配] 数据库中的角色列表:', allCharacters.map(c => c.name));
+  console.log('[角色匹配] 数据库中的角色列表:', allCharacters.map(c => ({ name: c.name, hasImage: !!(c.image_url || c.local_path) })));
 
   const matchedCharacters = [];
 
@@ -534,6 +552,12 @@ function matchCharactersFromDatabase(db, episodeId, names) {
     // 精确匹配
     let matched = allCharacters.find(c => c.name === name);
     if (matched) {
+      // 检查是否有图片素材
+      const hasImage = matched.image_url || matched.local_path;
+      if (!hasImage) {
+        console.warn('[角色匹配] 角色名称匹配但无图片素材，跳过:', name);
+        continue;
+      }
       console.log('[角色匹配] 精确匹配成功:', name, '-> id:', matched.id);
       matchedCharacters.push({
         id: matched.id,
@@ -546,6 +570,12 @@ function matchCharactersFromDatabase(db, episodeId, names) {
     const normalizedName = name.replace(/[·\s\-_]/g, '');
     matched = allCharacters.find(c => c.name.replace(/[·\s\-_]/g, '') === normalizedName);
     if (matched) {
+      // 检查是否有图片素材
+      const hasImage = matched.image_url || matched.local_path;
+      if (!hasImage) {
+        console.warn('[角色匹配] 角色名称匹配但无图片素材，跳过:', name);
+        continue;
+      }
       console.log('[角色匹配] 模糊匹配成功:', name, '->', matched.name, 'id:', matched.id);
       matchedCharacters.push({
         id: matched.id,
@@ -557,6 +587,12 @@ function matchCharactersFromDatabase(db, episodeId, names) {
     // 包含匹配
     matched = allCharacters.find(c => c.name.includes(name) || name.includes(c.name));
     if (matched) {
+      // 检查是否有图片素材
+      const hasImage = matched.image_url || matched.local_path;
+      if (!hasImage) {
+        console.warn('[角色匹配] 角色名称匹配但无图片素材，跳过:', name);
+        continue;
+      }
       console.log('[角色匹配] 包含匹配成功:', name, '->', matched.name, 'id:', matched.id);
       matchedCharacters.push({
         id: matched.id,
@@ -596,12 +632,12 @@ function matchPropsFromDatabase(db, episodeId, names) {
 
   console.log('[道具匹配] 开始匹配, drama_id:', episode.drama_id, '道具名:', names);
 
-  // 获取该 drama 下所有道具
+  // 获取该 drama 下所有道具（包含图片信息）
   const allProps = db.prepare(
-    'SELECT id, name FROM props WHERE drama_id = ? AND deleted_at IS NULL ORDER BY name ASC'
+    'SELECT id, name, image_url, local_path FROM props WHERE drama_id = ? AND deleted_at IS NULL ORDER BY name ASC'
   ).all(episode.drama_id);
 
-  console.log('[道具匹配] 数据库中的道具列表:', allProps.map(p => p.name));
+  console.log('[道具匹配] 数据库中的道具列表:', allProps.map(p => ({ name: p.name, hasImage: !!(p.image_url || p.local_path) })));
 
   const matchedProps = [];
 
@@ -611,6 +647,12 @@ function matchPropsFromDatabase(db, episodeId, names) {
     // 精确匹配
     let matched = allProps.find(p => p.name === name);
     if (matched) {
+      // 检查是否有图片素材
+      const hasImage = matched.image_url || matched.local_path;
+      if (!hasImage) {
+        console.warn('[道具匹配] 道具名称匹配但无图片素材，跳过:', name);
+        continue;
+      }
       console.log('[道具匹配] 精确匹配成功:', name, '-> id:', matched.id);
       matchedProps.push({
         id: matched.id,
@@ -623,6 +665,12 @@ function matchPropsFromDatabase(db, episodeId, names) {
     const normalizedName = name.replace(/[·\s\-_]/g, '');
     matched = allProps.find(p => p.name.replace(/[·\s\-_]/g, '') === normalizedName);
     if (matched) {
+      // 检查是否有图片素材
+      const hasImage = matched.image_url || matched.local_path;
+      if (!hasImage) {
+        console.warn('[道具匹配] 道具名称匹配但无图片素材，跳过:', name);
+        continue;
+      }
       console.log('[道具匹配] 模糊匹配成功:', name, '->', matched.name, 'id:', matched.id);
       matchedProps.push({
         id: matched.id,
@@ -634,6 +682,12 @@ function matchPropsFromDatabase(db, episodeId, names) {
     // 包含匹配
     matched = allProps.find(p => p.name.includes(name) || name.includes(p.name));
     if (matched) {
+      // 检查是否有图片素材
+      const hasImage = matched.image_url || matched.local_path;
+      if (!hasImage) {
+        console.warn('[道具匹配] 道具名称匹配但无图片素材，跳过:', name);
+        continue;
+      }
       console.log('[道具匹配] 包含匹配成功:', name, '->', matched.name, 'id:', matched.id);
       matchedProps.push({
         id: matched.id,
