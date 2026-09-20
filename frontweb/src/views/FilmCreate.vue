@@ -4540,6 +4540,9 @@ function onSbImageFileChange(ev) {
 
 function syncStoryboardStateFromEpisode(ep) {
   const boards = ep?.storyboards || []
+  const epProps = ep?.props || []
+  const epPropsText = epProps.map(p => `id:${p.id}|name:${p.name}`).join(', ')
+  console.log(`[syncStoryboardStateFromEpisode] episode.props数量: ${epProps.length}, 列表: ${epPropsText || '空'}`)
   const nextCharIds = {}
   const nextPropIds = {}
   const nextScene = {}
@@ -4780,7 +4783,12 @@ function getSbSelectedProps(sbId) {
   const ids = getSbPropIds(sbId)
   if (!ids.length) return []
   const list = props.value ?? []
-  return ids.map((id) => list.find((p) => Number(p.id) === Number(id))).filter(Boolean)
+  const propsText = list.map(p => `id:${p.id}|name:${p.name}`).join(', ')
+  console.log(`[getSbSelectedProps] sbId: ${sbId}, propIds: [${ids.join(', ')}], props列表: ${propsText || '空'}`)
+  const result = ids.map((id) => list.find((p) => Number(p.id) === Number(id))).filter(Boolean)
+  const resultText = result.map(p => `id:${p.id}|name:${p.name}`).join(', ')
+  console.log(`[getSbSelectedProps] 查找结果: ${resultText || '未找到'}`)
+  return result
 }
 
 async function onStoryboardCharacterChange(sbId) {
@@ -6192,7 +6200,10 @@ function getSbUniversalOmniRefSlots(sb) {
       thumbUrl: hasAssetImage(c) ? assetImageUrl(c) : null,
     })
   }
-  for (const p of getSbSelectedProps(sb.id)) {
+  const selectedProps = getSbSelectedProps(sb.id)
+  const slotsText = out.map(s => `idx:${s.index}|kind:${s.kind}|name:${s.name}`).join(', ')
+  console.log(`[getSbUniversalOmniRefSlots] sbId: ${sb.id}, propIds: [${getSbPropIds(sb.id).join(', ')}], selectedProps: ${selectedProps.map(p => `id:${p.id}|name:${p.name}`).join(', ') || '空'}`)
+  for (const p of selectedProps) {
     out.push({
       index: idx++,
       kind: 'prop',
@@ -6200,6 +6211,8 @@ function getSbUniversalOmniRefSlots(sb) {
       thumbUrl: hasAssetImage(p) ? assetImageUrl(p) : null,
     })
   }
+  const finalSlotsText = out.map(s => `idx:${s.index}|kind:${s.kind}|name:${s.name}`).join(', ')
+  console.log(`[getSbUniversalOmniRefSlots] final slots: ${finalSlotsText || '空'}`)
   return out
 }
 

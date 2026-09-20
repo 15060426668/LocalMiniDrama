@@ -92,8 +92,14 @@ function parseVideoBlock(block, context) {
     name: name
   }))
 
-  // Parse props
-  const propNames = propsText ? propsText.split(/[、，,]/).map(n => n.trim()).filter(Boolean) : []
+  // 解析并匹配道具
+  // 关键修复：只提取【道具】区块中第一行的内容，避免包含后续的镜头描述
+  let propNames = [];
+  if (propsText) {
+    // 只取第一行，遇到空行或"镜头"关键词时停止
+    const firstLine = propsText.split(/\n/)[0].trim();
+    propNames = firstLine.split(/[、，,]/).map(n => n.trim()).filter(Boolean);
+  }
   const propList = propNames.map(name => ({
     id: null,
     name: name

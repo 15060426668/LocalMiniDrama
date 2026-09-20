@@ -170,7 +170,7 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
           `SELECT p.id, p.name, p.local_path, p.image_url FROM storyboard_props sp
          JOIN props p ON p.id = sp.prop_id AND p.deleted_at IS NULL
          WHERE sp.storyboard_id = ?
-         ORDER BY sp.prop_id ASC`
+         ORDER BY sp.rowid ASC`
         )
         .all(sbId) || [];
   } catch (_) {
@@ -268,6 +268,21 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
         : [
             'CHARACTER_IMAGE_BINDING: 当前无「角色」参考槽位；若出现人物且 @图片1 为场景，勿将人物外貌写在 @图片1。',
           ].join('\n');
+
+  // 新增：限定 @图片N 仅在【出场人物】【场景与连续状态】【道具】中使用
+  const imageBindingScopeBlock = [
+    'IMAGE_BINDING_SCOPE（@图片N 使用范围限定）:',
+    '- 仅在以下三个区块中使用 @图片N 绑定：',
+    '  1.【出场人物】：描述人物外貌、表情、动作时使用对应角色的 @图片N',
+    '  2.【场景与连续状态】：描述环境、光影、陈设、空间关系时使用 @图片1（场景）',
+    '  3.【道具】：描述道具形态、位置、使用时使用对应道具的 @图片N',
+    '- 以下区块禁止使用 @图片N，必须用纯文本描述：',
+    '  - 运镜描写（如缓推轨、横移、定镜、摇镜等）',
+    '  - 时间轴与节奏（如 T1秒、T2秒 等时长标注）',
+    '  - 情绪与氛围（如紧张、温馨、悬疑等）',
+    '  - 音效与对白（如角色说话、环境音等）',
+    '  - 转场与衔接（如淡入淡出、切镜等）',
+  ].join('\n');
 
   if (slots.length === 0 && !forceWithoutReferenceImages) {
     return {
@@ -472,6 +487,7 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
     imageSlotMapBlock,
     sceneLayoutBlock || null,
     charBindingBlock,
+    imageBindingScopeBlock,
     styleHintBlock,
     refContract,
     assetLine,
