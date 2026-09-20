@@ -2622,6 +2622,8 @@
     <ImportCustomStoryboardDialog
       ref="importCustomStoryboardDialogRef"
       :episode-id="currentEpisodeId"
+      :scene-map="sceneMapForImport"
+      :character-map="characterMapForImport"
       @imported="onCustomStoryboardImported"
       @close="() => {}"
     />
@@ -2826,6 +2828,34 @@ const currentEpisode = computed(() => store.currentEpisode)
 const currentEpisodeId = computed(() => store.currentEpisode?.id ?? null)
 const videoProgress = computed(() => store.videoProgress)
 const videoStatus = computed(() => store.videoStatus)
+
+// 构建导入分镜用的场景映射表：{ "场景名称": sceneId }
+const sceneMapForImport = computed(() => {
+  const map = {}
+  const sceneList = scenes.value || []
+  for (const s of sceneList) {
+    const location = (s.location || '').trim()
+    if (location) {
+      map[location] = s.id
+    }
+  }
+  console.log('[sceneMapForImport] 场景映射表:', JSON.stringify(map))
+  return map
+})
+
+// 构建导入分镜用的角色映射表：{ "角色名称": characterId }
+const characterMapForImport = computed(() => {
+  const map = {}
+  const charList = characters.value || []
+  for (const c of charList) {
+    const name = (c.name || '').trim()
+    if (name) {
+      map[name] = c.id
+    }
+  }
+  console.log('[characterMapForImport] 角色映射表:', JSON.stringify(map))
+  return map
+})
 
 function trackFilmCreateAction(_action, _payload = {}) {
   // 单机版：无埋点上报
@@ -4765,9 +4795,14 @@ function onStoryboardPropChange(sbId) {
 /** 当前分镜选中的场景对象（用于下方缩略图） */
 function getSbSelectedScene(sbId) {
   const sceneId = sbSceneId.value[sbId]
-  if (sceneId == null) return null
   const list = scenes.value ?? []
-  return list.find((s) => Number(s.id) === Number(sceneId)) || null
+  const sceneListText = list.map(s => `id:${s.id}|location:${s.location}`).join(', ')
+  console.log(`[getSbSelectedScene] sbId: ${sbId}, sceneId: ${sceneId ?? 'null'}, 场景列表: ${sceneListText || '空'}`)
+  if (sceneId == null) return null
+  const result = list.find((s) => Number(s.id) === Number(sceneId)) || null
+  const resultText = result ? `id:${result.id}|location:${result.location}` : '未找到'
+  console.log(`[getSbSelectedScene] 查找结果: ${resultText}`)
+  return result
 }
 
 /** 当前分镜选中的角色对象列表（用于下方缩略图） */
@@ -6184,11 +6219,12 @@ function getSbUniversalOmniRefSlots(sb) {
   const out = []
   let idx = 1
   const scene = getSbSelectedScene(sb.id)
+  console.log(`[getSbUniversalOmniRefSlots] sbId: ${sb.id}, scene对象: ${scene ? `id:${scene.id}|location:${scene.location}|name:${scene.name}` : 'null'}`)
   if (scene) {
     out.push({
       index: idx++,
       kind: 'scene',
-      name: (scene.name || '场景').toString(),
+      name: (scene.location || scene.name || '场景').toString(),
       thumbUrl: hasAssetImage(scene) ? assetImageUrl(scene) : null,
     })
   }

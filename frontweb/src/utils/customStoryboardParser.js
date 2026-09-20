@@ -59,7 +59,10 @@ function parseVideoBlock(block, context) {
   }
 
   const totalDuration = parseFloat(headerMatch[1])
-  const sceneName = headerMatch[2].trim()
+  // 关键修复：清理场景名称中的箭头符号和多余空格
+  // 例如："SC02 明家破旧土屋 → 厨房后门" -> "SC02 明家破旧土屋厨房后门"
+  const rawSceneName = headerMatch[2].trim()
+  const sceneName = rawSceneName.replace(/[→→]+/g, '').replace(/\s+/g, ' ').trim()
   const characterNames = headerMatch[3].split('、').map(n => n.trim()).filter(Boolean)
 
   const sceneStateMatch = block.match(/【场景与连续状态】([\s\S]*?)(?=【|$)/)
@@ -81,7 +84,10 @@ function parseVideoBlock(block, context) {
 
   const sceneId = matchScene(sceneName, sceneMap)
 
-  const allCharacterNames = charactersText.split(/[、，,]/).map(n => n.trim()).filter(Boolean)
+  // 关键修复：先清理括号内的描述信息，再分割角色名
+  // 例如："陈婶子（高大健壮、圆脸）。" -> "陈婶子"
+  const cleanedCharactersText = charactersText.replace(/[（(][^）)]*[）)].*/g, '')
+  const allCharacterNames = cleanedCharactersText.split(/[、，,]/).map(n => n.trim()).filter(Boolean)
   
   // 去重
   const uniqueCharacterNames = [...new Set(allCharacterNames)]

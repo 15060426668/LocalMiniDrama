@@ -140,10 +140,12 @@ export const storyboardsAPI = {
   splitByAudio(id) {
     return request.post(`/storyboards/${id}/split-by-audio`, {})
   },
-  importCustomStoryboards(episodeId, text) {
+  importCustomStoryboards(episodeId, text, sceneMap = {}, characterMap = {}) {
     return request.post('/storyboards/import-custom', {
       episode_id: episodeId,
-      text
+      text,
+      scene_map: sceneMap,
+      character_map: characterMap
     })
   },
 }

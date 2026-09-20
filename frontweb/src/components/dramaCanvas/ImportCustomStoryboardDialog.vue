@@ -99,6 +99,14 @@ const props = defineProps({
   episodeId: {
     type: Number,
     required: true
+  },
+  sceneMap: {
+    type: Object,
+    default: () => ({})
+  },
+  characterMap: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -151,7 +159,9 @@ async function handleImport() {
   try {
     const response = await storyboardsAPI.importCustomStoryboards(
       props.episodeId,
-      importText.value
+      importText.value,
+      props.sceneMap,
+      props.characterMap
     )
     
     ElMessage.success(response.message || `成功导入 ${response.count} 条分镜`)
