@@ -294,6 +294,7 @@ function setupRouter(cfg, db, log) {
   r.post('/storyboards/:id/regenerate-layout-description', storyboards.regenerateLayoutDescription);
   r.post('/storyboards/:id/rebuild-video-prompt', storyboards.rebuildVideoPrompt);
   r.post('/storyboards/:id/split-by-audio', storyboards.splitByAudio);
+  r.post('/storyboards/import-custom', storyboards.importCustomStoryboards);
 
   // ---------- audio ----------
   r.post('/audio/extract', audio.extract);

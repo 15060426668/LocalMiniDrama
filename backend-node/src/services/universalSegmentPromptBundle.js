@@ -80,9 +80,11 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
   let sceneBlock = '';
   if (sb.scene_id) {
     try {
+      console.log('[全能提示词] 分镜 scene_id:', sb.scene_id);
       sceneRow = db
         .prepare('SELECT location, time, prompt, image_url, local_path FROM scenes WHERE id = ? AND deleted_at IS NULL')
         .get(sb.scene_id);
+      console.log('[全能提示词] 查询到的场景:', sceneRow);
       if (sceneRow) {
         const scBits = [
           chunk('SCENE_LOCATION', sceneRow.location),
@@ -91,6 +93,7 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
           hasMediaRef(sceneRow) ? 'SCENE_HAS_REFERENCE_IMAGE: yes' : 'SCENE_HAS_REFERENCE_IMAGE: no',
         ].filter(Boolean);
         sceneBlock = scBits.join('\n');
+        console.log('[全能提示词] 场景块:', sceneBlock);
       }
     } catch (_) {}
   }
@@ -108,13 +111,19 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
   /** 与前端 collectSbOmniReferenceAbsoluteUrls / 视频 API 参考图顺序一致：仅以分镜 characters JSON 的本剧角色顺序为准，避免再追加 storyboard_characters 导致槽位与界面 @图片N 错位。 */
   let charOrderFromDramaJson = false;
   try {
+    console.log('[全能提示词] 分镜 characters 原始值:', sb.characters);
     if (sb.characters) {
       const parsed = JSON.parse(sb.characters);
+      console.log('[全能提示词] 解析后的 characters:', parsed);
       if (Array.isArray(parsed)) {
         for (const item of parsed) {
           const cid = typeof item === 'object' && item != null ? item.id : item;
           const idNum = Number(cid);
-          if (!Number.isFinite(idNum)) continue;
+          console.log('[全能提示词] 处理角色项:', item, '-> cid:', cid, '-> idNum:', idNum);
+          if (!Number.isFinite(idNum)) {
+            console.log('[全能提示词] 跳过无效 id:', idNum);
+            continue;
+          }
           const nm =
             typeof item === 'object' && item != null && item.name != null ? String(item.name).trim() : '';
           pushCharEntry(`drama:${idNum}`, nm);
@@ -122,10 +131,12 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
         if (charOrderEntries.length > 0) charOrderFromDramaJson = true;
       }
     }
+    console.log('[全能提示词] charOrderFromDramaJson:', charOrderFromDramaJson, 'charOrderEntries:', charOrderEntries);
     if (!charOrderFromDramaJson) {
       const libLinks = db
         .prepare('SELECT character_id FROM storyboard_characters WHERE storyboard_id = ? ORDER BY id ASC')
         .all(sbId);
+      console.log('[全能提示词] storyboard_characters 关联表:', libLinks);
       for (const link of libLinks) {
         const lid = Number(link.character_id);
         if (!Number.isFinite(lid)) continue;
@@ -221,7 +232,11 @@ async function buildUniversalSegmentUserPromptBundle(db, sbId, reqBody, opts = {
         .prepare('SELECT name, local_path, image_url FROM character_libraries WHERE id = ? AND deleted_at IS NULL')
         .get(Number(ent.key.slice(4)));
     }
-    if (!hasMediaRef(row)) continue;
+    console.log('[全能提示词] 角色槽位构建 - ent:', ent, 'row:', row, 'hasMediaRef:', hasMediaRef(row));
+    if (!hasMediaRef(row)) {
+      console.log('[全能提示词] 跳过角色（无参考图）:', ent.key, row?.name);
+      continue;
+    }
     const cn = String(row.name || ent.nameHint || '角色').trim();
     pushSlot('角色', cn);
   }

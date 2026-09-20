@@ -237,6 +237,8 @@ function normalizeUniversalSegmentAtImageSpacing(text) {
   );
 }
 
+const customStoryboardImportService = require('../services/customStoryboardImportService');
+
 function routes(db, log) {
   return {
     create: (req, res) => {
@@ -1171,6 +1173,37 @@ function routes(db, log) {
       } catch (err) {
         log.error('storyboards batchInferParams', { error: err.message });
         response.internalError(res, err.message);
+      }
+    },
+
+    // 导入自定义分镜提示词
+    importCustomStoryboards: (req, res) => {
+      try {
+        const { episode_id: episodeId, text, character_map: characterMap = {}, scene_map: sceneMap = {} } = req.body || {};
+        
+        if (!episodeId) {
+          return response.badRequest(res, 'episode_id 必填');
+        }
+        
+        if (!text || !text.trim()) {
+          return response.badRequest(res, '导入文本不能为空');
+        }
+
+        const result = customStoryboardImportService.importCustomStoryboards(db, log, {
+          episodeId,
+          text,
+          characterMap,
+          sceneMap
+        });
+
+        response.success(res, {
+          message: `成功导入 ${result.count} 条分镜`,
+          count: result.count,
+          storyboards: result.storyboards
+        });
+      } catch (err) {
+        log.error('storyboards importCustomStoryboards', { error: err.message });
+        response.badRequest(res, err.message || '导入自定义分镜失败');
       }
     },
   };

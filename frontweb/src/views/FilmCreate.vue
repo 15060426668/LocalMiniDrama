@@ -877,6 +877,10 @@
             <ElButton type="info" plain size="large" @click="onAddSingleStoryboard">
             添加一个分镜
             </ElButton>
+            <ElButton type="success" plain size="large" @click="openImportCustomStoryboard">
+              <el-icon><Upload /></el-icon>
+              导入自定义分镜
+            </ElButton>
           </div>
           <template v-if="storyboards.length > 0">
             <div class="sb-batch-right">
@@ -2610,6 +2614,14 @@
       </template>
     </el-dialog>
 
+    <!-- 导入自定义分镜弹窗 -->
+    <ImportCustomStoryboardDialog
+      ref="importCustomStoryboardDialogRef"
+      :episode-id="currentEpisodeId"
+      @imported="onCustomStoryboardImported"
+      @close="() => {}"
+    />
+
     <!-- AI 配置弹窗（不跳转，避免本页内容丢失） -->
     <el-dialog v-model="showAiConfigDialog" title="AI 配置" width="90%" destroy-on-close class="ai-config-dialog">
       <AIConfigContent v-if="showAiConfigDialog" />
@@ -2671,6 +2683,7 @@ import { runGenerateStoryFromPremise } from '@/composables/useStoryGeneration'
 import { useCharacters } from '@/composables/filmCreate/useCharacters'
 import { useProps as usePropsComposable } from '@/composables/filmCreate/useProps'
 import { useScenes } from '@/composables/filmCreate/useScenes'
+import ImportCustomStoryboardDialog from '@/components/dramaCanvas/ImportCustomStoryboardDialog.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -2725,6 +2738,7 @@ const novelFileContent = ref('')
 const novelMaxChapters = ref(10)
 const novelAiSummarize = ref(false)
 const novelImporting = ref(false)
+const importCustomStoryboardDialogRef = ref(null)
 const scriptTitle = ref('')
 const selectedEpisodeId = ref(null)
 /** 保存剧本后用于恢复选中集（后端重插后 id 会变，用 episode_number 匹配） */
@@ -4524,11 +4538,14 @@ function syncStoryboardStateFromEpisode(ep) {
     nextDof[sb.id] = sb.depth_of_field || ''
     nextLayoutDescription[sb.id] = (sb.layout_description ?? '').toString()
     const charList = Array.isArray(sb.characters) ? sb.characters : (sb.characters != null ? [sb.characters] : [])
-    nextCharIds[sb.id] = charList.map((c) => (typeof c === 'object' && c != null ? Number(c.id) : Number(c))).filter((n) => Number.isFinite(n))
+    const parsedCharIds = charList.map((c) => (typeof c === 'object' && c != null ? Number(c.id) : Number(c))).filter((n) => Number.isFinite(n))
+    console.log('[前端同步分镜状态] sbId:', sb.id, 'characters原始:', sb.characters, '解析后IDs:', parsedCharIds)
+    nextCharIds[sb.id] = parsedCharIds
     nextPropIds[sb.id] = Array.isArray(sb.prop_ids) ? sb.prop_ids : []
     nextCreationMode[sb.id] = sb.creation_mode === 'universal' ? 'universal' : 'classic'
     nextUniversalSegment[sb.id] = (sb.universal_segment_text ?? '').toString()
   }
+  console.log('[前端同步分镜状态] 所有分镜角色IDs:', nextCharIds)
   sbCharacterIds.value = nextCharIds
   sbPropIds.value = nextPropIds
   sbSceneId.value = nextScene
@@ -6113,33 +6130,29 @@ function getSbUniversalOmniRefSlots(sb) {
   const out = []
   let idx = 1
   const scene = getSbSelectedScene(sb.id)
-  if (scene && hasAssetImage(scene)) {
+  if (scene) {
     out.push({
       index: idx++,
       kind: 'scene',
       name: (scene.name || '场景').toString(),
-      thumbUrl: assetImageUrl(scene),
+      thumbUrl: hasAssetImage(scene) ? assetImageUrl(scene) : null,
     })
   }
   for (const c of getSbSelectedCharacters(sb.id)) {
-    if (hasAssetImage(c)) {
-      out.push({
-        index: idx++,
-        kind: 'character',
-        name: (c.name || '角色').toString(),
-        thumbUrl: assetImageUrl(c),
-      })
-    }
+    out.push({
+      index: idx++,
+      kind: 'character',
+      name: (c.name || '角色').toString(),
+      thumbUrl: hasAssetImage(c) ? assetImageUrl(c) : null,
+    })
   }
   for (const p of getSbSelectedProps(sb.id)) {
-    if (hasAssetImage(p)) {
-      out.push({
-        index: idx++,
-        kind: 'prop',
-        name: (p.name || '物品').toString(),
-        thumbUrl: assetImageUrl(p),
-      })
-    }
+    out.push({
+      index: idx++,
+      kind: 'prop',
+      name: (p.name || '物品').toString(),
+      thumbUrl: hasAssetImage(p) ? assetImageUrl(p) : null,
+    })
   }
   return out
 }
@@ -6921,6 +6934,21 @@ async function onInsertStoryboardBefore(sb) {
   } catch (e) {
     ElMessage.error(e.message || '新增失败')
   }
+}
+
+function openImportCustomStoryboard() {
+  if (!currentEpisodeId.value) {
+    ElMessage.warning('请先选择集')
+    return
+  }
+  if (importCustomStoryboardDialogRef.value) {
+    importCustomStoryboardDialogRef.value.open()
+  }
+}
+
+async function onCustomStoryboardImported(response) {
+  ElMessage.success(`成功导入 ${response.count} 条分镜`)
+  await loadDrama()
 }
 
 async function startBatchImageGeneration() {

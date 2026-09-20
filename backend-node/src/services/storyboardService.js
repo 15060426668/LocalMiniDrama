@@ -94,10 +94,24 @@ function updateStoryboard(db, log, id, req) {
   const charactersValue = req.character_ids !== undefined ? req.character_ids : req.characters;
   let parsedDramaCharIdsForSync = null;
   if (charactersValue !== undefined) {
+    // 如果是纯数字数组，查询数据库获取角色名称，转换为 {id, name} 对象数组
+    let normalizedCharacters = charactersValue;
+    if (Array.isArray(charactersValue) && charactersValue.length > 0 && typeof charactersValue[0] === 'number') {
+      const charIds = charactersValue.map(id => Number(id)).filter(id => Number.isFinite(id) && id > 0);
+      if (charIds.length > 0) {
+        const placeholders = charIds.map(() => '?').join(',');
+        const charRows = db.prepare(`SELECT id, name FROM characters WHERE id IN (${placeholders}) AND deleted_at IS NULL`).all(...charIds);
+        normalizedCharacters = charIds.map(id => {
+          const found = charRows.find(r => r.id === id);
+          return found ? { id: found.id, name: found.name } : { id, name: '' };
+        });
+      }
+    }
+    
     updates.push('characters = ?');
-    const jsonStr = Array.isArray(charactersValue) ? JSON.stringify(charactersValue) : (typeof charactersValue === 'string' ? charactersValue : '[]');
+    const jsonStr = Array.isArray(normalizedCharacters) ? JSON.stringify(normalizedCharacters) : (typeof normalizedCharacters === 'string' ? normalizedCharacters : '[]');
     params.push(jsonStr);
-    parsedDramaCharIdsForSync = parseDramaCharacterIds(charactersValue) ?? [];
+    parsedDramaCharIdsForSync = parseDramaCharacterIds(normalizedCharacters) ?? [];
   }
   for (const key of allowed) {
     if (key === 'characters') continue;
