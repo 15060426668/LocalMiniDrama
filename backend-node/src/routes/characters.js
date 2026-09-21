@@ -322,7 +322,7 @@ function routes(db, cfg, log, uploadService) {
         response.internalError(res, err.message);
       }
     },
-    /** Seedance 2.0 角色音色参考音频上传 */
+    /** Seedance 2.0 角色音色参考音频上传（支持文件或公网链接） */
     sd2VoiceUpload: async (req, res) => {
       try {
         const charId = Number(req.params.id);
@@ -331,7 +331,46 @@ function routes(db, cfg, log, uploadService) {
           .get(charId);
         if (!charRow) return response.notFound(res, '角色不存在');
 
-        if (!req.file) return response.badRequest(res, '请上传音频文件');
+        const { audio_url } = req.body || {};
+        const now = new Date().toISOString();
+        let payload;
+
+        // 如果提供了公网链接，直接使用
+        if (audio_url && typeof audio_url === 'string' && audio_url.trim()) {
+          const url = audio_url.trim();
+          // 简单验证URL格式
+          try {
+            new URL(url);
+          } catch {
+            return response.badRequest(res, '无效的URL格式');
+          }
+          // 验证是否为音频URL（通过扩展名或Content-Type）
+          const allowedExts = ['.mp3', '.wav', '.m4a', '.ogg', '.webm', '.aac', '.flac'];
+          const hasAudioExt = allowedExts.some(ext => url.toLowerCase().includes(ext));
+          if (!hasAudioExt && !url.includes('audio')) {
+            log.warn('characters sd2-voice-upload url-no-audio-ext', { url });
+          }
+
+          payload = {
+            status: 'active',
+            url: url,
+            local_path: null,
+            certified_at: now,
+            duration: null,
+            format: 'url',
+          };
+
+          db.prepare('UPDATE characters SET seedance2_voice_asset = ?, updated_at = ? WHERE id = ?').run(
+            JSON.stringify(payload),
+            now,
+            charId
+          );
+
+          return response.success(res, { message: 'Seedance 2.0 音色参考已保存', seedance2_voice_asset: payload });
+        }
+
+        // 否则使用文件上传
+        if (!req.file) return response.badRequest(res, '请上传音频文件或提供公网链接');
 
         const allowedExt = ['.mp3', '.wav', '.m4a', '.ogg'];
         const ext = path.extname(req.file.originalname || '').toLowerCase();
@@ -355,9 +394,8 @@ function routes(db, cfg, log, uploadService) {
         fs.writeFileSync(absPath, req.file.buffer);
 
         const publicUrl = `/static/${relDir}/${safeName}`;
-        const now = new Date().toISOString();
 
-        const payload = {
+        payload = {
           status: 'active',
           url: publicUrl,
           local_path: `${relDir}/${safeName}`,

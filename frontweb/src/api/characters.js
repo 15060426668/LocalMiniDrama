@@ -57,6 +57,9 @@ export const characterAPI = {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
   },
+  sd2VoiceUploadUrl(characterId, audio_url) {
+    return request.post(`/characters/${characterId}/sd2-voice-upload`, { audio_url })
+  },
   sd2VoiceRefresh(characterId) {
     return request.post(`/characters/${characterId}/sd2-voice-refresh`, {})
   }

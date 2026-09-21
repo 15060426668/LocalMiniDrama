@@ -740,7 +740,30 @@ export function useCharacters(deps) {
 
   async function triggerSd2VoiceUpload(char) {
     if (!char?.id) return
-    // 创建隐藏的 file input
+    
+    try {
+      // 弹出对话框让用户选择上传方式
+      await ElMessageBox.confirm(
+        '请选择上传方式：',
+        '上传音色参考',
+        {
+          confirmButtonText: '上传本地文件',
+          cancelButtonText: '输入公网链接',
+          distinguishCancelAndClose: true,
+        }
+      )
+      // 用户点击"上传本地文件"
+      triggerFileUpload(char)
+    } catch (action) {
+      if (action === 'cancel') {
+        // 用户点击"输入公网链接"
+        triggerUrlInput(char)
+      }
+      // action === 'close' 时不做任何操作（用户点击X关闭）
+    }
+  }
+  
+  function triggerFileUpload(char) {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = 'audio/*'
@@ -749,9 +772,8 @@ export function useCharacters(deps) {
       if (!file) return
       sd2VoiceUploadingId.value = char.id
       try {
-        const res = await characterAPI.sd2VoiceUpload(char.id, file)
+        await characterAPI.sd2VoiceUpload(char.id, file)
         ElMessage.success('Seedance 2.0 音色参考已上传')
-        // 强制重新加载整个剧本数据，确保 seedance2_voice_asset 被正确解析并更新到 store
         await loadDrama()
       } catch (e) {
         ElMessage.error(e?.message || '音色上传失败')
@@ -760,6 +782,26 @@ export function useCharacters(deps) {
       }
     }
     input.click()
+  }
+  
+  function triggerUrlInput(char) {
+    ElMessageBox.prompt('请输入音频公网链接（支持mp3/wav/m4a/ogg等格式）', '输入公网链接', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputPattern: /^https?:\/\/.+/,
+      inputErrorMessage: '请输入有效的http/https链接',
+    }).then(async ({ value }) => {
+      sd2VoiceUploadingId.value = char.id
+      try {
+        await characterAPI.sd2VoiceUploadUrl(char.id, value)
+        ElMessage.success('Seedance 2.0 音色参考已保存')
+        await loadDrama()
+      } catch (e) {
+        ElMessage.error(e?.message || '保存失败')
+      } finally {
+        sd2VoiceUploadingId.value = null
+      }
+    }).catch(() => {})
   }
 
   // 播放 Seedance 2.0 音色参考（仅 active 状态）
@@ -782,6 +824,16 @@ export function useCharacters(deps) {
     } catch (e) {
       ElMessage.error('无法播放音频')
     }
+  }
+
+  // 复制音色链接
+  function copyVoiceUrl(url) {
+    if (!url) return
+    navigator.clipboard.writeText(url).then(() => {
+      ElMessage.success('链接已复制到剪贴板')
+    }).catch(() => {
+      ElMessage.error('复制失败，请手动选择链接复制')
+    })
   }
 
   return {
@@ -854,6 +906,7 @@ export function useCharacters(deps) {
     onSd2VoiceReplace,
     sd2VoiceActionLabel,
     playSd2Voice,
+    copyVoiceUrl,
     loadCharLibraryList,
     debouncedLoadCharLibrary,
     loadDramaAllCharList,

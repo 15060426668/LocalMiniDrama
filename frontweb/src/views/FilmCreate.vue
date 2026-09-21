@@ -517,7 +517,32 @@
                         >
                           更换
                         </el-button>
+                        <!-- 音色类型标识 -->
+                        <el-tag
+                          size="small"
+                          :type="char.seedance2_voice_asset?.format === 'url' ? 'warning' : 'info'"
+                          effect="plain"
+                        >
+                          {{ char.seedance2_voice_asset?.format === 'url' ? '公网链接' : '本地文件' }}
+                        </el-tag>
                         <span style="font-size:11px;color:#67c23a">音色已设置</span>
+                        <!-- 公网链接展示 -->
+                        <div v-if="char.seedance2_voice_asset?.format === 'url' && char.seedance2_voice_asset?.url" style="width:100%;margin-top:4px">
+                          <el-input
+                            size="small"
+                            :model-value="char.seedance2_voice_asset.url"
+                            readonly
+                            style="font-size:11px"
+                            @click="copyVoiceUrl(char.seedance2_voice_asset.url)"
+                          >
+                            <template #prepend>链接</template>
+                            <template #append>
+                              <el-tooltip content="点击复制" placement="top">
+                                <el-icon><CopyDocument /></el-icon>
+                              </el-tooltip>
+                            </template>
+                          </el-input>
+                        </div>
                       </template>
                       <template v-else>
                         <el-button
@@ -2651,7 +2676,7 @@ import { ref, computed, onMounted, onBeforeUnmount, watch, reactive, nextTick } 
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Setting, Plus, Minus, Sunny, Moon, MagicStick, Upload, Delete, Check, Loading, WarningFilled, User, Box, Picture, Film, VideoCamera, Document, InfoFilled, Refresh, ZoomIn, QuestionFilled, DocumentAdd, Expand, Fold, VideoPlay, Grid, Close } from '@element-plus/icons-vue'
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Setting, Plus, Minus, Sunny, Moon, MagicStick, Upload, Delete, Check, Loading, WarningFilled, User, Box, Picture, Film, VideoCamera, Document, InfoFilled, Refresh, ZoomIn, QuestionFilled, DocumentAdd, Expand, Fold, VideoPlay, Grid, Close, CopyDocument } from '@element-plus/icons-vue'
 import { useTheme } from '@/composables/useTheme'
 import { useFilmStore } from '@/stores/film'
 import { useGenerationTaskStore, GEN_RESOURCE } from '@/stores/generationTaskStore'
@@ -2953,7 +2978,7 @@ const {
   charRoleLabel, onGenerateCharacters: onGenerateCharactersRaw, openAddCharacter, stopCharacterPromptPoll, editCharacter,
   saveCharRefImageIfAny, submitEditCharacter, doGenerateCharacterPrompt, doExtractCharFromImage,
   extractIdentityAnchors, clearCharRefImage, onCloseCharDialog, onDeleteCharacter, onGenerateCharacterImage, onSd2CertifyCharacter, onSd2CertifyRefresh, sd2ActionLabel, onSd2PrimaryAction, openCharSd2CertDialog,
-  onSd2VoicePrimaryAction, onSd2VoiceReplace, sd2VoiceActionLabel, playSd2Voice,
+  onSd2VoicePrimaryAction, onSd2VoiceReplace, sd2VoiceActionLabel, playSd2Voice, copyVoiceUrl,
   loadCharLibraryList, debouncedLoadCharLibrary, loadDramaAllCharList, debouncedLoadDramaAllCharList,
   onCharLibraryDialogOpen, onCharLibraryTabChange, isCharAddToEpisodeLoading,
   openEditCharLibrary, submitEditCharLibrary,
