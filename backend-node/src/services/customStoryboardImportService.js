@@ -202,7 +202,7 @@ function parseVideoBlock(block, context) {
   // 关键修复：不再从头部信息提取角色名，只从【出场人物】区块提取
   // const characterNames = headerMatch[3].split('、').map(n => n.trim()).filter(Boolean);
 
-  const sceneStateMatch = block.match(/【场景与连续状态】([\s\S]*?)(?=【|$)/);
+  const sceneStateMatch = block.match(/【场景】([\s\S]*?)(?=【|$)/);
   const lightingMatch = block.match(/【光线】([\s\S]*?)(?=【|$)/);
   const lightingLockMatch = block.match(/【本编号场景光影锁】([\s\S]*?)(?=【|$)/);
   const charactersMatch = block.match(/【出场人物】([\s\S]*?)(?=【|$)/);
@@ -777,7 +777,7 @@ function matchPropsFromDatabase(db, episodeId, names) {
 /**
  * 构建全能片段文本（universal_segment_text）
  * 保留原始导入文本，并自动添加 @图片N 引用以绑定素材（场景、角色、道具）
- * 策略：只在【场景与连续状态】【出场人物】【道具】三个区块中添加 @图片N 标记
+ * 策略：只在【场景】【出场人物】【道具】三个区块中添加 @图片N 标记
  * 注意：绝对不在画面描述、运镜描写等其他区域添加 @图片N
  * @param {string} originalBlock 原始导入文本块
  * @param {number} totalDuration 总时长
@@ -802,24 +802,24 @@ function buildUniversalSegmentText(originalBlock, totalDuration, sceneName, ligh
   let currentSlotIndex = 1;
   console.log(`[buildUniversalSegmentText] 初始currentSlotIndex: ${currentSlotIndex}`);
   
-  // 1. 场景引用：在【场景与连续状态】区块中添加 @图片N
+  // 1. 场景引用：在【场景】区块中添加 @图片N
   if (hasScene) {
     const sceneAtRef = `@图片${currentSlotIndex}`;
     console.log(`[buildUniversalSegmentText] 场景绑定: @图片${currentSlotIndex}, 之后currentSlotIndex++`);
     currentSlotIndex++;
     console.log(`[buildUniversalSegmentText] 场景绑定后currentSlotIndex: ${currentSlotIndex}`);
     
-    // 查找【场景与连续状态】区块
-    const sceneSectionMatch = result.match(/【场景与连续状态】([\s\S]*?)(?=\n\s*【|$)/);
+    // 查找【场景】区块
+    const sceneSectionMatch = result.match(/【场景】([\s\S]*?)(?=\n\s*【|$)/);
     if (sceneSectionMatch) {
-      // 在【场景与连续状态】区块开头添加场景名称和 @图片N 标记
+      // 在【场景】区块开头添加场景名称和 @图片N 标记
       const sceneSectionStart = sceneSectionMatch.index;
       const sceneSectionFull = sceneSectionMatch[0];
-      const modifiedSceneSection = `【场景与连续状态】${sceneAtRef} ${sceneName}：${sceneSectionMatch[1].trim()}`;
+      const modifiedSceneSection = `【场景】${sceneAtRef} ${sceneName}：${sceneSectionMatch[1].trim()}`;
       result = result.substring(0, sceneSectionStart) + modifiedSceneSection + result.substring(sceneSectionStart + sceneSectionFull.length);
     } else {
-      // 如果没有【场景与连续状态】区块，则不添加场景引用
-      console.warn('[buildUniversalSegmentText] 未找到【场景与连续状态】区块，跳过场景引用添加');
+      // 如果没有【场景】区块，则不添加场景引用
+      console.warn('[buildUniversalSegmentText] 未找到【场景】区块，跳过场景引用添加');
     }
   }
   

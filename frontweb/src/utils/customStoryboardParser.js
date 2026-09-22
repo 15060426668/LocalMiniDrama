@@ -65,7 +65,7 @@ function parseVideoBlock(block, context) {
   const sceneName = rawSceneName.replace(/[→→]+/g, '').replace(/\s+/g, ' ').trim()
   const characterNames = headerMatch[3].split('、').map(n => n.trim()).filter(Boolean)
 
-  const sceneStateMatch = block.match(/【场景与连续状态】([\s\S]*?)(?=【|$)/)
+  const sceneStateMatch = block.match(/【场景】([\s\S]*?)(?=【|$)/)
   const lightingMatch = block.match(/【光线】([\s\S]*?)(?=【|$)/)
   const lightingLockMatch = block.match(/【本编号场景光影锁】([\s\S]*?)(?=【|$)/)
   const charactersMatch = block.match(/【出场人物】([\s\S]*?)(?=【|$)/)
