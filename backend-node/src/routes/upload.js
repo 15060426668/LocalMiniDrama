@@ -5,13 +5,11 @@ const uploadService = require('../services/uploadService');
 const storageLayout = require('../services/storageLayout');
 
 const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-const maxSize = 16 * 1024 * 1024; // 16MB，单张图片上限
-const MAX_SIZE_MB = 16;
+// 不限制文件大小
 
 const memoryStorage = multer.memoryStorage();
 const upload = multer({
   storage: memoryStorage,
-  limits: { fileSize: maxSize },
   fileFilter: (req, file, cb) => {
     const ct = file.mimetype || 'application/octet-stream';
     if (!allowedTypes.includes(ct)) {
@@ -100,5 +98,4 @@ module.exports = {
   upload,
   multerSingle: upload.single('file'),
   multerAudioSingle: audioUpload.single('file'),
-  MAX_IMAGE_SIZE_MB: MAX_SIZE_MB,
 };

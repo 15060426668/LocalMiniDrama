@@ -26,8 +26,8 @@ function createApp() {
   resumeProcessingVideoGenerations(db, log);
 
   const app = express();
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json({ limit: '500mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 
   app.use(
     cors({
@@ -106,7 +106,7 @@ function createApp() {
     if (!res.headersSent) {
       const isFileTooLarge = err.code === 'LIMIT_FILE_SIZE' || (err.message && err.message.includes('File too large'));
       const status = isFileTooLarge ? 413 : 500;
-      const message = isFileTooLarge ? '图片大小不能超过 16MB，请压缩后重试' : (err.message || '服务器错误');
+      const message = err.message || '服务器错误';
       res.status(status).json({ success: false, error: { code: isFileTooLarge ? 'FILE_TOO_LARGE' : 'INTERNAL_ERROR', message }, timestamp: new Date().toISOString() });
     }
   });

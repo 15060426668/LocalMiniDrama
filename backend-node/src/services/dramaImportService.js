@@ -183,10 +183,24 @@ function _doImport(db, storagePath, files, data, d, title, metaStr, now, log) {
     if (!c.name) { charNewIds.push(null); continue; }
     const localPath = saveMediaFile(storagePath, projectDir, 'characters', files, c.image_file, 'char_imp');
     const extraImagesJson = saveExtraImages(storagePath, projectDir, 'characters', files, c.extra_image_files, 'char_extra_imp');
+    
+    // 处理 Seedance 2.0 音色参考：如果是公网链接直接保存，如果是本地文件则跳过（文件未打包）
+    let voiceAssetJson = null;
+    if (c.seedance2_voice_asset) {
+      const voiceAsset = typeof c.seedance2_voice_asset === 'string' 
+        ? JSON.parse(c.seedance2_voice_asset) 
+        : c.seedance2_voice_asset;
+      
+      // 只有公网链接才保存，本地文件不保存（因为文件未打包到ZIP中）
+      if (voiceAsset && voiceAsset.format === 'url' && voiceAsset.url) {
+        voiceAssetJson = JSON.stringify(voiceAsset);
+      }
+    }
+    
     const info = db.prepare(
-      `INSERT INTO characters (drama_id, name, role, description, personality, appearance, voice_style, polished_prompt, local_path, extra_images, sort_order, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ).run(dramaId, c.name, c.role || null, c.description || null, c.personality || null, c.appearance || null, c.voice_style || null, c.polished_prompt || null, localPath, extraImagesJson, i, now, now);
+      `INSERT INTO characters (drama_id, name, role, description, personality, appearance, voice_style, polished_prompt, local_path, extra_images, seedance2_voice_asset, sort_order, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(dramaId, c.name, c.role || null, c.description || null, c.personality || null, c.appearance || null, c.voice_style || null, c.polished_prompt || null, localPath, extraImagesJson, voiceAssetJson, i, now, now);
     charNewIds.push(info.lastInsertRowid);
   }
 

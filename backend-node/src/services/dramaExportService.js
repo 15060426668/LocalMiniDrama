@@ -36,6 +36,13 @@ function parseExtraImages(raw) {
   } catch (_) { return []; }
 }
 
+function parseJsonColumn(raw) {
+  if (!raw) return null;
+  try {
+    return typeof raw === 'string' ? JSON.parse(raw) : raw;
+  } catch (_) { return null; }
+}
+
 const EXPORT_FIRST_FRAME_TYPES = ['storyboard_first', 'first', 'first_frame'];
 const EXPORT_LAST_FRAME_TYPES = ['storyboard_last', 'last', 'tail', 'last_frame'];
 
@@ -342,6 +349,8 @@ function exportDrama(db, cfg, log, dramaId) {
         polished_prompt: c.polished_prompt || null,
         image_file: c.local_path ? `media/characters/char_${c.id}${extOf(c.local_path)}` : null,
         extra_image_files: extraFiles,
+        // Seedance 2.0 音色参考（支持公网链接和本地文件）
+        seedance2_voice_asset: parseJsonColumn(c.seedance2_voice_asset),
       };
     }),
     scenes: dedupedScenes.map(s => {
